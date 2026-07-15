@@ -1,0 +1,341 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "02dfef50-593f-4b20-9f93-d1417ef98d67")
+	(paper "A4")
+	(title_block
+		(title "01_System")
+		(date "2026-07-03")
+		(rev "A")
+	)
+	(lib_symbols)
+	(sheet
+		(at 44.45 38.735)
+		(size 64.135 48.895)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "2b1d30b3-e063-4d77-bbdf-94304fe29f97")
+		(property "Sheetname" "02_USB_C_Input"
+			(at 44.45 38.0234 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "02_USB_C_Input.kicad_sch"
+			(at 44.45 88.2146 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ESP32S3_PlantMonitor"
+				(path "/02dfef50-593f-4b20-9f93-d1417ef98d67"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 132.08 39.37)
+		(size 60.325 46.355)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "3592d639-4e4a-4cb7-9552-ef86a8bb474d")
+		(property "Sheetname" "03_3V3_Power"
+			(at 132.08 38.6584 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "03_3V3_Power.kicad_sch"
+			(at 132.08 86.3096 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ESP32S3_PlantMonitor"
+				(path "/02dfef50-593f-4b20-9f93-d1417ef98d67"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 53.975 100.33)
+		(size 55.88 48.26)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "54e64539-f678-4f10-ba53-5efb5f2788e4")
+		(property "Sheetname" "05_I2C_Sensors"
+			(at 53.975 99.6184 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "05_I2C_Sensors.kicad_sch"
+			(at 53.975 149.1746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ESP32S3_PlantMonitor"
+				(path "/02dfef50-593f-4b20-9f93-d1417ef98d67"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 130.81 103.505)
+		(size 53.34 37.465)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "7ab0503a-1df4-4677-abbb-27167273fa96")
+		(property "Sheetname" "06_Soil_Probe_Input (page 6)"
+			(at 130.81 102.7934 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "06_Soil_ADC_Input.kicad_sch"
+			(at 130.81 141.5546 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ESP32S3_PlantMonitor"
+				(path "/02dfef50-593f-4b20-9f93-d1417ef98d67"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 213.36 102.87)
+		(size 53.975 39.37)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "c936da17-2809-47d6-8926-8fc850f8b85e")
+		(property "Sheetname" "07_Battery_PowerPath (page 7)"
+			(at 213.36 102.1584 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "07_Battery_Charger.kicad_sch"
+			(at 213.36 142.8246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ESP32S3_PlantMonitor"
+				(path "/02dfef50-593f-4b20-9f93-d1417ef98d67"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 207.01 37.465)
+		(size 53.975 48.895)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "cae33cb2-0f3b-48c7-babe-865a1eba30ee")
+		(property "Sheetname" "04_ESP32S3_Core"
+			(at 207.01 36.7534 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "04_ESP32S3_Core.kicad_sch"
+			(at 207.01 86.9446 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ESP32S3_PlantMonitor"
+				(path "/02dfef50-593f-4b20-9f93-d1417ef98d67"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 88.9 156.845)
+		(size 46.99 38.1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "cc23ba9f-3b3c-41b3-81f4-4290d5f3ec5f")
+		(property "Sheetname" "08_Mechanical"
+			(at 88.9 156.1334 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "08_Mechanical.kicad_sch"
+			(at 88.9 195.5296 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ESP32S3_PlantMonitor"
+				(path "/02dfef50-593f-4b20-9f93-d1417ef98d67"
+					(page "8")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
