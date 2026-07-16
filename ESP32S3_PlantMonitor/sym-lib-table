@@ -1,5 +1,4 @@
 (sym_lib_table
 	(version 7)
-	(lib (name "veml7700") (type "KiCad") (uri "C:/Users/huray/dev/PCB_Design/projects/ESP32S3_PlantMonitor_RevA/libs/symbols/SENSOR-SMD_EML7700-TT.kicad_sym") (options "") (descr ""))
-	(lib (name "SENSOR-SMD_EML7700-TT") (type "KiCad") (uri "C:/Users/huray/dev/PCB_Design/projects/ESP32S3_PlantMonitor_RevA/libs/symbols/SENSOR-SMD_EML7700-TT.kicad_sym") (options "") (descr ""))
+	(lib (name "PlantMonitor_JLC") (type "KiCad") (uri "C:/Users/huray/dev/PCB_Design/projects/ESP32S3_PlantMonitor_RevA/libs/PlantMonitor_JLC.kicad_sym") (options "") (descr ""))
 )
