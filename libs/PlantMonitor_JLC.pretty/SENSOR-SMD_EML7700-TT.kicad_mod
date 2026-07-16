@@ -29,7 +29,7 @@
 	(fp_line (start -3.40 -2.54) (end 3.40 -2.54) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 3.40 -2.54) (end 3.40 0.46) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 3.40 0.46) (end -3.40 0.46) (layer F.CrtYd) (width 0.05))
-	(model "C:/Users/huray/dev/PCB_Design/projects/ESP32S3_PlantMonitor_RevA/libs/PlantMonitor_JLC.3dshapes/SENSOR-SMD_EML7700-TT.wrl"
+	(model "${KIPRJMOD}/dev/PCB_Design/projects/ESP32S3_PlantMonitor_RevA/libs/PlantMonitor_JLC.3dshapes/SENSOR-SMD_EML7700-TT.wrl"
 		(offset (xyz 0.000 0.000 0.000))
 		(scale (xyz 1 1 1))
 		(rotate (xyz 0 0 0))
