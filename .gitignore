@@ -9,3 +9,13 @@ fp-info-cache
 ~*.lck
 .DS_Store
 Thumbs.db
+
+# KiCad session/backup noise (added 2026-07-20)
+.history/
+*.lck
+~*.lck
+_autosave-*
+*-bak
+*.kicad_sch-bak
+*.kicad_pcb-bak
+fp-info-cache

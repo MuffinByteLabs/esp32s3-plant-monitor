@@ -1,0 +1,5 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "PlantMonitor_JLC") (type "KiCad") (uri "${KIPRJMOD}/libs/PlantMonitor_JLC.pretty") (options "") (descr "Project footprints"))
+	(lib (name "logos") (type "KiCad") (uri "${KIPRJMOD}/libs/logos/logos.pretty") (options "") (descr "Silkscreen logos"))
+)
