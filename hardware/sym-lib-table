@@ -1,0 +1,4 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "PlantMonitor_JLC") (type "KiCad") (uri "${KIPRJMOD}/libs/PlantMonitor_JLC.kicad_sym") (options "") (descr "Project parts library"))
+)
