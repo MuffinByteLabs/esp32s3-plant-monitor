@@ -21,9 +21,9 @@ Wi-Fi plant monitor: soil moisture (DFRobot SEN0193), temp/RH/pressure (BME280, 
 | `fabrication/` | Factory files, one folder per ordered revision (empty until first order) |
 | `firmware/` | Firmware project (placeholder; hardware-imposed rules in its README) |
 
-## State (2026-07-20)
+## State (2026-07-20, evening)
 
-Schematic reviewed, netlist-verified, and corrected: USB-C GND pins grounded, battery-sense chain in place, hand-over pull-down = 10 k. Open before layout: add test points TP1–TP15 and mounting holes (sheet 08), then commit. Layout not started (`.kicad_pcb` is a stub).
+**See `docs/PROJECT_STATUS.md` for the live hand-off.** Schematic reviewed, corrected, and fully sourced: all 53 parts carry footprints + LCSC numbers (verified 53/53); BOM regenerated from the schematic. Remaining before layout: test points, mounting holes, ERC, commit, board-setup decisions. Layout not started (`.kicad_pcb` is a stub).
 
 ## Hard rules
 

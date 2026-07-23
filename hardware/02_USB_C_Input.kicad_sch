@@ -2634,7 +2634,7 @@
 				)
 			)
 		)
-		(property "Value" "Fuse"
+		(property "Value" "1206L075/16WR"
 			(at 123.19 39.37 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2644,7 +2644,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Fuse:Fuse_1206_3216Metric"
 			(at 123.19 44.958 90)
 			(hide yes)
 			(show_name no)
@@ -2668,6 +2668,17 @@
 		)
 		(property "Description" "Fuse"
 			(at 123.19 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C371166"
+			(at 123.19 43.18 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2726,7 +2737,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 145.0848 74.93 0)
 			(hide yes)
 			(show_name no)
@@ -2761,6 +2772,17 @@
 		)
 		(property "Purpose" ""
 			(at 146.05 78.74 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C14663"
+			(at 146.05 78.74 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3050,7 +3072,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 129.54 86.868 90)
 			(hide yes)
 			(show_name no)
@@ -3074,6 +3096,17 @@
 		)
 		(property "Description" "Resistor"
 			(at 129.54 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C23345"
+			(at 129.54 85.09 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3130,7 +3163,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 123.19 58.7248 0)
 			(hide yes)
 			(show_name no)
@@ -3154,6 +3187,17 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 119.38 59.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C14663"
+			(at 119.38 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3209,7 +3253,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 129.54 84.328 90)
 			(hide yes)
 			(show_name no)
@@ -3233,6 +3277,17 @@
 		)
 		(property "Description" "Resistor"
 			(at 129.54 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C23345"
+			(at 129.54 82.55 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3316,6 +3371,17 @@
 			)
 		)
 		(property "Description" "Very low capacitance ESD protection diode, 2 data-line, SOT-23-6"
+			(at 115.57 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C7519"
 			(at 115.57 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -3544,7 +3610,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 145.542 52.07 90)
 			(hide yes)
 			(show_name no)
@@ -3579,6 +3645,17 @@
 		)
 		(property "Purpose" ""
 			(at 147.32 52.07 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C23186"
+			(at 147.32 52.07 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3781,7 +3858,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "D_Zener"
+		(property "Value" "SMF5.0A"
 			(at 97.79 101.5999 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3792,7 +3869,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_SMD:D_SOD-123F"
 			(at 95.25 100.33 0)
 			(hide yes)
 			(show_name no)
@@ -3816,6 +3893,17 @@
 		)
 		(property "Description" "Zener diode"
 			(at 95.25 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C2980403"
+			(at 95.25 100.33 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3874,7 +3962,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 134.112 54.61 90)
 			(hide yes)
 			(show_name no)
@@ -3897,6 +3985,17 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 135.89 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C23186"
 			(at 135.89 54.61 0)
 			(hide yes)
 			(show_name no)
@@ -4112,7 +4211,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 141.2748 33.02 0)
 			(hide yes)
 			(show_name no)
@@ -4135,6 +4234,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 142.24 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C15850"
 			(at 142.24 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -4192,7 +4302,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
 			(at 76.2 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -4215,6 +4325,17 @@
 			)
 		)
 		(property "Description" "USB 2.0-only 16P Type-C Receptacle connector"
+			(at 72.39 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C165948"
 			(at 72.39 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -4319,7 +4440,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 145.0848 85.09 0)
 			(hide yes)
 			(show_name no)
@@ -4354,6 +4475,17 @@
 		)
 		(property "Purpose" ""
 			(at 146.05 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C14663"
+			(at 146.05 88.9 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

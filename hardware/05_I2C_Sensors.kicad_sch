@@ -1699,7 +1699,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 199.39 108.458 90)
 			(hide yes)
 			(show_name no)
@@ -1723,6 +1723,17 @@
 		)
 		(property "Description" "Resistor"
 			(at 199.39 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C23162"
+			(at 199.39 106.68 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1779,7 +1790,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 105.41 77.7748 0)
 			(hide yes)
 			(show_name no)
@@ -1803,6 +1814,17 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 101.6 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C14663"
+			(at 101.6 78.74 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2408,6 +2430,17 @@
 				)
 			)
 		)
+		(property "LCSC Part" "C92489"
+			(at 120.65 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "28af65d6-ff5c-40f9-881b-95551fb0c5d5")
 		)
@@ -2554,7 +2587,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 180.0352 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -2577,6 +2610,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 179.07 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C14663"
 			(at 179.07 87.63 0)
 			(hide yes)
 			(show_name no)
@@ -2791,7 +2835,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 199.39 78.232 90)
 			(hide yes)
 			(show_name no)
@@ -2815,6 +2859,17 @@
 		)
 		(property "Description" "Resistor"
 			(at 199.39 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C23162"
+			(at 199.39 80.01 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2948,7 +3003,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 134.62 79.7052 0)
 			(hide yes)
 			(show_name no)
@@ -2972,6 +3027,17 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 138.43 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C14663"
+			(at 138.43 78.74 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

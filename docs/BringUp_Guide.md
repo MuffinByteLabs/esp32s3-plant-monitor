@@ -24,15 +24,18 @@
   * **~3.5 V — stop transmitting.** Regulator rule: the AP2112K needs ~0.2 V headroom to hold 3.3 V during a 355 mA TX peak. Sensors + sleep still fine below this.
   * **3.0 V — deep sleep, stop everything.** Battery rule (PKCell discharge floor). The pack's own PCM doesn't trip until 2.5 V — that half-volt gap is firmware's responsibility.
 
-## 2. Probe points (Rev A has no test points — use these pads)
+## 2. Probe points (TP1–TP12 fitted 2026-07-22; backup pads for tight spots)
 
-| Net | Probe at | Net | Probe at |
-|---|---|---|---|
-| +5V_PROT | C2 (+) or F1 pin 2 | VBAT | C16 (+) |
-| VSYS | C5 or C18 (+) | BAT_SENSE | C17 (+) |
-| +3V3 | C7 or C9 (+) | ADC_SOIL | C14 (+) or R11 top |
-| GND | USB shell, J3 pin 2 | EN | C8 / R7 junction |
-| USB_VBUS | C1 (+) | IO0 | R6 / SW1 junction |
+| Net | TP | Backup pad | Net | TP | Backup pad |
+|---|---|---|---|---|---|
+| +5V_PROT | TP1 | C2 (+) / F1 pin 2 | BAT_SENSE | TP5 | C17 (+) |
+| VSYS | TP2 | C5 / C18 (+) | ADC_SOIL | TP6 | C14 (+) / R11 top |
+| +3V3 | TP3 | C7 / C9 (+) | EN | TP9 | C8 / R7 junction |
+| VBAT | TP4 | C16 (+) | IO0 | TP10 | R6 / SW1 junction |
+| GND | TP7, TP8\* | USB shell / J3 pin 2 | TXD0 / RXD0 | TP11\*, TP12\* | — (module pins 37/36) |
+| USB_VBUS | — | C1 (+) | | | |
+
+\* Through-hole 1.0 mm pads — a header pin or DuPont jumper end fits and holds. **Recovery UART / early-boot logs:** adapter TXD→TP12 (RXD0), adapter RXD→TP11 (TXD0), GND→TP8; 115200 baud; to flash, hold BOOT (SW1) and tap RESET (SW2). 3.3 V logic only — never connect an adapter's 5 V / 3V3 power pins.
 
 ## 3. Sequence
 
@@ -51,7 +54,7 @@
 
 7. **Meter the pack plug** (rule 0.1), then connect at J3 with USB still in. Charge LED on; VBAT (C16) climbs toward 4.20 V; charge current ≈ 90–110 mA (your as-received cell measured 3.95 V, so expect a shortish CC phase then taper).
 8. BAT_SENSE = VBAT ÷ 2 (±1 %). Firmware reading ×2 should match the meter at C16.
-9. **Hand-over test (scope).** Battery at ~3.7–3.9 V for a worthwhile test. Scope on VSYS (C18), trigger single, ~50 ms/div. Pull USB.
+9. **Hand-over test (scope).** Battery at ~3.7–3.9 V for a worthwhile test. Scope on VSYS (TP2; C18 (+) works too), trigger single, ~50 ms/div. Pull USB.
    * **PASS:** VSYS steps down and rides at ≈ VBAT − 0.65 V for **≤ ~100 ms**, then snaps up to ≈ VBAT and stays; board keeps running, no reset, +3V3 never drops below ~3.0 V.
    * **FAIL (old behavior):** the notch lasts ~0.5–1 s and the board reboots → R16 isn't the 10 k part, or the gate node has extra capacitance.
 10. Battery-only cold boot: unplug USB, press reset (SW2) — board must boot and run from battery alone.
