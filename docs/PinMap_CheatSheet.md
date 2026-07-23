@@ -1,5 +1,5 @@
 # Pin Map Cheat Sheet — ESP32-S3 Plant Monitor Rev A
-*Supersedes `references/ESP32S3_PlantMonitor_RevA_PinMap_CheatSheet.pdf` (which still showed the deleted soil divider). Designators match the schematic. Updated 2026-07-20.*
+*Supersedes `references/ESP32S3_PlantMonitor_RevA_PinMap_CheatSheet.pdf` (which still showed the deleted soil divider). Designators match the schematic. Updated 2026-07-20; test points added 2026-07-22.*
 
 ## At a glance
 
@@ -26,7 +26,7 @@
 | 39 | IO1 | ADC_SOIL | Soil reading, ADC1_CH0, direct |
 | 38 | IO2 | BAT_SENSE | VBAT÷2, ADC1_CH1 |
 | 23 | IO21 | SENS_PWR_EN | Probe power switch, LOW = on |
-| 37/36 | TXD0/RXD0 | — | Unused (no pads on Rev A — add TPs at layout) |
+| 37/36 | TXD0/RXD0 | — | Unused in normal run; recovery UART via TP11/TP12 (through-hole pads) |
 | 1, 40, 41 | GND/EPAD | GND | Ground + thermal |
 
 ## Net glossary (as built)
@@ -49,6 +49,6 @@
 * **J2 (soil, JST-PH 3):** 1 = ADC_SOIL · **2 = SOIL_PWR (middle)** · 3 = GND — matches DFRobot Gravity order (signal/VCC/GND). Buzz out the cable anyway.
 * **J3 (battery, JST-PH 2):** 1 = VBAT_RAW (+) · 2 = GND. **Meter the pack plug before first connection.**
 
-## Probe points (no TPs on Rev A)
+## Test points (fitted 2026-07-22)
 
-+5V_PROT → C2/F1.2 · VSYS → C5/C18 · +3V3 → C7/C9 · VBAT → C16 · BAT_SENSE → C17 · ADC_SOIL → C14/R11 · EN → C8 · IO0 → R6/SW1 · GND → USB shell / J3.2
+TP1 +5V_PROT · TP2 VSYS · TP3 +3V3 · TP4 VBAT · TP5 BAT_SENSE · TP6 ADC_SOIL · TP7 GND · TP8 GND (THT) · TP9 EN · TP10 IO0 · TP11 TXD0 (THT) · TP12 RXD0 (THT). THT = 1.0 mm through-hole, fits a header/jumper pin — recovery-UART trio TP11/TP12/TP8. Backup pads: BringUp_Guide §2.

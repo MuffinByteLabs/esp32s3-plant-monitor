@@ -77,4 +77,16 @@ Track three things: the **+5V_PROT rail** (which is also Q3's gate), **VSYS** (Q
 * [Zak Kemble — load sharing](https://blog.zakkemble.net/a-lithium-battery-charger-with-load-sharing/) · [Microchip AN1149](https://ww1.microchip.com/downloads/en/AppNotes/01149c.pdf)
 
 ---
+
+## 7. Part selection session (2026-07-20) — decisions & lessons
+
+All 53 parts assigned footprints + LCSC numbers in the schematic (verified 53/53); BOM regenerated from the schematic. Full list lives in `docs/ESP32S3_PlantMonitor_RevA_BOM.xlsx`.
+
+* **LED chemistry rule (learned the hard way):** red/yellow/yellow-green ≈ 2 V forward — fine on a 3.3 V rail through a resistor; blue/white/emerald/pure-green ≈ 3 V — will NOT light from 3.3 V through 10 k. Power LED is KT-0603YG (C2289, Vf 2.0–2.2 V, yellow-green). It's a 30–42 mcd part → ~0.2 mcd at 120 µA: faint indoor glow is *by design*; bench-check per §3.
+* **4-pad tactile switch trap:** TS-1187A pads pair A-B (top) / C-D (bottom) internally. Naive 1/2/3/4 numbering put both symbol pins on the same metal — would have held EN at GND forever. Footprint pads renumbered 1/1/2/2 (top/bottom rows), verified against the datasheet circuit diagram. Always check the pairing diagram on 4-leg buttons.
+* **Basic vs Extended:** purely "is this exact value permanently loaded in JLC's machines" — not quality. Stock and library status are live (C25804 10 k hit zero stock; C2289 rotated Basic→Extended mid-project). Decisions happen at BOM upload, with alternates noted (10 k alt: C98220).
+* **KiCad field truths:** the Fields Table groups by *exact text* (`1u` ≠ `1uF`) **and** by every group-checked column; editor state ≠ disk state until Ctrl-S — all verification (and git, and the fab) reads the disk.
+* Values normalized (1uF/4.7uF), D1=SMF5.0A, F1=1206L075/16WR, D2=LED_YG, D3=LED_RED; DNP only on C3/C4.
+
+---
 *Add new dated entries below.*

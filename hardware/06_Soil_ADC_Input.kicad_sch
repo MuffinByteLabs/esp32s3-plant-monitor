@@ -1282,7 +1282,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 83.312 91.44 90)
 			(hide yes)
 			(show_name no)
@@ -1305,6 +1305,17 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 85.09 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C25803"
 			(at 85.09 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -1364,7 +1375,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
 			(at 104.14 83.82 0)
 			(hide yes)
 			(show_name no)
@@ -1387,6 +1398,17 @@
 			)
 		)
 		(property "Description" "P-MOSFET transistor, gate/source/drain"
+			(at 99.06 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C15127"
 			(at 99.06 86.36 0)
 			(hide yes)
 			(show_name no)
@@ -1449,7 +1471,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 126.6952 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -1472,6 +1494,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 125.73 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C14663"
 			(at 125.73 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -1531,7 +1564,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_JST:JST_PH_S3B-PH-K_1x03_P2.00mm_Horizontal"
 			(at 135.89 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -1554,6 +1587,17 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 135.89 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C157929"
 			(at 135.89 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -1694,7 +1738,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 111.252 57.15 90)
 			(hide yes)
 			(show_name no)
@@ -1717,6 +1761,17 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 113.03 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C25803"
 			(at 113.03 57.15 0)
 			(hide yes)
 			(show_name no)
