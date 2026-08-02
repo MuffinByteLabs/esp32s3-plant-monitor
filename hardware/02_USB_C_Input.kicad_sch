@@ -4302,7 +4302,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
+		(property "Footprint" "PlantMonitor_JLC:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
 			(at 76.2 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -4338,6 +4338,16 @@
 		(property "LCSC Part" "C165948"
 			(at 72.39 58.42 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Purpose" ""
+			(at 72.39 58.42 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

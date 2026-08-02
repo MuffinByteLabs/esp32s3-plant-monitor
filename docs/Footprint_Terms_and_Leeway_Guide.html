@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Footprint terms &amp; how much leeway — plain English</title>
+<style>
+  :root{
+    --bg:#f7f8fa; --panel:#fff; --ink:#12161c; --ink2:#525c6b; --ink3:#8b95a5;
+    --line:#e3e7ed; --line2:#eff2f6;
+    --accent:#2f6fd0; --accent-soft:#eaf1fc;
+    --ok:#1a8a4a; --ok-soft:#e7f6ed;
+    --warn:#b45309; --warn-soft:#fdf3e4;
+    --bad:#c2410c; --bad-soft:#fdeee6;
+    --copper:#c07a3e; --copper-soft:#f3e2d1;
+    --metal:#9aa6b6; --solder:#8fa3ba; --body:#3c4654;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:34px 22px 90px}
+
+  h1{font-size:26px;line-height:1.25;margin:0 0 6px;letter-spacing:-.4px}
+  .lede{color:var(--ink2);font-size:15.5px;margin:0 0 30px;max-width:70ch}
+  h2{font-size:19px;margin:44px 0 4px;letter-spacing:-.2px;display:flex;align-items:baseline;gap:11px}
+  h2 .n{font-family:var(--mono);font-size:12px;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:5px;font-weight:600}
+  h2+.sub{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:70ch}
+  h3{font-size:15.5px;margin:26px 0 8px}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:16px}
+
+  .hero{background:var(--panel);border:2px solid var(--accent);border-radius:12px;padding:20px 24px;margin-bottom:8px}
+  .hero .k{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);font-weight:700;margin-bottom:7px}
+  .hero p{margin:0;font-size:17px;line-height:1.55;font-weight:500}
+  .hero .small{font-size:14px;font-weight:400;color:var(--ink2);margin-top:10px}
+
+  figure{margin:0}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 10px 6px;margin:0 0 14px}
+  .fig svg{display:block;width:100%;height:auto}
+  figcaption{font-size:13px;color:var(--ink2);padding:8px 12px 8px;line-height:1.6}
+
+  .defs{list-style:none;padding:0;margin:0;display:grid;gap:11px}
+  .defs li{display:grid;grid-template-columns:132px 1fr;gap:14px;align-items:start;font-size:14px;line-height:1.6}
+  .defs b{font-weight:650;color:var(--ink)}
+  .defs .d{color:var(--ink2)}
+  .defs .plain{display:block;color:var(--ink3);font-size:12.5px;font-style:italic;margin-top:2px}
+  @media(max-width:640px){.defs li{grid-template-columns:1fr;gap:2px}}
+
+  /* rules table */
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);font-weight:700;padding:0 10px 8px;border-bottom:1px solid var(--line)}
+  th:first-child{padding-left:0} td:first-child{padding-left:0}
+  td{padding:10px;border-bottom:1px solid var(--line2);vertical-align:top;line-height:1.55}
+  tr:last-child td{border-bottom:0}
+  .w-what{width:31%;font-weight:550}
+  .tagcol{width:1%;white-space:nowrap}
+
+  .tier{border-radius:11px;padding:16px 18px;margin-bottom:13px;border-left:4px solid}
+  .tier h3{margin:0 0 3px;font-size:15.5px;display:flex;align-items:center;gap:9px}
+  .tier .rule{font-size:13.5px;margin:0 0 12px}
+  .t-exact{background:var(--bad-soft);border-color:var(--bad)} .t-exact h3{color:var(--bad)}
+  .t-min{background:var(--warn-soft);border-color:var(--warn)} .t-min h3{color:var(--warn)}
+  .t-loose{background:var(--ok-soft);border-color:var(--ok)} .t-loose h3{color:var(--ok)}
+  .tier table{margin:0}
+  .tier th{border-bottom-color:rgba(0,0,0,.12)}
+  .tier td{border-bottom-color:rgba(0,0,0,.07)}
+  .pill{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;font-family:var(--mono);letter-spacing:.02em}
+  .p-exact{background:var(--bad);color:#fff}
+  .p-min{background:var(--warn);color:#fff}
+  .p-loose{background:var(--ok);color:#fff}
+
+  /* interactive */
+  .demo{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .demo .stage{padding:16px 12px 4px;background:var(--line2)}
+  .demo svg{display:block;width:100%;height:auto}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;padding:11px 20px 0;font-size:12px;color:var(--ink2)}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .ctrls{padding:14px 20px;display:grid;gap:14px}
+  .ctl{display:grid;grid-template-columns:150px 1fr 74px;gap:14px;align-items:center;font-size:13.5px}
+  .ctl input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+  .ctl .val{font-family:var(--mono);font-size:13px;text-align:right;color:var(--ink2)}
+  @media(max-width:600px){.ctl{grid-template-columns:1fr;gap:4px}.ctl .val{text-align:left}}
+  .verdict{padding:14px 20px;border-top:1px solid var(--line);font-size:14.5px;display:flex;gap:12px;align-items:flex-start}
+  .verdict .vtag{font-weight:700;font-size:12px;padding:4px 11px;border-radius:6px;white-space:nowrap;font-family:var(--mono)}
+  .v-good .vtag{background:var(--ok);color:#fff} .v-good{background:var(--ok-soft);color:var(--ok)}
+  .v-tight .vtag{background:var(--warn);color:#fff} .v-tight{background:var(--warn-soft);color:var(--warn)}
+  .v-bad .vtag{background:var(--bad);color:#fff} .v-bad{background:var(--bad-soft);color:var(--bad)}
+  .verdict .vtxt{color:var(--ink);font-weight:500}
+  .presets{display:flex;gap:7px;flex-wrap:wrap;padding:0 20px 16px}
+  .presets button{background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:6px 12px;font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+  .presets button:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* flow */
+  .flow{counter-reset:st;display:grid;gap:10px}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:15px 18px 15px 56px;position:relative}
+  .step::before{counter-increment:st;content:counter(st);position:absolute;left:17px;top:15px;width:25px;height:25px;border-radius:99px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+  .step b{display:block;font-size:15px;margin-bottom:3px}
+  .step .a{font-size:13.5px;color:var(--ink2);line-height:1.6}
+  .step .a em{color:var(--bad);font-style:normal;font-weight:600}
+  .step.last::before{background:var(--ok)}
+
+  code{font-family:var(--mono);font-size:.9em;background:var(--line2);padding:1.5px 5px;border-radius:4px}
+  .note{font-size:13px;color:var(--ink3);line-height:1.6;margin-top:10px}
+  .foot{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink3)}
+
+  @media print{
+    body{background:#fff}
+    .wrap{padding:0;max-width:none}
+    .card,.fig,.demo,.step,.hero{break-inside:avoid;border-color:#ccc}
+    .demo .ctrls,.presets{display:none}
+    h2{break-after:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Footprint terms &amp; how much leeway you actually have</h1>
+<p class="lede">Written for the ESP32-S3 Plant Monitor Rev&nbsp;A footprint check. No jargon assumed — every term is defined with a picture the first time it appears.</p>
+
+<div class="hero">
+  <div class="k">If you remember one thing</div>
+  <p>A footprint is not trying to copy the datasheet drawing. It is trying to make sure <b>every piece of metal on the part lands on copper, with a little copper sticking out past each end.</b></p>
+  <p class="small">That's what the solder needs. Most of the numbers in a datasheet's suggested layout are one designer's way of achieving that — there are many valid ways. Only a few numbers are actually load-bearing, and this page tells you which.</p>
+</div>
+
+<!-- ══════════ PART 1 ══════════ -->
+<h2><span class="n">1</span> The words, with pictures</h2>
+<p class="sub">Start here. Everything else on the page uses these five or six words.</p>
+
+<h3>A part with legs (your SOT-23 parts: the LDO, the charger, the MOSFETs, the ESD chip)</h3>
+
+<figure class="fig">
+<svg viewBox="0 0 760 362" role="img" aria-label="Side view of a component leg sitting on a copper pad">
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 z" fill="#2f6fd0"/></marker>
+    <marker id="arS" markerWidth="8" markerHeight="8" refX="1" refY="4" orient="auto"><path d="M7,1 L0,4 L7,7 z" fill="#2f6fd0"/></marker>
+    <marker id="arR" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 z" fill="#c2410c"/></marker>
+    <marker id="arRS" markerWidth="8" markerHeight="8" refX="1" refY="4" orient="auto"><path d="M7,1 L0,4 L7,7 z" fill="#c2410c"/></marker>
+    <pattern id="hatch" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="7" stroke="#ccd3db" stroke-width="3"/>
+    </pattern>
+  </defs>
+
+  <rect x="20" y="206" width="720" height="32" fill="url(#hatch)" stroke="#c2cad4"/>
+  <text x="30" y="228" font-size="11.5" fill="#7b8593" font-family="ui-monospace,monospace">your PCB</text>
+
+  <rect x="336" y="194" width="156" height="12" fill="#c07a3e" stroke="#96602f"/>
+
+  <path d="M336,194 L372,194 L372,172 Q 352,186 336,194 Z" fill="#6d84a0"/>
+  <path d="M492,194 L452,194 L452,176 Q 474,187 492,194 Z" fill="#6d84a0"/>
+
+  <rect x="60" y="58" width="240" height="82" rx="5" fill="#3c4654"/>
+  <text x="180" y="105" font-size="14" fill="#fff" text-anchor="middle" font-weight="600" letter-spacing="1.6">BODY</text>
+
+  <path d="M300,92 L332,92 L378,180 L452,180 L452,194 L372,194 L322,106 L300,106 Z" fill="#98a4b4" stroke="#74808e"/>
+  <rect x="372" y="180" width="80" height="14" fill="none" stroke="#2f6fd0" stroke-width="1.6" stroke-dasharray="4 3"/>
+
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="336" y1="206" x2="336" y2="332"/><line x1="372" y1="194" x2="372" y2="332"/>
+    <line x1="452" y1="194" x2="452" y2="332"/><line x1="492" y1="206" x2="492" y2="332"/>
+  </g>
+
+  <text x="372" y="254" font-size="11.5" fill="#525c6b" text-anchor="middle" font-weight="700">HEEL</text>
+  <text x="452" y="254" font-size="11.5" fill="#525c6b" text-anchor="middle" font-weight="700">TOE</text>
+
+  <g stroke="#c2410c" stroke-width="1.6">
+    <line x1="338" y1="270" x2="370" y2="270" marker-start="url(#arRS)" marker-end="url(#arR)"/>
+    <line x1="454" y1="270" x2="490" y2="270" marker-start="url(#arRS)" marker-end="url(#arR)"/>
+  </g>
+  <text x="354" y="288" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="600">overhang</text>
+  <text x="472" y="288" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="600">overhang</text>
+
+  <text x="412" y="303" font-size="12" fill="#2f6fd0" text-anchor="middle" font-weight="700">FOOT</text>
+  <line x1="373" y1="308" x2="451" y2="308" stroke="#2f6fd0" stroke-width="1.6" marker-start="url(#arS)" marker-end="url(#ar)"/>
+  <line x1="337" y1="331" x2="491" y2="331" stroke="#2f6fd0" stroke-width="1.6" marker-start="url(#arS)" marker-end="url(#ar)"/>
+  <text x="414" y="350" font-size="12" fill="#2f6fd0" text-anchor="middle" font-weight="700">PAD (the copper)</text>
+
+  <g stroke="#8b95a5" stroke-width="1" fill="none">
+    <path d="M398,58 L352,124"/><path d="M528,146 L486,190"/>
+  </g>
+  <text x="402" y="52" font-size="12.5" fill="#525c6b" font-weight="600">LEAD (the leg)</text>
+  <text x="534" y="142" font-size="12.5" fill="#525c6b" font-weight="600">SOLDER</text>
+  <text x="534" y="158" font-size="11" fill="#8b95a5">fills the overhang and</text>
+  <text x="534" y="172" font-size="11" fill="#8b95a5">freezes into a wedge</text>
+</svg>
+<figcaption>One leg, seen from the side. The leg bends down out of the body and flattens out — that flat bit is the <b>foot</b>. The copper <b>pad</b> underneath is longer than the foot, so there's bare copper poking out at each end. Molten solder runs into those gaps and freezes into a wedge. That wedge is the joint.</figcaption>
+</figure>
+
+<div class="card">
+<ul class="defs">
+  <li><b>Pad</b><span class="d">One rectangle of copper on your board. Also called a <i>land</i>.<span class="plain">The metal shape you're measuring in KiCad.</span></span></li>
+  <li><b>Footprint</b><span class="d">The whole set of pads for one part, plus its outline and courtyard.<span class="plain">What you pick in KiCad. It's a pattern, not a part.</span></span></li>
+  <li><b>Lead</b><span class="d">One leg of the part.<span class="plain">Just "the leg".</span></span></li>
+  <li><b>Foot</b><span class="d">The flat underside of the leg — the only bit that actually touches copper.<span class="plain">Like a human foot: the flat part on the ground.</span></span></li>
+  <li><b>Heel</b><span class="d">The end of the foot closest to the body.<span class="plain">Same as your heel — the back.</span></span></li>
+  <li><b>Toe</b><span class="d">The far tip of the foot, pointing away from the body.<span class="plain">Same as your toes — the front.</span></span></li>
+  <li><b>Fillet</b><span class="d">The wedge of solder that forms in the overhang past the heel or toe.<span class="plain">The bead of solder you can see around a good joint.</span></span></li>
+</ul>
+<p class="note"><b>Why anyone cares about heel vs toe:</b> the heel wedge is the strong one — it's the part inspectors X-ray and the part that survives being dropped. A pad biased toward the heel (like KiCad's) makes a mechanically stronger joint. A pad biased toward the toe (like Microchip's) makes a joint that's easier to see with a camera. Both work. That's the whole disagreement you found on the SOT-23-5.</p>
+</div>
+
+<h3>Looking down from above — the words for spacing</h3>
+
+<figure class="fig">
+<svg viewBox="0 0 760 400" role="img" aria-label="Top view of a five pad footprint showing pitch, gap and span">
+  <rect x="148" y="74" width="298" height="272" fill="none" stroke="#b0b9c4" stroke-width="1.4" stroke-dasharray="6 4"/>
+  <text x="150" y="66" font-size="11" fill="#8b95a5" font-family="ui-monospace,monospace">courtyard</text>
+  <path d="M148,346 L120,362" stroke="#8b95a5" stroke-width="1" fill="none"/>
+  <text x="116" y="368" font-size="10.5" fill="#8b95a5" text-anchor="end">= personal-space box</text>
+
+  <rect x="200" y="170" width="194" height="80" fill="none" stroke="#9aa6b6" stroke-width="1.4"/>
+  <text x="297" y="215" font-size="11.5" fill="#8b95a5" text-anchor="middle">part body</text>
+
+  <rect x="170" y="96" width="70" height="62" rx="3" fill="#c07a3e"/>
+  <rect x="354" y="96" width="70" height="62" rx="3" fill="#c07a3e"/>
+  <text x="205" y="133" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">5</text>
+  <text x="389" y="133" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">4</text>
+  <rect x="170" y="262" width="70" height="62" rx="3" fill="#c07a3e"/>
+  <rect x="262" y="262" width="70" height="62" rx="3" fill="#c07a3e"/>
+  <rect x="354" y="262" width="70" height="62" rx="3" fill="#c07a3e"/>
+  <text x="205" y="299" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">1</text>
+  <text x="297" y="299" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">2</text>
+  <text x="389" y="299" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">3</text>
+
+  <circle cx="160" cy="293" r="6.5" fill="#3c4654"/>
+  <text x="160" y="272" font-size="10" fill="#525c6b" text-anchor="middle">pin 1</text>
+
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="170" y1="158" x2="114" y2="158"/><line x1="170" y1="262" x2="114" y2="262"/>
+  </g>
+  <line x1="120" y1="159" x2="120" y2="261" stroke="#2f6fd0" stroke-width="1.7" marker-start="url(#arS)" marker-end="url(#ar)"/>
+  <text x="108" y="196" font-size="11" fill="#2f6fd0" text-anchor="end" font-weight="700">GAP between</text>
+  <text x="108" y="211" font-size="11" fill="#2f6fd0" text-anchor="end" font-weight="700">the two rows</text>
+  <text x="108" y="227" font-size="10" fill="#8b95a5" text-anchor="end">no routing fits here</text>
+
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="424" y1="96" x2="480" y2="96"/><line x1="424" y1="324" x2="480" y2="324"/>
+  </g>
+  <line x1="470" y1="97" x2="470" y2="323" stroke="#2f6fd0" stroke-width="1.7" marker-start="url(#arS)" marker-end="url(#ar)"/>
+  <text x="486" y="206" font-size="12" fill="#2f6fd0" font-weight="700">SPAN</text>
+  <text x="486" y="222" font-size="10.5" fill="#8b95a5">outer edge to outer edge</text>
+
+  <line x1="241" y1="293" x2="261" y2="293" stroke="#c2410c" stroke-width="1.8" marker-start="url(#arRS)" marker-end="url(#arR)"/>
+  <path d="M251,300 L251,332 L300,332 L462,346" stroke="#8b95a5" stroke-width="1" fill="none"/>
+  <text x="472" y="352" font-size="11.5" fill="#c2410c" font-weight="700">GAP between neighbours</text>
+  <text x="472" y="367" font-size="10.5" fill="#8b95a5">the solder-bridge risk</text>
+
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="205" y1="324" x2="205" y2="358"/><line x1="297" y1="324" x2="297" y2="358"/>
+  </g>
+  <line x1="206" y1="352" x2="296" y2="352" stroke="#c2410c" stroke-width="1.8" marker-start="url(#arRS)" marker-end="url(#arR)"/>
+  <text x="251" y="374" font-size="12" fill="#c2410c" text-anchor="middle" font-weight="700">PITCH</text>
+</svg>
+<figcaption>The same part from above (this is a SOT-23-5, like your AP2112K and MCP73831). Red = the two dimensions that can actually break a board. Blue = the ones with room to move.</figcaption>
+</figure>
+
+<div class="card">
+<ul class="defs">
+  <li><b>Pitch</b><span class="d">The centre-to-centre distance between two neighbouring pads in the same row.<span class="plain">Fence-post spacing. How far apart the legs are.</span></span></li>
+  <li><b>Gap</b><span class="d">The bare board <i>between</i> two pads. Two kinds matter: between side-by-side neighbours, and between the two rows.<span class="plain">The empty space. Too small = solder bridges two legs together.</span></span></li>
+  <li><b>Span</b><span class="d">Total distance across, outer edge to outer edge.<span class="plain">How wide the whole pad group is.</span></span></li>
+  <li><b>Courtyard</b><span class="d">An invisible box on its own layer saying "keep other parts out of here."<span class="plain">Personal space. It doesn't get manufactured — it's just KiCad reminding you not to crowd things.</span></span></li>
+</ul>
+</div>
+
+<h3>Parts with no legs — your resistors, capacitors, LEDs, fuse</h3>
+
+<figure class="fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Side and top view of a chip resistor on two pads">
+  <text x="28" y="112" font-size="11.5" fill="#8b95a5" font-family="ui-monospace,monospace">side view</text>
+  <rect x="20" y="176" width="330" height="30" fill="url(#hatch)" stroke="#c2cad4"/>
+  <rect x="66" y="164" width="84" height="12" fill="#c07a3e" stroke="#96602f"/>
+  <rect x="228" y="164" width="84" height="12" fill="#c07a3e" stroke="#96602f"/>
+  <path d="M66,164 L108,164 L108,146 Q 86,158 66,164 Z" fill="#6d84a0"/>
+  <path d="M312,164 L270,164 L270,146 Q 292,158 312,164 Z" fill="#6d84a0"/>
+  <rect x="108" y="122" width="162" height="42" fill="#3c4654"/>
+  <rect x="108" y="122" width="26" height="42" fill="#98a4b4" stroke="#74808e"/>
+  <rect x="244" y="122" width="26" height="42" fill="#98a4b4" stroke="#74808e"/>
+
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="66" y1="176" x2="66" y2="236"/><line x1="108" y1="164" x2="108" y2="236"/>
+    <line x1="270" y1="164" x2="270" y2="236"/><line x1="312" y1="176" x2="312" y2="236"/>
+    <line x1="150" y1="176" x2="150" y2="262"/><line x1="228" y1="176" x2="228" y2="262"/>
+  </g>
+  <g stroke="#c2410c" stroke-width="1.6">
+    <line x1="68" y1="234" x2="106" y2="234" marker-start="url(#arRS)" marker-end="url(#arR)"/>
+    <line x1="272" y1="234" x2="310" y2="234" marker-start="url(#arRS)" marker-end="url(#arR)"/>
+  </g>
+  <text x="87" y="252" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="600">overhang</text>
+  <text x="291" y="252" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="600">overhang</text>
+  <line x1="151" y1="262" x2="227" y2="262" stroke="#2f6fd0" stroke-width="1.6" marker-start="url(#arS)" marker-end="url(#ar)"/>
+  <text x="189" y="282" font-size="11.5" fill="#2f6fd0" text-anchor="middle" font-weight="700">GAP</text>
+
+  <path d="M154,100 L124,118" stroke="#8b95a5" stroke-width="1" fill="none"/>
+  <text x="158" y="96" font-size="12" fill="#525c6b" font-weight="600">END CAP</text>
+  <text x="158" y="111" font-size="10.5" fill="#8b95a5">the silver metal — this is the &quot;foot&quot;</text>
+
+  <text x="438" y="112" font-size="11.5" fill="#8b95a5" font-family="ui-monospace,monospace">top view</text>
+  <rect x="432" y="136" width="278" height="100" fill="none" stroke="#b0b9c4" stroke-dasharray="6 4"/>
+  <rect x="452" y="148" width="70" height="76" rx="3" fill="#c07a3e"/>
+  <rect x="620" y="148" width="70" height="76" rx="3" fill="#c07a3e"/>
+  <rect x="496" y="158" width="150" height="56" fill="none" stroke="#9aa6b6" stroke-width="1.4"/>
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="522" y1="148" x2="522" y2="118"/><line x1="620" y1="148" x2="620" y2="118"/>
+    <line x1="452" y1="224" x2="452" y2="262"/><line x1="690" y1="224" x2="690" y2="262"/>
+  </g>
+  <line x1="523" y1="124" x2="619" y2="124" stroke="#2f6fd0" stroke-width="1.6" marker-start="url(#arS)" marker-end="url(#ar)"/>
+  <text x="571" y="115" font-size="11.5" fill="#2f6fd0" text-anchor="middle" font-weight="700">GAP</text>
+  <line x1="453" y1="258" x2="689" y2="258" stroke="#2f6fd0" stroke-width="1.6" marker-start="url(#arS)" marker-end="url(#ar)"/>
+  <text x="571" y="278" font-size="11.5" fill="#2f6fd0" text-anchor="middle" font-weight="700">SPAN</text>
+</svg>
+<figcaption>A chip resistor or capacitor has no legs — just a silver metal cap wrapped around each end. Everything works the same: the cap is the "foot", and the pad has to reach under it <em>and</em> poke out past it. There's only one gap to worry about, and no pitch at all.</figcaption>
+</figure>
+
+<h3>Through-hole parts — your two JST battery / sensor connectors</h3>
+
+<figure class="fig">
+<svg viewBox="0 0 760 296" role="img" aria-label="Cross section and top view of a through hole pad">
+  <text x="44" y="60" font-size="11.5" fill="#8b95a5" font-family="ui-monospace,monospace">cut through the board</text>
+
+  <rect x="60" y="150" width="154" height="70" fill="url(#hatch)" stroke="#c2cad4"/>
+  <rect x="266" y="150" width="114" height="70" fill="url(#hatch)" stroke="#c2cad4"/>
+  <rect x="214" y="150" width="8" height="70" fill="#c07a3e"/>
+  <rect x="258" y="150" width="8" height="70" fill="#c07a3e"/>
+  <rect x="190" y="142" width="32" height="8" fill="#c07a3e"/>
+  <rect x="258" y="142" width="32" height="8" fill="#c07a3e"/>
+  <rect x="190" y="220" width="32" height="8" fill="#c07a3e"/>
+  <rect x="258" y="220" width="32" height="8" fill="#c07a3e"/>
+
+  <path d="M192,142 L228,142 L228,118 Q 208,132 192,142 Z" fill="#6d84a0"/>
+  <path d="M288,142 L252,142 L252,118 Q 272,132 288,142 Z" fill="#6d84a0"/>
+  <rect x="228" y="86" width="24" height="150" fill="#98a4b4" stroke="#74808e"/>
+
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="222" y1="228" x2="222" y2="258"/><line x1="258" y1="228" x2="258" y2="258"/>
+  </g>
+  <line x1="223" y1="252" x2="257" y2="252" stroke="#c2410c" stroke-width="1.8" marker-start="url(#arRS)" marker-end="url(#arR)"/>
+  <text x="240" y="273" font-size="12" fill="#c2410c" text-anchor="middle" font-weight="700">DRILL Ø — the hole</text>
+  <text x="240" y="288" font-size="10.5" fill="#8b95a5" text-anchor="middle">must be wider than the pin</text>
+
+  <line x1="191" y1="130" x2="221" y2="130" stroke="#2f6fd0" stroke-width="1.6" marker-start="url(#arS)" marker-end="url(#ar)"/>
+  <path d="M182,120 L200,127" stroke="#8b95a5" stroke-width="1" fill="none"/>
+  <text x="178" y="112" font-size="11.5" fill="#2f6fd0" text-anchor="end" font-weight="700">ANNULAR RING</text>
+  <text x="178" y="126" font-size="10.5" fill="#8b95a5" text-anchor="end">the copper collar</text>
+
+  <path d="M296,80 L256,98" stroke="#8b95a5" stroke-width="1" fill="none"/>
+  <text x="300" y="78" font-size="12" fill="#525c6b" font-weight="600">the connector&#39;s pin</text>
+
+  <text x="446" y="60" font-size="11.5" fill="#8b95a5" font-family="ui-monospace,monospace">top view</text>
+  <g>
+    <circle cx="500" cy="172" r="32" fill="#c07a3e"/><circle cx="500" cy="172" r="17" fill="#f7f8fa" stroke="#96602f"/>
+    <circle cx="590" cy="172" r="32" fill="#c07a3e"/><circle cx="590" cy="172" r="17" fill="#f7f8fa" stroke="#96602f"/>
+    <circle cx="680" cy="172" r="32" fill="#c07a3e"/><circle cx="680" cy="172" r="17" fill="#f7f8fa" stroke="#96602f"/>
+  </g>
+  <rect x="464" y="136" width="72" height="72" fill="none" stroke="#3c4654" stroke-width="1.6"/>
+  <text x="500" y="126" font-size="10.5" fill="#3c4654" text-anchor="middle" font-weight="700">square pad = pin 1</text>
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="500" y1="208" x2="500" y2="242"/><line x1="590" y1="208" x2="590" y2="242"/>
+  </g>
+  <line x1="501" y1="236" x2="589" y2="236" stroke="#c2410c" stroke-width="1.8" marker-start="url(#arRS)" marker-end="url(#arR)"/>
+  <text x="545" y="258" font-size="12" fill="#c2410c" text-anchor="middle" font-weight="700">PITCH</text>
+</svg>
+<figcaption>Through-hole is the one place where a number is a genuine physical limit: <b>the hole has to be bigger than the pin.</b> No solder fillet can save you from a hole that's too small — the connector simply will not go in. This is exactly why the Ø0.75 mm drill on your two JST connectors is flagged in the checklist.</figcaption>
+</figure>
+
+<!-- ══════════ PART 2 ══════════ -->
+<h2><span class="n">2</span> See it for yourself</h2>
+<p class="sub">Drag the sliders. The grey foot stays put; you're changing the copper underneath it. Watch when it stops working.</p>
+
+<div class="demo">
+  <div class="stage">
+    <svg id="dsvg" viewBox="0 0 620 196" role="img" aria-label="Interactive diagram of a foot on an adjustable pad">
+      <rect x="10" y="130" width="600" height="26" fill="url(#hatch)" stroke="#c2cad4"/>
+      <rect id="dpad" x="200" y="118" width="220" height="12" fill="#c07a3e" stroke="#96602f"/>
+      <path id="dfilL" fill="#6d84a0"/>
+      <path id="dfilR" fill="#6d84a0"/>
+      <path id="dleg" fill="#98a4b4" stroke="#74808e"/>
+      <rect id="dfoot" x="256" y="102" width="108" height="16" fill="#98a4b4" stroke="#2f6fd0" stroke-width="1.6" stroke-dasharray="4 3"/>
+      <path d="M436,62 L372,98" stroke="#8b95a5" stroke-width="1" fill="none"/>
+      <text x="442" y="58" id="dfootlbl" font-size="11.5" fill="#2f6fd0" font-weight="700">the foot — this stays put</text>
+      <g id="dmarks"></g>
+    </svg>
+  </div>
+  <div class="legend">
+    <span><i style="background:#c07a3e"></i>copper pad</span>
+    <span><i style="background:#98a4b4"></i>metal on the part</span>
+    <span><i style="background:#6d84a0"></i>solder</span>
+  </div>
+  <div class="ctrls">
+    <label class="ctl"><span>How long the pad is</span><input type="range" id="sLen" min="0.20" max="1.60" step="0.01" value="1.10"><span class="val" id="vLen">1.10 mm</span></label>
+    <label class="ctl"><span>Where the pad sits</span><input type="range" id="sOff" min="-0.40" max="0.40" step="0.01" value="0"><span class="val" id="vOff">0.00 mm</span></label>
+  </div>
+  <div class="presets">
+    <button data-l="1.10" data-o="0">Microchip's SOT-23-5 pad</button>
+    <button data-l="1.325" data-o="-0.26">KiCad's SOT-23-5 pad</button>
+    <button data-l="1.60" data-o="0">Much longer pad</button>
+    <button data-l="0.40" data-o="0">Pad too short</button>
+    <button data-l="1.10" data-o="0.38">Pad shifted too far</button>
+  </div>
+  <div class="verdict v-good" id="dverdict">
+    <span class="vtag" id="dtag">GOOD</span>
+    <span class="vtxt" id="dtxt"></span>
+  </div>
+</div>
+<p class="note">Notice what you can and can't break. Making the pad <b>longer</b> never breaks it. Making it much <b>shorter</b>, or <b>sliding it sideways</b>, does — because one end of the metal ends up hanging off the copper. That asymmetry is the whole reason pad length has leeway and pitch doesn't.</p>
+
+<!-- ══════════ PART 3 ══════════ -->
+<h2><span class="n">3</span> What's strict, what's loose</h2>
+<p class="sub">Every dimension you'll measure falls into one of these three buckets.</p>
+
+<div class="tier t-exact">
+  <h3><span class="pill p-exact">EXACT</span> Must match the datasheet, no tolerance</h3>
+  <p class="rule">These are the ones where "close enough" isn't a thing. If one of these is wrong, stop and fix it before you do anything else.</p>
+  <table>
+    <tr><td class="w-what">Pitch</td><td>Small errors <b>add up</b> along the row. Off by 0.05 mm and by the fifth leg you're off 0.20 mm — leg 3 lands fine and leg 1 misses entirely. There is no such thing as "roughly the right pitch."</td></tr>
+    <tr><td class="w-what">Number of pads</td><td>Self-explanatory, but worth a glance — a SOT-23-5 footprint under a 6-pin part is a real mistake people make.</td></tr>
+    <tr><td class="w-what">Which pad is pin 1, and which direction the numbering runs</td><td>Not a measurement — it's right or wrong. This is the error that costs a board spin, because the board looks perfect and simply doesn't work. Your BME280 is the risky one here (KiCad ships both a clockwise and a counter-clockwise version).</td></tr>
+    <tr><td class="w-what">Hole diameter, relative to the pin</td><td>A physical fit. The pin either goes in or it doesn't.</td></tr>
+  </table>
+</div>
+
+<div class="tier t-min">
+  <h3><span class="pill p-min">AT LEAST</span> Bigger is fine — smaller is not</h3>
+  <p class="rule">One-sided limits. When a datasheet says <code>MIN</code> next to a number, it's one of these. Your job is just "am I at or above it?"</p>
+  <table>
+    <tr><td class="w-what">Gap between neighbouring pads</td><td>The only dimension that causes solder bridges. If the datasheet says 0.35 min, then 0.35 or more is fine and 0.30 is not. Tightest on your board: the BME280 at 0.15 mm.</td></tr>
+    <tr><td class="w-what">Annular ring</td><td>Set by your fab, not the part. Too thin and the copper collar can tear away from the hole during drilling. JLC wants roughly 0.15 mm minimum.</td></tr>
+    <tr><td class="w-what">Courtyard</td><td>Must at minimum wrap around every pad and the body. Bigger just means you're being more cautious about neighbours. <em>Your VEML7700 fails this one</em> — its courtyard doesn't reach the pads.</td></tr>
+    <tr><td class="w-what">Keepout / clearance zones</td><td>The ESP32 antenna area. Bigger is always safer; smaller degrades your Wi-Fi range.</td></tr>
+  </table>
+</div>
+
+<div class="tier t-loose">
+  <h3><span class="pill p-loose">LOOSE</span> A few tenths of a millimetre either way is normal</h3>
+  <p class="rule">This is where nearly all your datasheet-vs-KiCad differences will land. Difference here is <b>expected</b>, not a defect. Record it and move on.</p>
+  <table>
+    <tr><td class="w-what">Pad length (the heel-to-toe direction)</td><td>Any length works as long as copper pokes out past both ends of the metal. Longer usually means a stronger joint. A 0.2–0.3 mm difference from the datasheet is completely routine.</td></tr>
+    <tr><td class="w-what">How far out the pads sit — span, row spacing</td><td>This just moves <i>where</i> the overhang goes: more behind the heel, or more past the toe. Both are valid design choices. This is exactly the SOT-23-5 difference you found.</td></tr>
+    <tr><td class="w-what">Pad width, <i>as long as the neighbour gap holds</i></td><td>Wider pads are fine in isolation. The only reason to care is that widening a pad shrinks the gap to its neighbour — so it collapses back into the AT LEAST rule above.</td></tr>
+    <tr><td class="w-what">Courtyard size beyond the minimum</td><td>A spacing hint for you, not something the factory manufactures.</td></tr>
+    <tr><td class="w-what">Silkscreen lines and outlines</td><td>Cosmetic — as long as no silk sits on top of a pad, where it would block solder.</td></tr>
+    <tr><td class="w-what">Pad corner shape (square vs rounded)</td><td>No electrical or mechanical difference at this scale.</td></tr>
+  </table>
+</div>
+
+<!-- ══════════ PART 4 ══════════ -->
+<h2><span class="n">4</span> When a number doesn't match — do this</h2>
+<p class="sub">Work down the list. The moment one fails, that's your answer; you can stop.</p>
+
+<div class="flow">
+  <div class="step"><b>Is the pitch the same?</b><div class="a">Compare only the centre-to-centre spacing. If it differs at all — even by 0.05 mm — <em>the footprint is wrong.</em> Fix it or pick a different footprint. If it matches, carry on.</div></div>
+  <div class="step"><b>Is the gap between neighbouring pads at least as big as the datasheet's?</b><div class="a">Equal or bigger is a pass. If yours is <em>smaller</em>, you've raised the solder-bridge risk and should widen the gap. Bigger than the datasheet is never a problem.</div></div>
+  <div class="step"><b>Does copper stick out past both ends of every piece of metal on the part?</b><div class="a">This is the real test, and the sliders above are how you picture it. Sketch the part's metal over your pad. If the metal fits inside the copper with a bit of room at each end, the joint will form — regardless of what the datasheet drew. If the metal <em>overhangs the copper at either end</em>, fix the pad.</div></div>
+  <div class="step"><b>Is pin 1 in the same place, numbered in the same direction?</b><div class="a">Check the datasheet's pin-out table, not just its drawing. If it disagrees, <em>stop and fix it</em> — nothing else on the board matters until this is right.</div></div>
+  <div class="step"><b>Does the courtyard wrap around all the pads?</b><div class="a">If not, extend it. It costs nothing and it's what stops you overlapping parts during layout.</div></div>
+  <div class="step last"><b>Anything else different?</b><div class="a">Write it in the notes field and mark the footprint verified. Pad 0.2 mm longer, pads sitting 0.3 mm further in, a differently-shaped silk outline — none of that needs action. You've already checked the five things that can actually fail.</div></div>
+</div>
+
+<!-- ══════════ PART 5 ══════════ -->
+<h2><span class="n">5</span> Your 20 footprints — the one thing to watch on each</h2>
+<p class="sub">Rather than checking every number equally hard, here's the dimension that actually matters per family.</p>
+
+<div class="card">
+<table>
+  <thead><tr><th class="w-what">Your footprints</th><th class="tagcol">Watch</th><th>Because</th></tr></thead>
+  <tbody>
+  <tr><td>0603 / 0805 / 1206 chips<br><span style="color:var(--ink3);font-size:12.5px">36 resistors, caps, LEDs, the fuse</span></td><td class="tagcol"><span class="pill p-min">gap</span></td><td>No pitch to get wrong, only two pads. Just confirm the pad reaches under the end cap and out past it. The fuse is the one worth a real look — Littelfuse specs a bigger pad than a generic chip land.</td></tr>
+  <tr><td>SOT-23, SOT-23-5, SOT-23-6<br><span style="color:var(--ink3);font-size:12.5px">MOSFETs, LDO, charger, ESD chip</span></td><td class="tagcol"><span class="pill p-exact">pitch</span> <span class="pill p-min">gap</span></td><td>Pitch is 0.95 mm on all of them and matches. Neighbour gap is 0.35 mm and matches. Pad length differs from every vendor — that's the LOOSE bucket. <b>Already resolved: no action.</b></td></tr>
+  <tr><td>BME280 LGA-8</td><td class="tagcol"><span class="pill p-exact">pin&nbsp;1 dir</span></td><td>0.15 mm between pads — tightest copper on the board. But the real risk is numbering direction: KiCad ships a clockwise and a counter-clockwise variant and you've got the clockwise one. Verify against Bosch's pin-out <i>table</i>.</td></tr>
+  <tr><td>ESP32-S3-WROOM-1</td><td class="tagcol"><span class="pill p-min">keepout</span></td><td>Pads are 1.27 mm pitch and huge — hard to get wrong. The antenna clearance area is the thing that quietly ruins the board.</td></tr>
+  <tr><td>JST PH 2-pin and 3-pin</td><td class="tagcol"><span class="pill p-exact">drill Ø</span></td><td>Physical fit, no solder fillet can rescue it. KiCad uses Ø0.75 mm against a pin that's about 0.71 mm across the diagonal. Check JST's own figure.</td></tr>
+  <tr><td>USB-C receptacle</td><td class="tagcol"><span class="pill p-exact">everything</span></td><td>The exception to this whole page. A connector is a mechanical fit — the shield legs, the locating pegs and the board-edge position all have to match the drawing exactly. Treat every number as EXACT.</td></tr>
+  <tr><td>VEML7700 (custom)</td><td class="tagcol"><span class="pill p-min">courtyard</span></td><td>Auto-converted footprint nobody checked. Its courtyard doesn't reach its own pads — fix that. Then verify the pads against Vishay from scratch.</td></tr>
+  <tr><td>Tactile switches (custom)</td><td class="tagcol"><span class="pill p-loose">—</span></td><td>Four big pads, wide spacing, no fine pitch. Low risk. You just need the datasheet, which you don't have yet.</td></tr>
+  <tr><td>Test points, mounting holes</td><td class="tagcol"><span class="pill p-loose">—</span></td><td>Nothing to verify against. Just confirm the SMD test points have no solder paste and the M3 holes have room for a screw head.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="foot">
+  Companion to <b>Footprint_Check_ESP32S3_PlantMonitor_RevA.html</b> · ESP32-S3 Plant Monitor Rev A · both files live in <code>docs/</code>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var PXMM = 240, CX = 310, FOOT = 0.45, PADY = 118, FOOTY = 102;
+  var pad=document.getElementById('dpad'), foot=document.getElementById('dfoot'),
+      leg=document.getElementById('dleg'), filL=document.getElementById('dfilL'),
+      filR=document.getElementById('dfilR'), marks=document.getElementById('dmarks'),
+      sLen=document.getElementById('sLen'), sOff=document.getElementById('sOff'),
+      vLen=document.getElementById('vLen'), vOff=document.getElementById('vOff'),
+      vBox=document.getElementById('dverdict'), vTag=document.getElementById('dtag'),
+      vTxt=document.getElementById('dtxt');
+
+  var fL = CX - FOOT/2*PXMM, fR = CX + FOOT/2*PXMM;
+  foot.setAttribute('x', fL); foot.setAttribute('width', fR-fL);
+  // the leg rising off the heel end of the foot
+  leg.setAttribute('d','M'+fL+',102 L'+(fL-42)+',34 L'+(fL-27)+',34 L'+(fL+15)+',102 Z');
+
+  function esc(s){return String(s);}
+
+  function draw(){
+    var len = parseFloat(sLen.value), off = parseFloat(sOff.value);
+    vLen.textContent = len.toFixed(2)+' mm';
+    vOff.textContent = (off>0?'+':'')+off.toFixed(2)+' mm';
+
+    var pL = CX + off*PXMM - len/2*PXMM, pR = CX + off*PXMM + len/2*PXMM;
+    pad.setAttribute('x', pL); pad.setAttribute('width', Math.max(1, pR-pL)); pad.setAttribute('y', PADY);
+
+    var heel = (fL - pL)/PXMM, toe = (pR - fR)/PXMM;
+
+    // solder fillets only where there is overhang
+    var hw = fL-pL, tw = pR-fR;
+    var hh = Math.min(20, Math.max(0,hw)*0.55), th = Math.min(20, Math.max(0,tw)*0.55);
+    filL.setAttribute('d', heel>0.02
+      ? 'M'+pL+','+PADY+' L'+fL+','+PADY+' L'+fL+','+(PADY-hh)+' Q '+(fL-hw*0.5)+','+(PADY-hh*0.2)+' '+pL+','+PADY+' Z' : '');
+    filR.setAttribute('d', toe>0.02
+      ? 'M'+pR+','+PADY+' L'+fR+','+PADY+' L'+fR+','+(PADY-th)+' Q '+(fR+tw*0.5)+','+(PADY-th*0.2)+' '+pR+','+PADY+' Z' : '');
+
+    // overhang markers
+    var g='';
+    function dim(x1,x2,label,color){
+      if(x2-x1 < 3) return '';
+      var mid=(x1+x2)/2;
+      return '<line x1="'+x1+'" y1="174" x2="'+x2+'" y2="174" stroke="'+color+'" stroke-width="1.6"/>'
+           + '<line x1="'+x1+'" y1="169" x2="'+x1+'" y2="179" stroke="'+color+'" stroke-width="1.6"/>'
+           + '<line x1="'+x2+'" y1="169" x2="'+x2+'" y2="179" stroke="'+color+'" stroke-width="1.6"/>'
+           + '<text x="'+mid+'" y="167" font-size="10.5" fill="'+color+'" text-anchor="middle" font-weight="600">'+label+'</text>';
+    }
+    var cHeel = heel<0 ? '#c2410c' : heel<0.05 ? '#b45309' : '#1a8a4a';
+    var cToe  = toe <0 ? '#c2410c' : toe <0.05 ? '#b45309' : '#1a8a4a';
+    if(heel>=0) g += dim(pL, fL, heel.toFixed(2), cHeel);
+    else        g += '<text x="'+((pL+fL)/2)+'" y="170" font-size="10.5" fill="#c2410c" text-anchor="middle" font-weight="700">off the copper</text>';
+    if(toe>=0)  g += dim(fR, pR, toe.toFixed(2), cToe);
+    else        g += '<text x="'+((fR+pR)/2)+'" y="170" font-size="10.5" fill="#c2410c" text-anchor="middle" font-weight="700">off the copper</text>';
+    marks.innerHTML = g;
+
+    var worst = Math.min(heel, toe), cls, tag, txt;
+    if(worst < 0){
+      cls='v-bad'; tag='BROKEN';
+      txt = 'The metal hangs off the end of the copper. There is no room for solder to form a wedge on that side, and the joint will be weak or missing. Fix the pad.';
+    } else if(worst < 0.05){
+      cls='v-bad'; tag='TOO TIGHT';
+      txt = 'The metal reaches almost exactly to the edge of the copper. Add the normal manufacturing wobble — parts land a little off-centre — and it will hang off. Fix the pad.';
+    } else if(worst < 0.15){
+      cls='v-tight'; tag='WORKABLE';
+      txt = 'There is copper past both ends, but not much. It will solder, though you have little margin for a part that lands slightly crooked. Fine if the datasheet agrees; worth a note if it doesn’t.';
+    } else if(worst < 0.65){
+      cls='v-good'; tag='GOOD';
+      txt = 'Copper sticks out past both ends of the metal with room to spare. Solder will pull the part into place on its own. This works whether or not the numbers match the datasheet drawing.';
+    } else {
+      cls='v-good'; tag='GOOD (roomy)';
+      txt = 'Plenty of copper past both ends. Nothing wrong with this — the only cost is that the part takes up more board space, and a very long pad can let the part drift slightly during reflow.';
+    }
+    vBox.className = 'verdict ' + cls;
+    vTag.textContent = tag;
+    vTxt.textContent = txt;
+  }
+
+  sLen.addEventListener('input', draw);
+  sOff.addEventListener('input', draw);
+  Array.prototype.forEach.call(document.querySelectorAll('.presets button'), function(b){
+    b.addEventListener('click', function(){
+      sLen.value = b.dataset.l; sOff.value = b.dataset.o; draw();
+    });
+  });
+  draw();
+})();
+</script>
+</body>
+</html>

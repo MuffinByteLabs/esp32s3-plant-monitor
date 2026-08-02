@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Footprint Check — ESP32-S3 Plant Monitor Rev A</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#fff; --ink:#12161c; --ink2:#5a6473; --ink3:#8b95a5;
+    --line:#e2e6ec; --line2:#eef1f5;
+    --accent:#2f6fd0; --accent-soft:#eaf1fc;
+    --done:#1a8a4a; --done-soft:#e7f6ed;
+    --warn:#a16207; --warn-soft:#fdf6e3;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  }
+  html[data-theme="dark"]{
+    --bg:#0f1216; --panel:#171b21; --ink:#e6eaf0; --ink2:#9aa5b4; --ink3:#6b7686;
+    --line:#262c35; --line2:#1f242b;
+    --accent:#5b9bf5; --accent-soft:#18243a;
+    --done:#4ade80; --done-soft:#12251a;
+    --warn:#fbbf24; --warn-soft:#2a2210;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+  button,input{font:inherit;color:inherit}
+
+  header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--line)}
+  .hwrap{max-width:1060px;margin:0 auto;padding:14px 20px 0}
+  .htop{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
+  h1{margin:0;font-size:17px;font-weight:650;letter-spacing:-.2px}
+  .sub{color:var(--ink2);font-size:12.5px;margin-top:2px}
+  .meta{color:var(--ink3);font-size:11.5px;margin-top:3px;font-family:var(--mono)}
+  .spacer{flex:1}
+  .tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .btn{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:6px 11px;font-size:12.5px;cursor:pointer;white-space:nowrap;transition:.12s}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{filter:brightness(1.08);color:#fff}
+
+  .prog{display:flex;align-items:center;gap:14px;margin:14px 0 10px;flex-wrap:wrap}
+  .bar{flex:1;min-width:200px;height:8px;background:var(--line2);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--done);width:0;transition:width .28s}
+  .counts{font-size:13px;font-family:var(--mono);white-space:nowrap;color:var(--ink2)}
+  .counts b{color:var(--done);font-weight:700}
+
+  .filters{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:12px;align-items:center}
+  .chip{background:transparent;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:12px;cursor:pointer;color:var(--ink2);transition:.12s}
+  .chip:hover{border-color:var(--accent);color:var(--accent)}
+  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  .fsep{width:1px;height:18px;background:var(--line);margin:0 4px}
+  .search{border:1px solid var(--line);background:var(--bg);border-radius:7px;padding:5px 10px;font-size:12.5px;width:190px;outline:none}
+  .search:focus{border-color:var(--accent)}
+
+  main{max-width:1060px;margin:0 auto;padding:18px 20px 70px}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
+  .card.done{border-color:color-mix(in srgb,var(--done) 45%,var(--line))}
+  .card.hidden{display:none}
+
+  .chead{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .chead:hover{background:var(--line2)}
+  .caret{color:var(--ink3);font-size:11px;transition:.15s;width:12px;flex-shrink:0}
+  .card.open .caret{transform:rotate(90deg)}
+  .num{font-family:var(--mono);font-size:11px;color:var(--ink3);width:20px;flex-shrink:0}
+  .ctitle{flex:1;min-width:0}
+  .fpname{font-family:var(--mono);font-size:12.5px;font-weight:600;word-break:break-all;line-height:1.35}
+  .cpart{font-size:12px;color:var(--ink2);margin-top:3px}
+  .badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+  .badge{font-size:10.5px;padding:2px 7px;border-radius:4px;background:var(--line2);color:var(--ink2);font-family:var(--mono);white-space:nowrap}
+  .badge.custom{background:var(--warn-soft);color:var(--warn);font-weight:600}
+  .badge.cat{background:var(--accent-soft);color:var(--accent)}
+
+  .tally{flex-shrink:0;display:flex;align-items:center;gap:9px}
+  .tally .t{font-family:var(--mono);font-size:12.5px;color:var(--ink3);white-space:nowrap}
+  .card.done .tally .t{color:var(--done);font-weight:600}
+  .ring{width:26px;height:26px;flex-shrink:0}
+  .ring circle{fill:none;stroke-width:3.5}
+  .ring .bgc{stroke:var(--line2)}
+  .ring .fgc{stroke:var(--done);stroke-linecap:round;transition:stroke-dasharray .3s}
+
+  .cbody{display:none;border-top:1px solid var(--line);padding:12px 16px 14px}
+  .card.open .cbody{display:block}
+
+  .dsline{font-size:11.5px;color:var(--ink2);margin-bottom:11px;line-height:1.6;word-break:break-all}
+  .dsline b{color:var(--ink3);font-weight:600;font-family:var(--sans);text-transform:uppercase;font-size:10px;letter-spacing:.06em;margin-right:5px}
+  .dsline span{font-family:var(--mono);color:var(--accent)}
+  .dsline.none span{color:var(--warn)}
+
+  .allbtn{background:transparent;border:1px solid var(--line);border-radius:6px;padding:4px 10px;font-size:11.5px;cursor:pointer;color:var(--ink2);margin-bottom:10px}
+  .allbtn:hover{border-color:var(--accent);color:var(--accent)}
+
+  .parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px}
+  .part{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:7px;cursor:pointer;transition:.1s}
+  .part:hover{background:var(--line2)}
+  .part input{width:16px;height:16px;accent-color:var(--done);cursor:pointer;flex-shrink:0;margin:0}
+  .part .ref{font-family:var(--mono);font-size:13px;font-weight:600;width:46px;flex-shrink:0}
+  .part .val{font-size:12.5px;color:var(--ink2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .part .sh{font-size:10.5px;color:var(--ink3);font-family:var(--mono);flex-shrink:0}
+  .part.ticked .ref,.part.ticked .val{opacity:.42;text-decoration:line-through}
+
+  .empty{text-align:center;padding:48px 20px;color:var(--ink3);font-size:13px}
+
+  .savebar{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);padding:8px 20px;z-index:60;display:flex;align-items:center;gap:10px;justify-content:center;font-size:12px;color:var(--ink3)}
+  .savebar .dot{width:7px;height:7px;border-radius:99px;background:var(--done)}
+  .savebar .dot.off{background:var(--warn)}
+  #toast{position:fixed;bottom:52px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:var(--bg);padding:9px 17px;border-radius:8px;font-size:12.5px;z-index:200;opacity:0;transition:.25s;pointer-events:none}
+  #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+  @media print{
+    header{position:static}.tools,.filters,.savebar,#toast,.caret,.allbtn{display:none!important}
+    body{background:#fff}.card{break-inside:avoid;border-color:#ccc}.cbody{display:block!important}
+    .card.hidden{display:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <div class="htop">
+      <div>
+        <h1 id="pname"></h1>
+        <div class="sub" id="psub"></div>
+        <div class="meta" id="pmeta"></div>
+      </div>
+      <div class="spacer"></div>
+      <div class="tools">
+        <button class="btn" id="expandAll">Expand all</button>
+        <button class="btn" id="collapseAll">Collapse all</button>
+        <button class="btn primary" id="save">Save file</button>
+        <button class="btn" id="load">Load</button>
+        <button class="btn" id="theme">Dark</button>
+      </div>
+    </div>
+    <div class="prog">
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="counts"><b id="nDone">0</b> of <span id="nTot">0</span> parts checked &nbsp;·&nbsp; <b id="pkgDone">0</b>/<span id="pkgTot">0</span> packages complete</div>
+    </div>
+    <div class="filters" id="filters"></div>
+  </div>
+</header>
+
+<main id="list"></main>
+
+<div class="savebar">
+  <span class="dot" id="sdot"></span><span id="sstate">Autosave on</span>
+  <span>·</span><span>Use <b>Save file</b> to keep a copy you can reload anywhere</span>
+</div>
+<div id="toast"></div>
+<input type="file" id="fileIn" accept=".json" style="display:none">
+
+<script>
+const PROJECT = {"name": "ESP32-S3 Plant Monitor — Rev A", "sub": "Footprint check — tick each part as you verify it", "meta": "20 packages · 69 parts · KiCad 10 · JLCPCB assembly"};
+
+const DS_DIR = "references/datasheets/";
+
+const FOOTPRINTS = [
+ {
+  "id": "c0603",
+  "fp": "Capacitor_SMD:C_0603_1608Metric",
+  "lib": "KiCad std",
+  "cat": "Passive",
+  "part": "MLCC 0603 (1608 metric)",
+  "ds": "CAP_Samsung_CL10A475KO8NNNC_4.7uF_16V_0603_C19666_MLCC_Catalogue.pdf",
+  "sheets": [
+   "02 USB-C",
+   "03 3V3 Power",
+   "04 ESP32-S3 Core",
+   "05 I2C Sensors",
+   "06 Soil ADC",
+   "07 Charger"
+  ],
+  "comps": [
+   {
+    "ref": "C1",
+    "val": "100nF",
+    "sheet": "02 USB-C",
+    "lcsc": "C14663"
+   },
+   {
+    "ref": "C3",
+    "val": "100nF",
+    "sheet": "02 USB-C",
+    "lcsc": "C14663"
+   },
+   {
+    "ref": "C4",
+    "val": "100nF",
+    "sheet": "02 USB-C",
+    "lcsc": "C14663"
+   },
+   {
+    "ref": "C6",
+    "val": "1uF",
+    "sheet": "03 3V3 Power",
+    "lcsc": "C15849"
+   },
+   {
+    "ref": "C7",
+    "val": "1uF",
+    "sheet": "03 3V3 Power",
+    "lcsc": "C15849"
+   },
+   {
+    "ref": "C8",
+    "val": "1uF",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": "C15849"
+   },
+   {
+    "ref": "C10",
+    "val": "100nF",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": "C14663"
+   },
+   {
+    "ref": "C11",
+    "val": "100nF",
+    "sheet": "05 I2C Sensors",
+    "lcsc": "C14663"
+   },
+   {
+    "ref": "C12",
+    "val": "100nF",
+    "sheet": "05 I2C Sensors",
+    "lcsc": "C14663"
+   },
+   {
+    "ref": "C13",
+    "val": "100nF",
+    "sheet": "05 I2C Sensors",
+    "lcsc": "C14663"
+   },
+   {
+    "ref": "C14",
+    "val": "100nF",
+    "sheet": "06 Soil ADC",
+    "lcsc": "C14663"
+   },
+   {
+    "ref": "C15",
+    "val": "4.7uF",
+    "sheet": "07 Charger",
+    "lcsc": "C19666"
+   },
+   {
+    "ref": "C16",
+    "val": "4.7uF",
+    "sheet": "07 Charger",
+    "lcsc": "C19666"
+   },
+   {
+    "ref": "C17",
+    "val": "100nF",
+    "sheet": "07 Charger",
+    "lcsc": "C14663"
+   },
+   {
+    "ref": "C18",
+    "val": "1uF",
+    "sheet": "07 Charger",
+    "lcsc": "C15849"
+   }
+  ]
+ },
+ {
+  "id": "c0805",
+  "fp": "Capacitor_SMD:C_0805_2012Metric",
+  "lib": "KiCad std",
+  "cat": "Passive",
+  "part": "MLCC 0805 (2012 metric)",
+  "ds": "CAP_Samsung_CL21A226MAQNNNE_22uF_25V_0805_C45783_MLCC_Catalogue.pdf",
+  "sheets": [
+   "02 USB-C",
+   "03 3V3 Power",
+   "04 ESP32-S3 Core"
+  ],
+  "comps": [
+   {
+    "ref": "C2",
+    "val": "10uF",
+    "sheet": "02 USB-C",
+    "lcsc": "C15850"
+   },
+   {
+    "ref": "C5",
+    "val": "10uF",
+    "sheet": "03 3V3 Power",
+    "lcsc": "C15850"
+   },
+   {
+    "ref": "C9",
+    "val": "22uF",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": "C45783"
+   }
+  ]
+ },
+ {
+  "id": "r0603",
+  "fp": "Resistor_SMD:R_0603_1608Metric",
+  "lib": "KiCad std",
+  "cat": "Passive",
+  "part": "Chip resistor 0603 (1608 metric)",
+  "ds": null,
+  "sheets": [
+   "02 USB-C",
+   "03 3V3 Power",
+   "04 ESP32-S3 Core",
+   "05 I2C Sensors",
+   "06 Soil ADC",
+   "07 Charger"
+  ],
+  "comps": [
+   {
+    "ref": "R1",
+    "val": "22",
+    "sheet": "02 USB-C",
+    "lcsc": "C23345"
+   },
+   {
+    "ref": "R2",
+    "val": "22",
+    "sheet": "02 USB-C",
+    "lcsc": "C23345"
+   },
+   {
+    "ref": "R3",
+    "val": "5.1k",
+    "sheet": "02 USB-C",
+    "lcsc": "C23186"
+   },
+   {
+    "ref": "R4",
+    "val": "5.1k",
+    "sheet": "02 USB-C",
+    "lcsc": "C23186"
+   },
+   {
+    "ref": "R5",
+    "val": "10k",
+    "sheet": "03 3V3 Power",
+    "lcsc": "C25804"
+   },
+   {
+    "ref": "R6",
+    "val": "10k",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": "C25804"
+   },
+   {
+    "ref": "R7",
+    "val": "10k",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": "C25804"
+   },
+   {
+    "ref": "R8",
+    "val": "4.7k",
+    "sheet": "05 I2C Sensors",
+    "lcsc": "C23162"
+   },
+   {
+    "ref": "R9",
+    "val": "4.7k",
+    "sheet": "05 I2C Sensors",
+    "lcsc": "C23162"
+   },
+   {
+    "ref": "R10",
+    "val": "100k",
+    "sheet": "06 Soil ADC",
+    "lcsc": "C25803"
+   },
+   {
+    "ref": "R11",
+    "val": "100k",
+    "sheet": "06 Soil ADC",
+    "lcsc": "C25803"
+   },
+   {
+    "ref": "R12",
+    "val": "470",
+    "sheet": "07 Charger",
+    "lcsc": "C23179"
+   },
+   {
+    "ref": "R13",
+    "val": "10k",
+    "sheet": "07 Charger",
+    "lcsc": "C25804"
+   },
+   {
+    "ref": "R14",
+    "val": "100k 1%",
+    "sheet": "07 Charger",
+    "lcsc": "C25803"
+   },
+   {
+    "ref": "R15",
+    "val": "100k 1%",
+    "sheet": "07 Charger",
+    "lcsc": "C25803"
+   },
+   {
+    "ref": "R16",
+    "val": "10k",
+    "sheet": "07 Charger",
+    "lcsc": "C25804"
+   }
+  ]
+ },
+ {
+  "id": "led0603",
+  "fp": "LED_SMD:LED_0603_1608Metric",
+  "lib": "KiCad std",
+  "cat": "Opto",
+  "part": "Chip LED 0603",
+  "ds": "LED_XINGLIGHT_XL-0603QYGC_YellowGreen_0603_C2289_Datasheet.pdf  ·  LED_KENTO_KT-0603R_Red_0603_C2286_Datasheet.pdf",
+  "sheets": [
+   "03 3V3 Power",
+   "07 Charger"
+  ],
+  "comps": [
+   {
+    "ref": "D2",
+    "val": "LED_YG",
+    "sheet": "03 3V3 Power",
+    "lcsc": "C2289"
+   },
+   {
+    "ref": "D3",
+    "val": "LED_RED",
+    "sheet": "07 Charger",
+    "lcsc": "C2286"
+   }
+  ]
+ },
+ {
+  "id": "sod123f",
+  "fp": "Diode_SMD:D_SOD-123F",
+  "lib": "KiCad std",
+  "cat": "Protection",
+  "part": "SMF5.0A TVS diode",
+  "ds": "TVS_MDD_SMF5_0A_5V_Unidirectional_Datasheet.pdf",
+  "sheets": [
+   "02 USB-C"
+  ],
+  "comps": [
+   {
+    "ref": "D1",
+    "val": "SMF5.0A",
+    "sheet": "02 USB-C",
+    "lcsc": "C2980403"
+   }
+  ]
+ },
+ {
+  "id": "dsma",
+  "fp": "Diode_SMD:D_SMA",
+  "lib": "KiCad std",
+  "cat": "Power",
+  "part": "SS14 Schottky 1A/40V",
+  "ds": "DIODE_SS14_Schottky_1A40V_Family_Datasheet.pdf",
+  "sheets": [
+   "07 Charger"
+  ],
+  "comps": [
+   {
+    "ref": "D4",
+    "val": "SS14",
+    "sheet": "07 Charger",
+    "lcsc": "C2480"
+   }
+  ]
+ },
+ {
+  "id": "fuse1206",
+  "fp": "Fuse:Fuse_1206_3216Metric",
+  "lib": "KiCad std",
+  "cat": "Protection",
+  "part": "Resettable PPTC fuse 1206",
+  "ds": "FUSE_Littelfuse_1206L_Resettable_PPTC_Datasheet_2024.pdf",
+  "sheets": [
+   "02 USB-C"
+  ],
+  "comps": [
+   {
+    "ref": "F1",
+    "val": "1206L075/16WR",
+    "sheet": "02 USB-C",
+    "lcsc": "C371166"
+   }
+  ]
+ },
+ {
+  "id": "usbc",
+  "fp": "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12",
+  "lib": "KiCad std",
+  "cat": "Connector",
+  "part": "HRO USB-C receptacle, 16P",
+  "ds": "USBC_TYPE-C-31-M-12_Receptacle_C165948_Footprint_Drawing.pdf",
+  "sheets": [
+   "02 USB-C"
+  ],
+  "comps": [
+   {
+    "ref": "J1",
+    "val": "USB_C_Receptacle_USB2.0_16P",
+    "sheet": "02 USB-C",
+    "lcsc": "C165948"
+   }
+  ]
+ },
+ {
+  "id": "sot236",
+  "fp": "Package_TO_SOT_SMD:SOT-23-6",
+  "lib": "KiCad std",
+  "cat": "IC",
+  "part": "SOT-23-6 — ESD protection",
+  "ds": "ESD_ST_USBLC6-2SC6_USB2_DataLine_Protection_Datasheet.pdf",
+  "sheets": [
+   "02 USB-C"
+  ],
+  "comps": [
+   {
+    "ref": "U1",
+    "val": "USBLC6-2SC6",
+    "sheet": "02 USB-C",
+    "lcsc": "C7519"
+   }
+  ]
+ },
+ {
+  "id": "sot235",
+  "fp": "Package_TO_SOT_SMD:SOT-23-5",
+  "lib": "KiCad std",
+  "cat": "IC",
+  "part": "SOT-23-5 — LDO + LiPo charger",
+  "ds": "LDO_Diodes_AP2112K-3.3_600mA_3V3_Regulator_Datasheet.pdf  ·  CHARGER_Microchip_MCP73831_LiPo_Linear_Charger_Datasheet_DS20001984H.pdf",
+  "sheets": [
+   "03 3V3 Power",
+   "07 Charger"
+  ],
+  "comps": [
+   {
+    "ref": "U2",
+    "val": "AP2112K-3.3",
+    "sheet": "03 3V3 Power",
+    "lcsc": "C51118"
+   },
+   {
+    "ref": "U6",
+    "val": "MCP73831-2-OT",
+    "sheet": "07 Charger",
+    "lcsc": "C424093"
+   }
+  ]
+ },
+ {
+  "id": "sot23",
+  "fp": "Package_TO_SOT_SMD:SOT-23",
+  "lib": "KiCad std",
+  "cat": "Discrete",
+  "part": "SOT-23 — P-channel MOSFET",
+  "ds": "MOSFET_AlphaOmega_AO3401A_PchannelMOSFET_Datasheet.pdf",
+  "sheets": [
+   "06 Soil ADC",
+   "07 Charger"
+  ],
+  "comps": [
+   {
+    "ref": "Q1",
+    "val": "AO3401A",
+    "sheet": "06 Soil ADC",
+    "lcsc": "C15127"
+   },
+   {
+    "ref": "Q2",
+    "val": "AO3401A",
+    "sheet": "07 Charger",
+    "lcsc": "C15127"
+   },
+   {
+    "ref": "Q3",
+    "val": "AO3401A",
+    "sheet": "07 Charger",
+    "lcsc": "C15127"
+   }
+  ]
+ },
+ {
+  "id": "wroom",
+  "fp": "RF_Module:ESP32-S3-WROOM-1",
+  "lib": "KiCad std",
+  "cat": "Module",
+  "part": "ESP32-S3-WROOM-1 module",
+  "ds": "ESP32S3_Espressif_WROOM-1_WROOM-1U_Module_Datasheet_v1.8.pdf",
+  "sheets": [
+   "04 ESP32-S3 Core"
+  ],
+  "comps": [
+   {
+    "ref": "U3",
+    "val": "ESP32-S3-WROOM-1",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": "C2913198"
+   }
+  ]
+ },
+ {
+  "id": "lga8",
+  "fp": "Package_LGA:Bosch_LGA-8_2.5x2.5mm_P0.65mm_ClockwisePinNumbering",
+  "lib": "KiCad std",
+  "cat": "Sensor",
+  "part": "Bosch LGA-8 — BME280",
+  "ds": "SENSOR_Bosch_BME280_Temperature_Humidity_Pressure_Datasheet_Rev1.24_2024.pdf",
+  "sheets": [
+   "05 I2C Sensors"
+  ],
+  "comps": [
+   {
+    "ref": "U4",
+    "val": "BME280",
+    "sheet": "05 I2C Sensors",
+    "lcsc": "C92489"
+   }
+  ]
+ },
+ {
+  "id": "veml",
+  "fp": "PlantMonitor_JLC:SENSOR-SMD_EML7700-TT",
+  "lib": "⚠ Custom",
+  "cat": "Sensor",
+  "part": "Vishay VEML7700-TT light sensor",
+  "ds": "SENSOR_Vishay_VEML7700_Ambient_Light_I2C_Datasheet_Rev1.8_2024.pdf",
+  "sheets": [
+   "05 I2C Sensors"
+  ],
+  "comps": [
+   {
+    "ref": "U5",
+    "val": "VEML7700-TT",
+    "sheet": "05 I2C Sensors",
+    "lcsc": "C1850416"
+   }
+  ]
+ },
+ {
+  "id": "swtact",
+  "fp": "PlantMonitor_JLC:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5",
+  "lib": "⚠ Custom",
+  "cat": "Switch",
+  "part": "SMD tactile switch 5.1 × 5.1 mm (XKB TS-1187A)",
+  "ds": "SWITCH_XKB_TS-1187A_Tactile_SMD_5.1x5.1_H1.5_C318884_Datasheet.pdf",
+  "sheets": [
+   "04 ESP32-S3 Core"
+  ],
+  "comps": [
+   {
+    "ref": "SW1",
+    "val": "SW_Push",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": "C318884"
+   },
+   {
+    "ref": "SW2",
+    "val": "SW_Push",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": "C318884"
+   }
+  ]
+ },
+ {
+  "id": "jst3",
+  "fp": "Connector_JST:JST_PH_S3B-PH-K_1x03_P2.00mm_Horizontal",
+  "lib": "KiCad std",
+  "cat": "Connector",
+  "part": "JST PH 3-pin right-angle",
+  "ds": "CONN_JST_PH_2.0mm_Crimp_Connector_Family_Datasheet.pdf",
+  "sheets": [
+   "06 Soil ADC"
+  ],
+  "comps": [
+   {
+    "ref": "J2",
+    "val": "Conn_01x03",
+    "sheet": "06 Soil ADC",
+    "lcsc": "C157929"
+   }
+  ]
+ },
+ {
+  "id": "jst2",
+  "fp": "Connector_JST:JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal",
+  "lib": "KiCad std",
+  "cat": "Connector",
+  "part": "JST PH 2-pin right-angle",
+  "ds": "CONN_JST_PH_2.0mm_Crimp_Connector_Family_Datasheet.pdf",
+  "sheets": [
+   "07 Charger"
+  ],
+  "comps": [
+   {
+    "ref": "J3",
+    "val": "Conn_01x02",
+    "sheet": "07 Charger",
+    "lcsc": "C173752"
+   }
+  ]
+ },
+ {
+  "id": "tpsmd",
+  "fp": "TestPoint:TestPoint_Pad_D1.5mm",
+  "lib": "KiCad std",
+  "cat": "Test",
+  "part": "SMD test pad Ø1.5 mm",
+  "ds": null,
+  "sheets": [
+   "04 ESP32-S3 Core",
+   "08 Mechanical"
+  ],
+  "comps": [
+   {
+    "ref": "TP1",
+    "val": "TestPoint",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP2",
+    "val": "TestPoint",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP3",
+    "val": "TestPoint",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP4",
+    "val": "TestPoint",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP5",
+    "val": "TestPoint",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP6",
+    "val": "TestPoint",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP7",
+    "val": "TestPoint",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP9",
+    "val": "TestPoint",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP10",
+    "val": "TestPoint",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": ""
+   }
+  ]
+ },
+ {
+  "id": "tptht",
+  "fp": "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm",
+  "lib": "KiCad std",
+  "cat": "Test",
+  "part": "THT test point Ø2.0 / drill 1.0 mm",
+  "ds": null,
+  "sheets": [
+   "04 ESP32-S3 Core",
+   "08 Mechanical"
+  ],
+  "comps": [
+   {
+    "ref": "TP8",
+    "val": "TestPoint",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP11",
+    "val": "TestPoint",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": ""
+   },
+   {
+    "ref": "TP12",
+    "val": "TestPoint",
+    "sheet": "04 ESP32-S3 Core",
+    "lcsc": ""
+   }
+  ]
+ },
+ {
+  "id": "mnt",
+  "fp": "MountingHole:MountingHole_3.2mm_M3",
+  "lib": "KiCad std",
+  "cat": "Mechanical",
+  "part": "M3 mounting hole Ø3.2 mm",
+  "ds": null,
+  "sheets": [
+   "08 Mechanical"
+  ],
+  "comps": [
+   {
+    "ref": "H1",
+    "val": "MountingHole",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "H2",
+    "val": "MountingHole",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "H3",
+    "val": "MountingHole",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   },
+   {
+    "ref": "H4",
+    "val": "MountingHole",
+    "sheet": "08 Mechanical",
+    "lcsc": ""
+   }
+  ]
+ }
+];
+
+
+/* ── state: { fpId: { refdes: true } } ─────────────────── */
+const KEY = "fpcheck_simple_esp32s3_plantmonitor_revA";
+let store = null;
+try { const t="__t"; localStorage.setItem(t,"1"); localStorage.removeItem(t); store = localStorage; } catch(e){ store = null; }
+
+let state = {};
+FOOTPRINTS.forEach(f => { state[f.id] = {}; });
+
+function merge(data){
+  const src = (data && data.state) || data;
+  if(!src || typeof src !== "object") return;
+  FOOTPRINTS.forEach(f => {
+    const s = src[f.id]; if(!s) return;
+    f.comps.forEach(c => { if(s[c.ref]) state[f.id][c.ref] = true; });
+  });
+}
+if(store){ try{ const raw = store.getItem(KEY); if(raw) merge(JSON.parse(raw)); }catch(e){} }
+else { document.getElementById("sdot").classList.add("off"); document.getElementById("sstate").textContent = "Autosave unavailable here"; }
+
+let dirty = false;
+function persist(){
+  dirty = true;
+  if(store){ try{ store.setItem(KEY, JSON.stringify({v:2, saved:new Date().toISOString(), state})); dirty=false; }catch(e){} }
+}
+window.addEventListener("beforeunload", e => { if(dirty && !store){ e.preventDefault(); e.returnValue=""; } });
+
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const doneCount = f => f.comps.filter(c => state[f.id][c.ref]).length;
+const isDone    = f => doneCount(f) === f.comps.length;
+
+document.getElementById("pname").textContent = PROJECT.name;
+document.getElementById("psub").textContent  = PROJECT.sub;
+document.getElementById("pmeta").textContent = PROJECT.meta;
+
+/* ── filters ───────────────────────────────────────────── */
+let filter = { status:"all", cat:"all", q:"" };
+
+function buildFilters(){
+  const cats = [...new Set(FOOTPRINTS.map(f => f.cat))];
+  const el = document.getElementById("filters");
+  const mk = (label, group, val) =>
+    `<button class="chip" data-g="${group}" data-v="${esc(val)}" aria-pressed="${(group==="status"?filter.status:filter.cat)===val}">${esc(label)}</button>`;
+  el.innerHTML =
+    mk("All","status","all") + mk("Not done","status","todo") + mk("Complete","status","done") +
+    `<span class="fsep"></span>` +
+    mk("Every category","cat","all") + cats.map(c => mk(c,"cat",c)).join("") +
+    `<span class="fsep"></span>` +
+    `<input class="search" id="q" placeholder="Search refdes, value, package…" value="${esc(filter.q)}">`;
+  el.querySelectorAll(".chip").forEach(b => b.onclick = () => {
+    filter[b.dataset.g] = b.dataset.v; buildFilters(); applyFilter();
+  });
+  const q = document.getElementById("q");
+  q.oninput = () => { filter.q = q.value; applyFilter(); };
+  if(filter.q && document.activeElement !== q){ q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
+}
+
+/* ── render ────────────────────────────────────────────── */
+function ringHTML(n, total){
+  const C = 2 * Math.PI * 10.5, frac = total ? n/total : 0;
+  return `<svg class="ring" viewBox="0 0 26 26"><circle class="bgc" cx="13" cy="13" r="10.5"/>`
+       + (n > 0 ? `<circle class="fgc" cx="13" cy="13" r="10.5" transform="rotate(-90 13 13)"`
+                + ` stroke-dasharray="${(C*frac).toFixed(2)} ${C.toFixed(2)}"/>` : ``)
+       + `</svg>`;
+}
+
+function cardHTML(f, i){
+  const n = doneCount(f), tot = f.comps.length;
+  const libBadge = f.lib.startsWith("⚠")
+    ? `<span class="badge custom">${esc(f.lib)}</span>` : `<span class="badge">${esc(f.lib)}</span>`;
+  const parts = f.comps.map(c => {
+    const on = !!state[f.id][c.ref];
+    return `<label class="part ${on?"ticked":""}" data-ref="${esc(c.ref)}">
+      <input type="checkbox" ${on?"checked":""}>
+      <span class="ref">${esc(c.ref)}</span>
+      <span class="val" title="${esc(c.val)}">${esc(c.val)}</span>
+      <span class="sh">${esc(c.sheet.slice(0,2))}</span>
+    </label>`;
+  }).join("");
+
+  const ds = f.ds
+    ? `<div class="dsline"><b>Datasheet</b><span>${esc(f.ds.split("  ·  ").map(x => DS_DIR + x).join("   ·   "))}</span></div>`
+    : `<div class="dsline none"><b>Datasheet</b><span>none in references/datasheets/</span></div>`;
+
+  return `<section class="card ${isDone(f)?"done":""}" data-id="${f.id}" data-cat="${esc(f.cat)}">
+    <div class="chead">
+      <span class="caret">▶</span>
+      <span class="num">${String(i+1).padStart(2,"0")}</span>
+      <div class="ctitle">
+        <div class="fpname">${esc(f.fp)}</div>
+        <div class="cpart">${esc(f.part)}</div>
+        <div class="badges">
+          <span class="badge cat">${esc(f.cat)}</span>${libBadge}
+          <span class="badge">sheet ${esc(f.sheets.map(s => s.slice(0,2)).join(", "))}</span>
+        </div>
+      </div>
+      <div class="tally">${ringHTML(n, tot)}<span class="t">${n}/${tot}</span></div>
+    </div>
+    <div class="cbody">
+      ${ds}
+      <button class="allbtn">${n===tot ? "Clear all" : "Tick all"}</button>
+      <div class="parts">${parts}</div>
+    </div>
+  </section>`;
+}
+
+function render(){
+  document.getElementById("list").innerHTML = FOOTPRINTS.map(cardHTML).join("");
+  document.querySelectorAll(".card").forEach(wire);
+  applyFilter();
+  updateProgress();
+}
+
+function refreshCard(card, f){
+  const n = doneCount(f), tot = f.comps.length;
+  card.classList.toggle("done", n === tot);
+  card.querySelector(".tally").innerHTML = ringHTML(n, tot) + `<span class="t">${n}/${tot}</span>`;
+  card.querySelector(".allbtn").textContent = n === tot ? "Clear all" : "Tick all";
+}
+
+function wire(card){
+  const f = FOOTPRINTS.find(x => x.id === card.dataset.id);
+
+  card.querySelector(".chead").addEventListener("click", () => card.classList.toggle("open"));
+
+  card.querySelectorAll(".part").forEach(lab => {
+    const ref = lab.dataset.ref, cb = lab.querySelector("input");
+    cb.onchange = () => {
+      if(cb.checked) state[f.id][ref] = true; else delete state[f.id][ref];
+      lab.classList.toggle("ticked", cb.checked);
+      refreshCard(card, f); persist(); updateProgress(); applyFilter();
+    };
+  });
+
+  card.querySelector(".allbtn").onclick = () => {
+    const fill = doneCount(f) !== f.comps.length;
+    f.comps.forEach(c => { if(fill) state[f.id][c.ref] = true; else delete state[f.id][c.ref]; });
+    card.querySelectorAll(".part").forEach(lab => {
+      lab.querySelector("input").checked = fill;
+      lab.classList.toggle("ticked", fill);
+    });
+    refreshCard(card, f); persist(); updateProgress(); applyFilter();
+  };
+}
+
+function applyFilter(){
+  const q = filter.q.trim().toLowerCase();
+  document.querySelectorAll(".card").forEach(card => {
+    const f = FOOTPRINTS.find(x => x.id === card.dataset.id);
+    let show = true;
+    if(filter.status === "done" && !isDone(f)) show = false;
+    if(filter.status === "todo" && isDone(f))  show = false;
+    if(filter.cat !== "all" && f.cat !== filter.cat) show = false;
+    if(q){
+      const hay = (f.fp + " " + f.part + " " + f.cat + " " + f.lib + " " +
+        f.comps.map(c => c.ref + " " + c.val).join(" ")).toLowerCase();
+      if(!hay.includes(q)) show = false;
+    }
+    card.classList.toggle("hidden", !show);
+  });
+  const vis = document.querySelectorAll(".card:not(.hidden)").length;
+  let e = document.getElementById("emptyMsg");
+  if(!vis && !e){
+    e = document.createElement("div"); e.id = "emptyMsg"; e.className = "empty";
+    e.textContent = "Nothing matches that filter.";
+    document.getElementById("list").appendChild(e);
+  } else if(vis && e){ e.remove(); }
+}
+
+function updateProgress(){
+  let done = 0, tot = 0, pkg = 0;
+  FOOTPRINTS.forEach(f => { done += doneCount(f); tot += f.comps.length; if(isDone(f)) pkg++; });
+  document.getElementById("nDone").textContent = done;
+  document.getElementById("nTot").textContent = tot;
+  document.getElementById("pkgDone").textContent = pkg;
+  document.getElementById("pkgTot").textContent = FOOTPRINTS.length;
+  document.getElementById("barFill").style.width = (tot ? done/tot*100 : 0) + "%";
+}
+
+/* ── toolbar ───────────────────────────────────────────── */
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._x); t._x = setTimeout(() => t.classList.remove("show"), 2000);
+}
+document.getElementById("expandAll").onclick   = () => document.querySelectorAll(".card:not(.hidden)").forEach(c => c.classList.add("open"));
+document.getElementById("collapseAll").onclick = () => document.querySelectorAll(".card").forEach(c => c.classList.remove("open"));
+
+document.getElementById("save").onclick = () => {
+  const blob = new Blob([JSON.stringify({v:2, project:PROJECT.name, saved:new Date().toISOString(), state}, null, 1)], {type:"application/json"});
+  const u = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = u; a.download = "footprint_check_progress.json"; a.click();
+  setTimeout(() => URL.revokeObjectURL(u), 1500);
+  dirty = false; toast("Saved");
+};
+document.getElementById("load").onclick = () => document.getElementById("fileIn").click();
+document.getElementById("fileIn").onchange = e => {
+  const file = e.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = () => { try { merge(JSON.parse(r.result)); persist(); render(); toast("Progress loaded"); }
+                     catch(err){ toast("Could not read that file"); } };
+  r.readAsText(file); e.target.value = "";
+};
+
+const themeBtn = document.getElementById("theme");
+function setTheme(t){ document.documentElement.setAttribute("data-theme", t); themeBtn.textContent = t === "dark" ? "Light" : "Dark"; }
+themeBtn.onclick = () => {
+  const nxt = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  setTheme(nxt); if(store){ try{ store.setItem(KEY+"_theme", nxt); }catch(e){} }
+};
+setTheme((store && (() => { try{ return store.getItem(KEY+"_theme"); }catch(e){ return null; } })()) || "light");
+
+buildFilters();
+render();
+</script>
+</body>
+</html>
