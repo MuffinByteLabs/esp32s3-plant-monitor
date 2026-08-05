@@ -2644,7 +2644,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Fuse:Fuse_1206_3216Metric"
+		(property "Footprint" "PlantMonitor_JLC:Fuse_1206_3216Metric"
 			(at 123.19 44.958 90)
 			(hide yes)
 			(show_name no)
@@ -3869,7 +3869,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SOD-123F"
+		(property "Footprint" "PlantMonitor_JLC:D_SOD-123F"
 			(at 95.25 100.33 0)
 			(hide yes)
 			(show_name no)
