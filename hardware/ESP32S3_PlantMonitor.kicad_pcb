@@ -9586,10 +9586,9 @@
 		(embedded_fonts no)
 	)
 	(footprint "PlantMonitor_JLC:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
-		(locked yes)
 		(layer "F.Cu")
 		(uuid "8c119300-ac54-4400-bf9b-810c4316dfcb")
-		(at 36.4 87.89 -90)
+		(at 32.8 87.89 -90)
 		(descr "USB Type-C receptacle for USB 2.0 and PD, http://www.krhro.com/uploads/soft/180320/1-1P320120243.pdf")
 		(tags "usb usb-c 2.0 pd")
 		(property "Reference" "J1"
@@ -10046,7 +10045,7 @@
 		(embedded_fonts no)
 		(model "${KIPRJMOD}/libs/PlantMonitor_JLC.3dshapes/HRO_TYPE-C-31-M-12.step"
 			(offset
-				(xyz -4.5 -3.5 0)
+				(xyz -4.5 -3.5 0.5)
 			)
 			(scale
 				(xyz 1.005 1 1)

@@ -359,7 +359,7 @@
 		(uuid "0381d331-2ef5-42e4-8d28-972ea7c7ec1e")
 	)
 	(embedded_fonts no)
-	(model "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_HRO_TYPE-C-31-M-12.step"
+	(model "${KIPRJMOD}/libs/PlantMonitor_JLC.3dshapes/HRO_TYPE-C-31-M-12.step"
 		(offset
 			(xyz 0 0 0)
 		)

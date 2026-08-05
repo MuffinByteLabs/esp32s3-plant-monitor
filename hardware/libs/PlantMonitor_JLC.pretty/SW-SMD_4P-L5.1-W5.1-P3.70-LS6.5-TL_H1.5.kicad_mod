@@ -358,7 +358,7 @@
 		(uuid "2d65495d-b57d-42ef-ba0d-2e0e388e2743")
 	)
 	(embedded_fonts no)
-	(model "C:/Users/huray/dev/PCB_Design/projects/ESP32S3_PlantMonitor_RevA/hardware/libs/PlantMonitor_JLC.3dshapes/SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5.wrl"
+	(model "${KIPRJMOD}/libs/PlantMonitor_JLC.3dshapes/SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5.wrl"
 		(offset
 			(xyz 0 0 0)
 		)
