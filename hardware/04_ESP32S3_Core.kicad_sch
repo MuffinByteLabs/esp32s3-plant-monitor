@@ -3921,7 +3921,7 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_Push")
-		(at 106.68 86.36 270)
+		(at 106.68 86.36 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3932,29 +3932,29 @@
 		(fields_autoplaced yes)
 		(uuid "c39dcd1a-fa24-4a10-83c8-18870aecf50f")
 		(property "Reference" "SW1"
-			(at 110.49 85.0899 90)
+			(at 107.95 85.0899 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 110.49 87.6299 90)
+			(at 107.95 87.6299 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Footprint" "PlantMonitor_JLC:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
-			(at 111.76 86.36 0)
+			(at 101.6 86.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3965,7 +3965,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 111.76 86.36 0)
+			(at 101.6 86.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
