@@ -622,6 +622,14 @@
       {
         "netclass": "USB",
         "pattern": "USB_DN"
+      },
+      {
+        "netclass": "USB",
+        "pattern": "*USB_CONN_D*"
+      },
+      {
+        "netclass": "USB",
+        "pattern": "*USB_ESD_D*"
       }
     ]
   },

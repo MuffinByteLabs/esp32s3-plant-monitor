@@ -63,11 +63,22 @@ Measured: shell nose at x=32.54 vs edge x=34.00 → **1.46 mm** overhang. The HR
 
 **Cleanest fix: move the left board edge, not the connector.** Change the outline rect's left side from x=34.00 → **x=33.54** (board grows 0.46 mm; H1/H3 and copper-edge clearances all still pass — verified). Moving J1 +0.46 mm instead cascades: its courtyard then hits U1 (0.43 mm) and D1 (0.28 mm), so J1+U1+C1+D1 would all shift. One number in the outline beats four part moves.
 
-### 2.3 MEDIUM — USB net-class patterns miss most of the physical pair
+### 2.3 MEDIUM — USB pair segments are anonymous nets, so the router treats them as `Default`
 
-The `USB` class (0.25 mm track, 0.2 mm diff-pair gap — correctly configured) is assigned only to `USB_DP`/`USB_DN`, which exist **only from R1/R2 to the module** (2.5 mm). The long stretch I'll actually route as a differential pair — J1 → U1 → R1/R2 — lives on `Net-(J1-D+-PadA6)`, `Net-(J1-D--PadA7)`, `Net-(R1-Pad1)`, `Net-(R2-Pad1)`, which all fall into `Default` (0.2 mm track, 0.25 mm dp-gap). The interactive router will silently draw the pair with the wrong geometry.
+*(Revised 2026-08-12 — the schematic-side fix below supersedes the net-class-pattern patch originally written here; my own suggestion.)*
 
-**Fix:** Board Setup → Net Classes → add patterns to `USB`: `Net-(J1-D*` (catches both connector-side nets), `Net-(R1-Pad1)`, `Net-(R2-Pad1)`.
+The `USB` class (0.25 mm track, 0.2 mm diff-pair gap — correctly configured) is assigned only to `USB_DP`/`USB_DN`, which exist **only from R1/R2 to the module** (2.5 mm). The long stretch I'll actually route as a pair — J1 → U1 → R1/R2 — lives on auto-generated names (`Net-(J1-D+-PadA6)`, `Net-(J1-D--PadA7)`, `Net-(R1-Pad1)`, `Net-(R2-Pad1)`), which fall into `Default` (0.2 mm, 0.25 dp-gap). Worse than the width: KiCad's differential-pair router finds a net's partner **by name suffix** (…P/…N, +/−), and `Net-(J1-D+-PadA6)`/`Net-(J1-D--PadA7)` don't form a recognizable pair — so `Route → Differential Pair` won't even engage on 80 % of the run.
+
+**Fix (industry-standard: name the nets in the schematic — the schematic is the source of truth, not the layout tool's patterns):** on sheet 02, add net labels to the four unlabeled wire segments, keeping the P/N-at-the-end convention so the pair router recognizes them:
+
+| Segment | Label |
+|---|---|
+| J1 A6/B6 (D+) → U1 pin 3 | `USB_CONN_DP` |
+| J1 A7/B7 (D−) → U1 pin 1 | `USB_CONN_DN` |
+| U1 pin 4 → R2 | `USB_ESD_DP` |
+| U1 pin 6 → R1 | `USB_ESD_DN` |
+
+Then: ERC (stays clean) → **F8** to push the names to the board — zero-risk right now because nothing is routed; pads just get renamed nets — and in Board Setup → Net Classes add two patterns to `USB`: `*USB_CONN_D*` and `*USB_ESD_D*` (leading `*` because sheet-local labels carry the `/02_USB_C_Input/` path prefix — same trick my Power class already uses for `*USB_VBUS`). Now every segment routes as a true differential pair at 0.25/0.2, DRC messages read `USB_CONN_DP` instead of pad soup, and the stage-by-stage names document the signal flow (connector → ESD → series-R → module) the way commercial schematics do.
 
 ### 2.4 LOW-MED — outline is a sharp-cornered rectangle
 
@@ -111,7 +122,7 @@ Silk phase (LAW 27): label every TP with its **name** (+5V, VSYS, 3V3, VBAT, BSN
 
 Order of battle, per my guide §5/§6 with board-specific notes:
 
-1. **Housekeeping first:** the net-class patch (2.3), edge/corner decisions (2.2/2.4), lock parts (2.5).
+1. **Housekeeping first:** the USB net renames + F8 + class patterns (2.3), edge/corner decisions (2.2/2.4), lock parts (2.5).
 2. **USB pair first** (least freedom): J1 pads → merge A/B pad pairs at the connector → straight through U1 (pins 1/3 in, 6/4 out) → diagonal corridor to R1/R2 at (58.5, 66–67.5) → module pins 13/14. Top layer only, zero vias, ~0.2 mm gap, and keep the bottom layer under the pair + 5 mm shadow untouched (LAW 5/6). The corridor passes below the LED cluster — route the pair before anything else claims that diagonal.
 3. **VBUS/protection in copper order** (LAW 7): J1 VBUS pads → D1 → F1 → C2/onward, 0.5 mm+, stubs in millimetres — placement already makes the straight chain possible; don't route VBUS to F1 first and tee back to D1.
 4. **Power spine:** F1 → (C2) → split: U6 VDD (via C15) and D4 → VSYS pour-let (D4/Q3/C18/C5/C6/U2·VIN fat and compact, 0.5–0.8 mm, LAW 13/14) → LDO → C7 → 3V3 trunk east along y≈53–54 past C9→C10 into pin 2, then a second 3V3 branch south to the sensor corner. Give U2's GND pin its heat-spreader pour + 4–6 stitching vias (LAW 15 — confirmed requirement from both prior reviews).
