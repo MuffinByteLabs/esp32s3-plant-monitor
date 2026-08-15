@@ -1,9 +1,9 @@
 # Pin Map Cheat Sheet — ESP32-S3 Plant Monitor Rev A
-*Supersedes `references/ESP32S3_PlantMonitor_RevA_PinMap_CheatSheet.pdf` (which still showed the deleted soil divider). Designators match the schematic. Updated 2026-07-20; test points added 2026-07-22.*
+*Supersedes `references/ESP32S3_PlantMonitor_RevA_PinMap_CheatSheet.pdf` (which still showed the deleted soil divider). Designators match the schematic. Updated 2026-07-20; test points added 2026-07-22; USB segment nets added 2026-08-13; **I²C re-pinned 2026-08-15** (layout-driven: IO4/IO5 → IO38/IO39, module pads 31/32 on the right side facing the sensors — verified from the board netlist after F8).*
 
 ## At a glance
 
-* **I²C:** SCL = GPIO4 · SDA = GPIO5 · pull-ups R8/R9 = 4.7 k to +3V3 (one pair for the whole bus). Net names: `SCL`, `SDA`.
+* **I²C:** SCL = **GPIO39** · SDA = **GPIO38** (re-pinned 2026-08-15; firmware: `Wire.begin(38, 39)` — SDA first) · pull-ups R8/R9 = 4.7 k to +3V3 (one pair for the whole bus). Net names: `SCL`, `SDA`.
 * **Sensors:** BME280 = 0x76 (SDO→GND, CSB→3V3) · VEML7700 = 0x10 (fixed).
 * **ADC1 (ATTEN=3, effective 0–2900 mV):** GPIO1 = `ADC_SOIL` (ADC1_CH0, **direct** — no divider; 100 k pull-down R11 + 100 nF C14) · GPIO2 = `BAT_SENSE` (ADC1_CH1, VBAT÷2 via R14/R15 100 k 1 % + 100 nF C17).
 * **Soil-probe power:** GPIO21 = `SENS_PWR_EN` → Q1 gate. **LOW = probe ON**, HIGH/floating = off (R10 100 k pull-up keeps it off in deep sleep and at boot).
@@ -21,8 +21,8 @@
 | 27 | IO0 | — | Boot strap: R6 10 k up, SW1 |
 | 13 | IO19 | USB_DN | Native USB D− (22 Ω R1 in line) |
 | 14 | IO20 | USB_DP | Native USB D+ (22 Ω R2 in line) |
-| 4 | IO4 | SCL | I²C clock |
-| 5 | IO5 | SDA | I²C data |
+| 31 | IO38 | SDA | I²C data (was IO5/pad 5 until 2026-08-15) |
+| 32 | IO39 | SCL | I²C clock (was IO4/pad 4; IO39 is MTCK — pin-JTAG forfeited, USB-JTAG unaffected) |
 | 39 | IO1 | ADC_SOIL | Soil reading, ADC1_CH0, direct |
 | 38 | IO2 | BAT_SENSE | VBAT÷2, ADC1_CH1 |
 | 23 | IO21 | SENS_PWR_EN | Probe power switch, LOW = on |
@@ -42,7 +42,9 @@
 | SOIL_PWR | Switched 3.3 V to probe (J2 pin 2, middle) |
 | ADC_SOIL | Probe output → GPIO1 (J2 pin 1); 100 k to GND |
 | SCL / SDA | Sensor bus |
-| USB_DP / USB_DN | USB data to GPIO20/19 |
+| USB_DP / USB_DN | USB data to GPIO20/19 (module side of R1/R2) |
+| USB_CONN_DP / _DN | J1 → U1 segment of the pair (sheet-02 local labels, renamed 2026-08-12 from auto names) |
+| USB_ESD_DP / _DN | U1 → R1/R2 segment of the pair (ditto) |
 
 ## Connectors
 

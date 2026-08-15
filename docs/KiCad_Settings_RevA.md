@@ -1,6 +1,6 @@
 # KiCad Settings Log — ESP32-S3 Plant Monitor Rev A
 
-*Record of every custom setting configured before layout, with the reasoning. Started 2026-08-04 (pre-layout setup). KiCad 10, **4-layer** (was 2 — changed 2026-08-06, see §5), JLCPCB. Update this file whenever a setting changes — it is the "why" behind the numbers in `ESP32S3_PlantMonitor.kicad_pro`.*
+*Record of every custom setting configured before layout, with the reasoning. Started 2026-08-04 (pre-layout setup); updated 2026-08-13 (USB netclass patterns, layer plan revised to GND/GND, rule-area status). KiCad 10, **4-layer** (was 2 — changed 2026-08-06, see §5), JLCPCB. Update this file whenever a setting changes — it is the "why" behind the numbers in `ESP32S3_PlantMonitor.kicad_pro`.*
 
 ---
 
@@ -35,9 +35,11 @@
 |---|---|---|---|---|---|
 | Default | 0.2 | 0.2 | 0.6/0.3 | 0.2 / 0.25 (unused) | everything not listed below |
 | **Power** | 0.2 | **0.5** | **0.8/0.4** | — | `+3V3` · `+5V_PROT` · `VSYS` · `VBAT` · `*VBAT_RAW` · `*USB_VBUS` |
-| **USB** | 0.2 | 0.25 | 0.6/0.3 | **0.25 / 0.2** | `USB_DP` · `USB_DN` |
+| **USB** | 0.2 | 0.25 | 0.6/0.3 | **0.25 / 0.2** | `USB_DP` · `USB_DN` · `*USB_CONN_D*` · `*USB_ESD_D*` |
 
 The `*` wildcard on `*VBAT_RAW` / `*USB_VBUS` exists because those two are **local labels**, so their full net names carry a sheet prefix (`/07_Battery_PowerPath/VBAT_RAW`). All the bare names are global labels / power symbols. If any net is later converted to a hierarchical label, its name gains a sheet prefix → prepend `*` to that pattern and re-check the "Nets matching" preview in Board Setup.
+
+*Added 2026-08-12:* the four sheet-02 segments of the USB pair (J1→U1, U1→R1/R2) were promoted from auto-generated names to local labels `USB_CONN_DP/DN` and `USB_ESD_DP/DN` — KiCad's differential-pair router finds a net's partner by name suffix, so the auto names blocked DP routing on 80 % of the run. The two `*USB_…_D*` patterns put them in the USB class.
 
 ## 5. Other Board Setup pages
 
@@ -61,15 +63,14 @@ The `*` wildcard on `*VBAT_RAW` / `*USB_VBUS` exists because those two are **loc
   - U2's ~0.34 W gets two more full copper sheets of heatsink (hard rule 15), which also lowers the local hot spot the BME280 is trying not to read (hard rule 17).
   - Slack. The subtle failure of a cramped 2-layer board isn't that it fails, it's the small ugly compromises made at ~80 % routed. Defects live there.
 
-  Cost delta ≈ **$5** on five boards (JLC 4-layer board charge ~$70/m²; ~$2 → ~$7–8 at 78 × 70 mm); JLC **assembly** cost is identical either way, so it's a rounding error on the order.
+  Cost delta ≈ **$5** on five boards (JLC 4-layer board charge scales with area; the board is 62.5 × 44.5 mm after the 08-12 shrink); JLC **assembly** cost is identical either way, so it's a rounding error on the order.
 
-- **Layer plan** (decided with the stackup):
-  - **F.Cu** — every part (hard rule 22) + all fast or noise-sensitive signals: USB D+/D−, ADC_SOIL, BAT_SENSE, the VSYS node.
-  - **In1.Cu** — one solid GND zone covering the whole board. Never routed on. Never cut. Draw it once, then leave it alone.
-  - **In2.Cu** — power zones: `+3V3` as the main pour, with `VSYS` / `VBAT` / `+5V_PROT` islands.
-  - **B.Cu** — slow signals only (I²C, UART to TP11/TP12, LED/button, EN, IO0) + a GND pour in the leftovers.
-  - Rationale for the F.Cu/B.Cu split: B.Cu's nearest plane is In2, which is chopped into power islands, so its return paths are messier than F.Cu's — which sits over uncut ground. Anything speed- or noise-sensitive stays on top.
-- **Antenna keep-out is now a 4-layer rule area** — Rule Area with "keep out copper pours" ticked on F.Cu, In1.Cu, In2.Cu *and* B.Cu. Hard rule 1's intent is unchanged; there are just two more layers to enforce it on, and the two new ones are invisible, so it is easy to forget.
+- **Layer plan — REVISED 2026-08-13 (supersedes the 08-06 version):** both inner layers are **ground**; there is no power layer. Layers renamed **GND1.Cu / GND2.Cu**.
+  - **F.Cu** — every part (hard rule 22) + all fast or noise-sensitive signals: USB pair (entire run), ADC_SOIL, BAT_SENSE, the VSYS node, most power.
+  - **GND1.Cu / GND2.Cu** — one solid GND zone each, whole board. Never routed on. Never cut.
+  - **B.Cu** — slow signals wherever they're cleaner down there (I²C, UART to TP11/TP12, LED/button, EN, IO0, SENS_PWR_EN crossings) + a GND pour in the leftovers.
+  - *Why the revision:* with GND on both inner layers, **both** routing layers get a clean uncut reference 0.21 mm away (the old plan left B.Cu referencing a power layer chopped into islands — the exact split-plane-crossing hazard a first layout should avoid). Power at this board's ≤ ~0.5 A routes comfortably as 0.5–0.8 mm traces on the outer layers, so a power plane bought nothing. This matches `docs/Routing_Guide_RevA_4Layer.md` §1–2, which is the routing source of truth.
+- **Antenna keep-out must be a 4-layer rule area** — Rule Area with "keep out copper pours" ticked on F.Cu, GND1.Cu, GND2.Cu *and* B.Cu. Hard rule 1's intent is unchanged; there are just two more layers to enforce it on, and the two new ones are invisible, so it is easy to forget. **Status check 2026-08-13: the saved `.kicad_pcb` contains no rule area** — whatever was drawn on 08-06 didn't survive; re-create it before the first zone fill (PROJECT_STATUS step 6).
 - **Text & Graphics → Defaults:** silk text 1.0 mm height / 0.15 mm line width (matches constraint + JLC floor).
 - **Solder Mask/Paste:** zeros — JLC applies their own mask expansion.
 - **Teardrops / Violation Severity:** defaults.
@@ -92,8 +93,7 @@ Mode **Shove** (pushes existing tracks/vias aside while keeping every clearance 
 
 ## 9. Planned-but-not-yet-applied (set these when the step arrives)
 
-- **In1.Cu GND zone — draw this FIRST, before routing.** One rectangle over the whole board, net `GND`, so the plane exists while I route and I can see what I'm referencing. Clearance 0.3 / min width 0.2 / thermal spoke 0.5.
-- **In2.Cu power zones** — after the power parts are placed: `+3V3` main pour, `VSYS` / `VBAT` / `+5V_PROT` islands. Zone priorities matter when islands overlap (higher priority wins).
+- **GND1.Cu + GND2.Cu zones — draw these FIRST, before routing** *(revised 2026-08-13: both inner layers are ground; the In2 power-zone plan is superseded)*. One rectangle over the whole board on each, net `GND`, so the planes exist while I route and I can see what I'm referencing. Clearance 0.3 / min width 0.25 / pad connection **thermal reliefs** (THT parts stay hand-solderable) / thermal spoke 0.5 / remove islands.
 - **F.Cu / B.Cu GND pours** — after routing, as before. Refill with `B` after *every* edit — stale pours lie.
 - Any GND pad still showing an airwire after the pour → via next to it (stitching pass; extra vias around USB corridor, LDO pour, module EP). On 4-layer these vias now reach a plane that is 0.21 mm away instead of 1.51 mm, so they are cheaper electrically — use more of them, not fewer.
 - Outline trim + corner fillets at the very end, before final DRC.

@@ -13,12 +13,12 @@ Rev A uses the app-note discrete load-sharing circuit (MCP73831 + SS14 + P-FET +
 
 Recommendation: **BQ24075** if redoing the block properly; **TPS2113A** if minimizing change. Verify JLCPCB stock/price for all three before choosing.
 
-## 2. Do these in the Rev A *layout* (free wins, not really Rev B)
+## 2. Do these in the Rev A *layout* (free wins, not really Rev B) — *status 2026-08-13*
 
-* **Test points TP1–TP15** per design doc §11 — the schematic currently has none. Minimum set: +5V_PROT, VSYS, +3V3, GND ×2, VBAT, BAT_SENSE, ADC_SOIL, EN, IO0, TXD0, RXD0.
-* **Mounting holes** (4× M3) — `08_Mechanical` sheet is still empty.
-* Silkscreen: **battery polarity marks at J3**, probe pin names at J2, BOOT/RESET labels matching actual refs (SW1 = BOOT, SW2 = RESET).
-* UART fallback: TXD0/RXD0 at least on pads (recovery path if native USB is ever bricked).
+* ~~**Test points TP1–TP15**~~ **DONE 2026-07-22** — TP1–TP12 in the schematic, netlist-verified; placement finishing now.
+* ~~**Mounting holes** (4× M3)~~ **DONE** — H1–H4, now concentric with the R4.25 board corners.
+* Silkscreen: **battery polarity marks at J3**, probe pin names at J2, BOOT/RESET labels (SW1 = BOOT, SW2 = RESET) — *still open; happens in the end-of-routing silk pass.*
+* ~~UART fallback~~ **DONE** — TP11/TP12/TP8 through-hole recovery trio at the bottom edge, 2.54 mm pitch.
 
 ## 3. Sleep-floor reductions (months → half-year battery life)
 
@@ -33,7 +33,8 @@ Current floor ≈ 210 µA: power LED 120 + LDO Iq 55 + divider 21 + ESP32 ~10.
 
 * **Buck-boost regulator** (TPS63001/TPS63020 class) instead of LDO: full 3.0–4.2 V battery range usable at 3.3 V, no TX-headroom rule, ends the 3.5 V firmware cutoff. Cost: inductor, EMI care near the ADCs/antenna.
 * **TVS after the fuse** (or a second one) so sustained overvoltage trips F1 instead of cooking D1.
-* **ESD/robustness on field wiring**: series R + TVS on ADC_SOIL at J2 (the probe cable is an antenna), and consider the same on J3.
+* **ESD/robustness on field wiring**: series R + TVS on ADC_SOIL at J2 (the probe cable is an antenna), and consider the same on J3. *(2026-08-08 note in Hard Rules: as drawn, ADC_SOIL has no series element on-board — R11 is a parallel pull-down — so a small series R here is confirmed as the Rev B item.)*
+* **Thermal slots around the BME280** — only if Rev A bring-up shows a board-heat reading offset beyond simple firmware correction. The 4-layer ground planes spread heat board-wide (see `Routing_Guide_RevA_4Layer.md` §5); characterize first, slot second.
 * **Charger with pack-NTC support** (comes free with BQ24075's TS pin) if a thermistor-equipped pack is adopted.
 
 ## 5. Usability / debug

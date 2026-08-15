@@ -74,6 +74,17 @@
 
 ---
 
+## 4-layer amendments — added 2026-08-13
+
+*The board went from 2 to 4 layers: **L1 signal · GND1 · GND2 · L4 signal** (JLC04161H-7628; both middle layers solid ground — the 08-06 idea of power islands on In2 is superseded). Every rule above stands except as amended here; mechanisms in `docs/Routing_Guide_RevA_4Layer.md`.*
+
+- **LAW 19/20 now cover two planes:** GND1 and GND2 are never routed on and never cut. "Bottom layer = one continuous plane" becomes "both inner layers = continuous planes"; B.Cu (L4) is a normal routing layer with its own GND pour.
+- **LAW 6 is automatically satisfied:** two solid planes sit between the USB pair and L4, so routing on L4 under the pair is harmless. The pair itself still stays on L1.
+- **LAW 5 stands, and improves:** the J1 duplicate-pad breakout routes entirely on L1 (one tie behind the pad row, one in front, exits from the outer pads — Routing Guide §3.1, geometry verified 08-12), so the pair truly gets zero vias, no exceptions.
+- **LAW 12 unchanged for decouplers** — every decoupler GND pad gets its via at the pad (the hop to GND1 is now 0.21 mm — the whole point of the stackup). Amendment: *trivial* grounds (100 k pull-down ends, switch GND pads, R13's ground) may join a well-stitched pour instead of getting personal vias.
+- **LAW 21 restated:** stitch the outer pours into the planes every ~5 mm and at every decoupler. New companion rule: a **fast** signal changing layers needs a GND via within 1–2 mm (return current must jump planes through it); slow signals can lean on the stitching grid.
+- **LAW 1–3 unchanged**, but the keep-out must now be enforced on **four** copper layers — use a Rule Area covering F.Cu/GND1/GND2/B.Cu (re-create it: the current board file has none).
+
 ## Pocket numbers
 
 - Trace: **~6 nH/cm**, ~1 mΩ/cm at 0.5 mm width (1 oz) · via ~0.5–1 nH · cap internal ESL ~0.5–1 nH · plane return ~0.1 nH/cm · loose wire ~10 nH/cm · battery leads ~200 nH
