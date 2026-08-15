@@ -26,6 +26,10 @@
 
 Then route per `docs/Routing_Guide_RevA_4Layer.md` §3: USB first (the connector breakout now routes entirely on L1 — no crossover via), VBUS chain in copper order, power spine, analog, slow signals, GND vias/pours/stitching, silk pass.
 
+## Late-stage status (2026-08-15)
+
+Routing is **complete** (all pads connected, USB pair via-free and length-matched, power doubled-via'd, every decoupler grounded at its pin). All 12 TPs placed on-copper; THT TP courtyard fixed to Ø2.5 (DRC clean there). **Consciously waived:** the 4-layer antenna rule area, and (pending final call) four TPs inside the 15 mm antenna ring — TP5 (8.0 mm), TP3 (10.4), TP9 (12.0), TP7 (14.0); Espressif's official guidance doesn't address TPs, so this is our own conservative rule — mitigation is probe-lead discipline during RF-active tests. Remaining: follow `docs/Finishing_Guide_RevA.md` (outer pours → stitching incl. R13's via → DRC loop → silk pass → JLC order via the plugin, Standard assembly for the module).
+
 ## Standing facts (don't re-derive)
 
 Hand-over: R16 = 10 k ⇒ ~50–100 ms body-diode notch at unplug — scope-verify at TP2/VSYS during bring-up (BringUp_Guide step 9) · firmware owns battery limits: no TX < ~3.5 V, shutdown at 3.0 V · sleep floor ~210 µA (power LED dominant; DNP D2 for battery tests) · charge LED ≠ polarity proof — meter the pack plug, always · SW1 = BOOT, SW2 = RESET (schematic wins over the old design doc) · module C2913198 is Standard-PCBA tier · C3/C4 carry `dnp` but not exclude-from-BOM — confirm both stay off BOM/placement at JLC upload · doc↔schematic refdes cross-map lives in the design doc Addendum A.
