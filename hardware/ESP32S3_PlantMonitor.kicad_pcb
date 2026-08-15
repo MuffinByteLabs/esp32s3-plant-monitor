@@ -15480,6 +15480,17 @@
 		(uuid "310555e4-ae52-4624-a038-f34bbef41627")
 	)
 	(gr_rect
+		(start 30.725 54.25)
+		(end 50.5 67.25)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "78d8d38b-5357-42b9-a944-3f46c9d17951")
+	)
+	(gr_rect
 		(start 31 70.5)
 		(end 51.5 87.25)
 		(stroke
@@ -15489,17 +15500,6 @@
 		(fill no)
 		(layer "Cmts.User")
 		(uuid "8511681b-3aa6-489b-b0fe-3fec0d1a3cd6")
-	)
-	(gr_rect
-		(start 38.25 54.25)
-		(end 50.5 67.25)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(fill no)
-		(layer "Cmts.User")
-		(uuid "78d8d38b-5357-42b9-a944-3f46c9d17951")
 	)
 	(gr_rect
 		(start 42.5 89.25)
@@ -15984,7 +15984,7 @@
 		)
 	)
 	(gr_text "USB-C"
-		(at 34.5 70.5 0)
+		(at 28.375 70.5 0)
 		(layer "Cmts.User")
 		(uuid "762c40e2-6b1b-4b88-b60f-bcdd3e81120f")
 		(effects
@@ -15996,7 +15996,7 @@
 		)
 	)
 	(gr_text "LDO"
-		(at 42.75 54 0)
+		(at 30.325 54 0)
 		(layer "Cmts.User")
 		(uuid "1ee1313e-280e-4e61-9da5-97f9c94d04ac")
 		(effects
@@ -16044,7 +16044,7 @@
 		)
 	)
 	(gr_text "soil sensor\n"
-		(at 72.5 77.4 0)
+		(at 71.875 97 0)
 		(layer "Cmts.User")
 		(uuid "1056ebbf-5c5a-4658-a9a5-b21c12764ff3")
 		(effects
@@ -16067,7 +16067,7 @@
 			(justify left bottom)
 		)
 	)
-	(gr_text "LIGHT SENSOR"
+	(gr_text "Light Sensor (VEML7700)"
 		(at 98.5 80.7 0)
 		(layer "Cmts.User")
 		(uuid "4ab85ba7-76f3-4635-bf5f-c33c26019bce")
@@ -17863,6 +17863,15 @@
 		(uuid "d783fc09-aa61-4499-9eef-7f9c82ece9ea")
 	)
 	(via
+		(at 82 60.475)
+		(size 0.6)
+		(drill 0.3)
+		(layers "F.Cu" "B.Cu")
+		(free yes)
+		(net "GND")
+		(uuid "d865a4f8-f52d-4e7d-97a0-b6764cb24bc6")
+	)
+	(via
 		(at 52.775 80.5)
 		(size 0.8)
 		(drill 0.4)
@@ -17886,6 +17895,15 @@
 		(free yes)
 		(net "GND")
 		(uuid "e36e46b4-9165-4913-947e-9076d57ff205")
+	)
+	(via
+		(at 90.175 60.4)
+		(size 0.6)
+		(drill 0.3)
+		(layers "F.Cu" "B.Cu")
+		(free yes)
+		(net "GND")
+		(uuid "e63c513c-f39a-4648-bf1e-0d40217dab8a")
 	)
 	(via
 		(at 55.75 88.75)
