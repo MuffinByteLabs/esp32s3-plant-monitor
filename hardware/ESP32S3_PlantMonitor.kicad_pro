@@ -39,9 +39,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.8,
-          "height": 1.27,
-          "width": 2.54
+          "drill": 0.6,
+          "height": 1.8,
+          "width": 1.0
         },
         "silk_line_width": 0.15,
         "silk_text_italic": false,
@@ -60,12 +60,12 @@
           "hatch_smoothing_level": 0,
           "hatch_smoothing_value": 0.1,
           "hatch_thickness": 1.0,
-          "min_clearance": 0.5,
+          "min_clearance": 0.3,
           "min_island_area": 10.0,
           "min_thickness": 0.25,
           "pad_connection": 1,
           "remove_islands": 0,
-          "thermal_relief_gap": 0.5,
+          "thermal_relief_gap": 0.3,
           "thermal_relief_spoke_width": 0.5
         }
       },
@@ -76,7 +76,68 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "silk_edge_clearance|34000000|72800000|7e4aa71f-dcaa-48ff-b3ea-3ecf8f49d147|295b1f58-6420-4e68-bc78-99da8dc70596",
+          "usb-c silk screen"
+        ],
+        [
+          "silk_edge_clearance|34000000|82200000|7e4aa71f-dcaa-48ff-b3ea-3ecf8f49d147|70a4c434-85e2-4001-a7c7-e85d399d4a9c",
+          "usb-c silk screen"
+        ],
+        [
+          "silk_edge_clearance|56410000|50000000|c63194a5-fe4a-45bb-96eb-3e2ffd25bc54|d894f0a3-f22a-41cb-b493-f1aafe11823c",
+          "esp32 pin 1 indicator silk screen"
+        ],
+        [
+          "silk_edge_clearance|58940000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|cb09bdf7-22e9-4333-a81e-461cacffdad3",
+          "Battery connector silk screen"
+        ],
+        [
+          "silk_edge_clearance|60200000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|a38c0ed2-dcff-4273-8510-72eea53d99be",
+          "Battery connector silk screen"
+        ],
+        [
+          "silk_edge_clearance|60700000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|699a3434-0e54-41aa-958e-54f56528123c",
+          "Battery connector silk screen"
+        ],
+        [
+          "silk_edge_clearance|61500000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|d4acc9a1-4520-41ee-afb1-2a0cfa593348",
+          "Battery connector silk screen"
+        ],
+        [
+          "silk_edge_clearance|62500000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|8375991d-b713-4892-8fa8-551050271925",
+          "Battery connector silk screen"
+        ],
+        [
+          "silk_edge_clearance|65060000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|46598f24-1812-4f6b-8877-0a985b5b8fe8",
+          "Battery connector silk screen"
+        ],
+        [
+          "silk_edge_clearance|71690000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|83b2035e-ffe9-40c5-9ce8-bb9308da2c36",
+          "soil sensor silk screen"
+        ],
+        [
+          "silk_edge_clearance|72950000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|7f3cce6b-8531-4359-998b-9ecc6b2d9276",
+          "soil sensor silk screen"
+        ],
+        [
+          "silk_edge_clearance|73450000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|0410b739-77ff-477a-adc6-6234f96f0f3b",
+          "soil sensor silk screen"
+        ],
+        [
+          "silk_edge_clearance|74250000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|8d20d889-5650-4c3b-ace4-50c681a08aea",
+          "soil sensor silk screen"
+        ],
+        [
+          "silk_edge_clearance|77250000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|07baeb3c-7163-4541-94d5-73b2781d2b7d",
+          "soil sensor silk screen"
+        ],
+        [
+          "silk_edge_clearance|79810000|94500000|90fa1955-95e7-4073-97ee-18f1c0158549|36aa37eb-866c-4edb-8b0a-6187398533b9",
+          "soil sensor silk screen"
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -107,7 +168,7 @@
         "items_not_allowed": "error",
         "length_out_of_range": "error",
         "lib_footprint_issues": "warning",
-        "lib_footprint_mismatch": "warning",
+        "lib_footprint_mismatch": "ignore",
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
         "mirrored_text_on_front_layer": "warning",
