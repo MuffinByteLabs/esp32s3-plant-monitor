@@ -51,4 +51,4 @@ Silk labels by function (+5V, VSYS, 3V3, GND, VBAT, BSNS, SOIL, EN, IO0) when I 
 
 Type in the TPs, nudge J1, lock J1/U3, and I'm at the routing phase — the order in the 08-10 report §4 still applies verbatim (USB pair first through its corridor, VBUS in copper order, power spine, analog, per-cap ground vias, pours + stitching). The optional schematic niceties (+3V3 power-symbol unification, `SENS_PWR_EN` active-low rename, labels for EN/IO0/TXD0/RXD0) remain open and remain optional.
 
-*all coordinates in KiCad board units (mm, Y down).*
+*All coordinates in KiCad board units (mm, Y down).*

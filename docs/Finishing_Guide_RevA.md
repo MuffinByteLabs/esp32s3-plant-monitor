@@ -64,4 +64,4 @@ Then the board is out of my hands for a week, `BringUp_Guide.md` becomes the act
 
 ---
 
-*click paths verified against KiCad 10 · companion to `Routing_Guide_RevA_4Layer.md` §8's definition of done.*
+*Click paths verified against KiCad 10 · companion to `Routing_Guide_RevA_4Layer.md` §8's definition of done.*

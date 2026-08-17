@@ -19,3 +19,11 @@ _autosave-*
 *.kicad_sch-bak
 *.kicad_pcb-bak
 fp-info-cache
+
+# local work/backup folders
+_gitwork/
+hardware/_restore_backup*/
+hardware/jlcpcb/
+
+# Office temp files
+~$*

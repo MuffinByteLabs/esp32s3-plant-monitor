@@ -17,7 +17,7 @@ Recommendation: **BQ24075** if redoing the block properly; **TPS2113A** if minim
 
 * ~~**Test points TP1–TP15**~~ **DONE 2026-07-22** — TP1–TP12 in the schematic, netlist-verified; placement finishing now.
 * ~~**Mounting holes** (4× M3)~~ **DONE** — H1–H4, now concentric with the R4.25 board corners.
-* Silkscreen: **battery polarity marks at J3**, probe pin names at J2, BOOT/RESET labels (SW1 = BOOT, SW2 = RESET) — *still open; happens in the end-of-routing silk pass.*
+* ~~Silkscreen: **battery polarity marks at J3**, probe pin names at J2, BOOT/RESET labels (SW1 = BOOT, SW2 = RESET)~~ **DONE 2026-08-16/17** — full functional silk pass (TP names, +/− at J3, SIG/PWR/GND at J2, BOOT/RESET, PWR/CHG).
 * ~~UART fallback~~ **DONE** — TP11/TP12/TP8 through-hole recovery trio at the bottom edge, 2.54 mm pitch.
 
 ## 3. Sleep-floor reductions (months → half-year battery life)
@@ -43,6 +43,8 @@ Current floor ≈ 210 µA: power LED 120 + LDO Iq 55 + divider 21 + ESP32 ~10.
 * Charge-state readable by firmware (STAT to a GPIO through a divider — mind the 5 V domain, see Zak's app-note variant) so the app can report "charging/full."
 * RGB status LED with firmware duty-cycling instead of the always-on power LED.
 * Label probe points / add a scope-ground pad near VSYS.
+* Move TP5 (BAT_SNS) a few mm further from the antenna (8.3 mm in Rev A — waived with probe-lead discipline; free to fix in a re-layout).
+* One extra GND via tight against U6's ground pad (Rev A has 2 within 3 mm; the LDO got 5 — match the treatment).
 
 ## 6. Process
 

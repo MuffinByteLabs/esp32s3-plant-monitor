@@ -143,4 +143,4 @@ Routing is finished when: unconnected items = **0** · DRC = **0** with the real
 
 ---
 
-*board state measured from disk, not screenshots · LAW/STRONG references are to `Hard_Rules_Layout_RevA.md`, which remains in force except where Section 1 explicitly retires the 2-layer-specific mechanics.*
+*Board state measured from disk, not screenshots · LAW/STRONG references are to `Hard_Rules_Layout_RevA.md`, which remains in force except where Section 1 explicitly retires the 2-layer-specific mechanics.*

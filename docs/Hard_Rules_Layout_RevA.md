@@ -87,7 +87,7 @@
 
 ## Pocket numbers
 
-- Trace: **~6 nH/cm**, ~1 mΩ/cm at 0.5 mm width (1 oz) · via ~0.5–1 nH · cap internal ESL ~0.5–1 nH · plane return ~0.1 nH/cm · loose wire ~10 nH/cm · battery leads ~200 nH
+- Trace: **~6 nH/cm**, ~10 mΩ/cm at 0.5 mm width (1 oz; 0.5 mΩ/square × 20 squares/cm — corrected 2026-08-17, earlier drafts said 1 mΩ/cm) · via ~0.5–1 nH · cap internal ESL ~0.5–1 nH · plane return ~0.1 nH/cm · loose wire ~10 nH/cm · battery leads ~200 nH
 - **V = L·(ΔI/Δt)** — shortcut: nH × (A ÷ ns) = V, directly
 - ΔV = I·Δt/C (tank sag) · τ = R·C · V = I·R · edge length = 15 cm/ns × edge time (worry when trace > edge/10)
 - Fast-path inductance: >20 nH = problem, 5–10 nH = noticeable, <5 nH = good decoupling loop. Slow paths: hundreds of nH are free.

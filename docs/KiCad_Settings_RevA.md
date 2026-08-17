@@ -1,6 +1,6 @@
 # KiCad Settings Log — ESP32-S3 Plant Monitor Rev A
 
-*Record of every custom setting configured before layout, with the reasoning. Started 2026-08-04 (pre-layout setup); updated 2026-08-13 (USB netclass patterns, layer plan revised to GND/GND, rule-area status). KiCad 10, **4-layer** (was 2 — changed 2026-08-06, see §5), JLCPCB. Update this file whenever a setting changes — it is the "why" behind the numbers in `ESP32S3_PlantMonitor.kicad_pro`.*
+*Record of every custom setting configured before layout, with the reasoning. Started 2026-08-04 (pre-layout setup); updated 2026-08-13, 2026-08-17 (USB netclass patterns, layer plan revised to GND/GND, rule-area status). KiCad 10, **4-layer** (was 2 — changed 2026-08-06, see §5), JLCPCB. Update this file whenever a setting changes — it is the "why" behind the numbers in `ESP32S3_PlantMonitor.kicad_pro`.*
 
 ---
 
@@ -35,7 +35,7 @@
 |---|---|---|---|---|---|
 | Default | 0.2 | 0.2 | 0.6/0.3 | 0.2 / 0.25 (unused) | everything not listed below |
 | **Power** | 0.2 | **0.5** | **0.8/0.4** | — | `+3V3` · `+5V_PROT` · `VSYS` · `VBAT` · `*VBAT_RAW` · `*USB_VBUS` |
-| **USB** | 0.2 | 0.25 | 0.6/0.3 | **0.25 / 0.2** | `USB_DP` · `USB_DN` · `*USB_CONN_D*` · `*USB_ESD_D*` |
+| **USB** | 0.2 | 0.25 | 0.6/0.3 | **0.29 / 0.2** *(as-built 2026-08-17: pair routed at the JLC04161H-7628 ~90 Ω geometry; breakout stubs at 0.25)* | `USB_DP` · `USB_DN` · `*USB_CONN_D*` · `*USB_ESD_D*` |
 
 The `*` wildcard on `*VBAT_RAW` / `*USB_VBUS` exists because those two are **local labels**, so their full net names carry a sheet prefix (`/07_Battery_PowerPath/VBAT_RAW`). All the bare names are global labels / power symbols. If any net is later converted to a hierarchical label, its name gains a sheet prefix → prepend `*` to that pattern and re-check the "Nets matching" preview in Board Setup.
 
@@ -70,7 +70,7 @@ The `*` wildcard on `*VBAT_RAW` / `*USB_VBUS` exists because those two are **loc
   - **GND1.Cu / GND2.Cu** — one solid GND zone each, whole board. Never routed on. Never cut.
   - **B.Cu** — slow signals wherever they're cleaner down there (I²C, UART to TP11/TP12, LED/button, EN, IO0, SENS_PWR_EN crossings) + a GND pour in the leftovers.
   - *Why the revision:* with GND on both inner layers, **both** routing layers get a clean uncut reference 0.21 mm away (the old plan left B.Cu referencing a power layer chopped into islands — the exact split-plane-crossing hazard a first layout should avoid). Power at this board's ≤ ~0.5 A routes comfortably as 0.5–0.8 mm traces on the outer layers, so a power plane bought nothing. This matches `docs/Routing_Guide_RevA_4Layer.md` §1–2, which is the routing source of truth.
-- **Antenna keep-out must be a 4-layer rule area** — Rule Area with "keep out copper pours" ticked on F.Cu, GND1.Cu, GND2.Cu *and* B.Cu. Hard rule 1's intent is unchanged; there are just two more layers to enforce it on, and the two new ones are invisible, so it is easy to forget. **Status check 2026-08-13: the saved `.kicad_pcb` contains no rule area** — whatever was drawn on 08-06 didn't survive; re-create it before the first zone fill (PROJECT_STATUS step 6).
+- **Antenna keep-out must be a 4-layer rule area** — Rule Area with "keep out copper pours" ticked on F.Cu, GND1.Cu, GND2.Cu *and* B.Cu. Hard rule 1's intent is unchanged; there are just two more layers to enforce it on, and the two new ones are invisible, so it is easy to forget. **Resolved 2026-08-17: no separate rule area needed.** The antenna (and the enlarged keep-out rectangle carried inside the module footprint, F.Cu/B.Cu) sits wholly off-board — the module overhangs the top edge — and all four zones pull back 0.5 mm from the edge, so no on-board copper can exist in the keep-out on any layer. Waiver recorded in PROJECT_STATUS.
 - **Text & Graphics → Defaults:** silk text 1.0 mm height / 0.15 mm line width (matches constraint + JLC floor).
 - **Solder Mask/Paste:** zeros — JLC applies their own mask expansion.
 - **Teardrops / Violation Severity:** defaults.

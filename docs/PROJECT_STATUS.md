@@ -1,39 +1,37 @@
 # PROJECT STATUS — read me first in a new session
-*Updated 2026-08-13, mid 4-layer board-setup session (all statements verified from the saved files). This file is the hand-off between work sessions — update it whenever a milestone lands. Previous status (2026-07-22, pre-layout) is in git history.*
+*Updated 2026-08-17, pre-order (all statements verified from the saved files: board DRC re-run with zones refilled + schematic parity on). This file is the hand-off between work sessions — update it whenever a milestone lands. Previous statuses (2026-08-13 board-setup, 2026-08-15 late-stage) are in git history.*
 
 ## Where the project stands
 
-**Placement is COMPLETE and twice-reviewed.** Board: **62.5 × 44.5 mm, R4.25 rounded corners with H1–H4 concentric to the arcs** (uniform 1.25 mm edge margin around each M3 screw head). Module re-centered with the antenna fully overhanging the top edge; keep-out empty. All 53 parts + placed TPs on the top side, zero courtyard overlaps, every decoupler measured at its pin (reviews: `docs/reviews/Placement_Review_RevA_2026-08-10.md` + `..._2026-08-12_v2_status.md` with maps). Connector fixes are in: J1 nose overhang **0.96 mm** (HRO target ~1.0), J2/J3 housing faces **+0.30 mm** proud (were 3–3.5 mm off-board).
+**Layout is COMPLETE — routing, pours, stitching, and the silk pass are done; the board is at the order-prep stage.** Board: **62.5 × 44.5 mm, R4.25 rounded corners, H1–H4 concentric to the arcs**, 4-layer **L1 signal · GND1 · GND2 · L4 signal** (JLC04161H-7628, stackup numbers entered, readout 1.6062 mm). 416 track segments, 157 vias (only the two sanctioned sizes), zero tracks on either inner plane.
 
-**USB nets renamed for real diff-pair routing (2026-08-12).** Sheet-02 local labels `USB_CONN_DP/DN` (J1→U1) and `USB_ESD_DP/DN` (U1→R1/R2) replace the auto-generated names; F8 pushed to the board; netclass patterns `*USB_CONN_D*` / `*USB_ESD_D*` added to the `USB` class. The pair now routes with the differential-pair tool end-to-end at 0.25/0.2.
+**Verified clean as of 2026-08-17 (KiCad 10 DRC, zones refilled, parity on):** 0 errors · 0 unconnected items · 0 schematic-parity differences. The only warnings are the 15 expected silk-clipped-at-edge items from the overhanging J1/J2/J3/U3 footprint graphics. Highlights confirmed from the file:
 
-**The board is going to 4 layers: L1 signal · GND1 · GND2 · L4 signal.** Decision note: this **supersedes the 2026-08-06 plan** (recorded in `KiCad_Settings_RevA.md` §5) that had In2 as a +3V3/power-island layer — both inner layers are now solid ground, and power routes as fat traces on the outer layers. Reasons: an uncuttable reference under *both* routing layers, no split-plane crossings to police, and power demand (≤ ~0.5 A) that traces handle easily. Mechanisms and the full routing plan: `docs/Routing_Guide_RevA_4Layer.md`.
+- **USB:** D+/D− entirely on F.Cu, zero vias, 0.29/0.2 coupled geometry (~90 Ω on this stackup), total-length mismatch 0.42 mm, ESD chip in copper order, connector breakout all-L1 per Routing Guide §3.1.
+- **Power:** every power segment 0.5 mm; layer hops doubled 0.8/0.4 (one conscious single VBUS via at (46.40, 73.95) — see waivers); VSYS all-top compact star; +3V3 flows C9 → C10 → module pin 2.
+- **Decoupling:** all 16 fitted caps have their GND via 1.1–1.45 mm from the pad; C14/C17 at the ADC pins.
+- **J1 grounding (fixed 2026-08-17):** the four G pads (A1/B12, A12/B1) are **solid** to the top pour with a GND via ~1.1 mm from each pad pair; shield slots stay on thermal reliefs (they ground through their barrels on all four layers, and stay hand-reworkable).
+- **Thermal:** U2/U6/U4 ground pads solid; U2 has 5 GND vias within 3 mm; all THT (J2/J3/TPs) on thermal reliefs — hand-solderable.
+- **Exclusions:** C3/C4 dnp + excluded from BOM/CPL **on both schematic and board** (parity now clean); all 12 TPs + H1–H4 excluded from BOM and position files.
 
-**Board Setup state (verified from screenshots + file, 2026-08-13):** Constraints, pre-defined sizes (tracks 0.2/0.25/0.3/0.5/0.8/1.0; vias 0.6/0.3 + 0.8/0.4), and all three net classes with patterns are **correct — done**. Copper count is set to 4 with layers named GND1.Cu/GND2.Cu. **Physical Stackup thicknesses were mis-entered and are being corrected** to JLC04161H-7628 (verify at jlcpcb.com/impedance): F.Cu 0.035 · prepreg 0.2104 (εr 4.4) · GND1 0.0152 · core 1.065 (εr 4.6) · GND2 0.0152 · prepreg 0.2104 · B.Cu 0.035 → readout ≈ 1.6 mm. "Impedance controlled" stays unchecked (order as plain 4-layer; USB is Full Speed).
+## Remaining before export (minutes, not hours)
 
-**Test points:** TP8/TP11/TP12 (UART recovery trio, 2.54 mm pitch) and TP10 (IO0, at 83, 92) are placed. **TP1–TP7 and TP9 are still parked off-board** — verified coordinates for all eight are in the 08-12 v2 status doc §Test-points table (still valid for the current placement).
+1. **Two antenna-fence vias** — the top-edge GND row still has its two over-target gaps: 4.62 mm (x 53.9 → 58.5) and 5.73 mm (x 72.1 → 77.8). Drop one via near **(56, 51.2)** and one near **(75.5, 51.0)** (the second lands on the existing 0.8 mm GND trace from U3 pad 40). Target is the ~3 mm (λ/20) fence pitch in front of the antenna.
+2. Optional, 30 seconds each: double the single VBUS via at (46.40, 73.95) or waive it (0.4 mm drill carries several × the load); clean the trailing newlines inside the `5V` / `EN` / `+` silk texts; add a board-name/rev text and a `JLCJLCJLCJLC` text where the order number should print (without it JLC picks the spot).
+3. **Refill (`B`) → final DRC → git commit "pre-order baseline".**
+4. Generate fab files and order per **`fabrication/revA/ORDER_NOTES.md`** (settings, remark text, preview checklist — new 2026-08-17).
 
-## Remaining before routing (in order)
+## Waivers on record (each one sentence, per the house rule)
 
-1. **Finish Physical Stackup numbers** (table above) — check the bottom readout says ≈1.60 mm.
-2. **Place TP1–TP7 + TP9** from the coordinate table.
-   - Also fix the one real DRC error the 08-13 external review caught: the THT test-point courtyard is Ø3.0, so the TP12/TP11/TP8 trio at 2.54 mm pitch overlaps (2 courtyard errors at TP11). **Keep the 2.54 pitch** (header compatibility is the point) and shrink the courtyard circle to Ø2.5 in the `TestPoint_THTPad_D2.0mm_Drill1.0mm` footprint (0.25 mm margin around the Ø2.0 pad — same treatment as the earlier SW1/VEML courtyard nits).
-3. ~~Decide the SCL/SDA re-pin~~ **DONE 2026-08-15** — SDA → IO38 (pad 31), SCL → IO39 (pad 32), right side facing the sensors; verified from the board netlist after F8 (pads 4/5 released to NC). Firmware: `Wire.begin(38, 39)`. Note: IO39 is MTCK, so pin-JTAG is forfeited — USB-JTAG (the normal S3 path) unaffected. *Routing has since begun (inner GND zones on In1/In2 filled; 300+ segments as of 08-15). Still open from this list: TP courtyard fix if not yet done, remaining TP placement, J1/U3 locks, the 4-layer antenna rule area (zones are now filled, so add it before the outer pours), and the optional TXD0/RXD0/EN/IO0 net labels.*
-4. **Lock J1 and U3** (H1–H4 already locked).
-5. **Draw the two inner GND zones** (whole board on GND1 and GND2, net `GND`, solid, clearance 0.3 / min width 0.25, pad connection **thermal reliefs**, remove islands) and fill (`B`).
-6. **Re-create the antenna keep-out rule area on all four copper layers** — the settings log says one was made 2026-08-06, but the current `.kicad_pcb` contains **no rule area** (checked 2026-08-13); it needs to exist before pours.
-7. Final F8 + ERC + **git commit "pre-routing baseline"**.
-
-Then route per `docs/Routing_Guide_RevA_4Layer.md` §3: USB first (the connector breakout now routes entirely on L1 — no crossover via), VBUS chain in copper order, power spine, analog, slow signals, GND vias/pours/stitching, silk pass.
-
-## Late-stage status (2026-08-15)
-
-Routing is **complete** (all pads connected, USB pair via-free and length-matched, power doubled-via'd, every decoupler grounded at its pin). All 12 TPs placed on-copper; THT TP courtyard fixed to Ø2.5 (DRC clean there). **Consciously waived:** the 4-layer antenna rule area, and (pending final call) four TPs inside the 15 mm antenna ring — TP5 (8.0 mm), TP3 (10.4), TP9 (12.0), TP7 (14.0); Espressif's official guidance doesn't address TPs, so this is our own conservative rule — mitigation is probe-lead discipline during RF-active tests. Remaining: follow `docs/Finishing_Guide_RevA.md` (outer pours → stitching incl. R13's via → DRC loop → silk pass → JLC order via the plugin, Standard assembly for the module).
+- **TP3 / TP5 / TP9 inside the self-imposed 15 mm antenna ring** (10.6 / 8.3 / 12.5 mm): bare 1.5 mm pads, antenna fully overhangs, vendor guidance has no TP rule — waived for Rev A with probe-lead discipline during RF-active tests (BringUp_Guide); TP5 move noted for Rev B.
+- **Rear shield-slot single top spoke:** the slot is tied by an explicit trace and grounded through its barrel into both planes and the bottom pour; reliefs kept so the connector stays hand-replaceable.
+- **Single VBUS via at (46.40, 73.95)** if not doubled: capacity margin ≫ load; consistency-only finding.
+- **No on-board antenna rule area:** the antenna and its enlarged keep-out sit wholly off-board (module overhangs the top edge) and every zone pulls back 0.5 mm from the edge — there is no on-board region for a rule area to police (also recorded in `KiCad_Settings_RevA.md` §5).
 
 ## Standing facts (don't re-derive)
 
-Hand-over: R16 = 10 k ⇒ ~50–100 ms body-diode notch at unplug — scope-verify at TP2/VSYS during bring-up (BringUp_Guide step 9) · firmware owns battery limits: no TX < ~3.5 V, shutdown at 3.0 V · sleep floor ~210 µA (power LED dominant; DNP D2 for battery tests) · charge LED ≠ polarity proof — meter the pack plug, always · SW1 = BOOT, SW2 = RESET (schematic wins over the old design doc) · module C2913198 is Standard-PCBA tier · C3/C4 carry `dnp` but not exclude-from-BOM — confirm both stay off BOM/placement at JLC upload · doc↔schematic refdes cross-map lives in the design doc Addendum A.
+Hand-over: R16 = 10 k ⇒ ~50–100 ms body-diode notch at unplug — scope-verify at TP2/VSYS during bring-up (BringUp_Guide step 9) · firmware owns battery limits: no TX < ~3.5 V, shutdown at 3.0 V · sleep floor ~210 µA (power LED dominant; DNP D2 for battery tests) · charge LED ≠ polarity proof — meter the pack plug, always · SW1 = BOOT, SW2 = RESET (schematic wins over the old design doc) · module C2913198 is Standard-PCBA tier · trace resistance pocket number corrected 2026-08-17: 0.5 mm / 1 oz ≈ **10 mΩ/cm**, not 1 (Hard Rules § pocket numbers) · U1 sits at 45° — legal everywhere, but double-check its rotation in the JLC placement preview (importers mangle odd angles first) · doc↔schematic refdes cross-map lives in the design doc Addendum A.
 
 ## Key files
 
-`docs/Routing_Guide_RevA_4Layer.md` (route from this) · `docs/Hard_Rules_Layout_RevA.md` (+ 4-layer amendments at the end) · `docs/KiCad_Settings_RevA.md` (every setting + why) · `docs/reviews/` (placement reviews 08-10, 08-12 with maps; design reviews 07-20, 07-22) · `docs/BringUp_Guide.md` (probe table = TP1–TP12) · `docs/PinMap_CheatSheet.md` · `hardware/` (KiCad; libs inside, `${KIPRJMOD}` paths) · `references/datasheets/`.
+`fabrication/revA/ORDER_NOTES.md` (order settings + remark + preview checklist — **use this at upload**) · `docs/Routing_Guide_RevA_4Layer.md` (layer strategy source of truth) · `docs/Hard_Rules_Layout_RevA.md` (+ 4-layer amendments) · `docs/KiCad_Settings_RevA.md` (every setting + why; USB DP width updated to as-built 0.29) · `docs/reviews/` (design 07-20/07-22 · placement 08-10/08-12 · finishing 08-16 · final layout 08-17) · `docs/BringUp_Guide.md` (probe table = TP1–TP12) · `docs/PinMap_CheatSheet.md` (I²C = IO38/IO39, as built) · `hardware/` (KiCad; libs inside, `${KIPRJMOD}` paths) · `references/datasheets/`.

@@ -1,5 +1,7 @@
 # ESP32-S3 Plant Monitor — Rev A
 
+![ESP32-S3 Plant Monitor Rev A — 3D render](docs/images/board_iso.png)
+
 Wi-Fi plant monitor: soil moisture (DFRobot SEN0193), temp/RH/pressure (BME280, 0x76), ambient light (VEML7700, 0x10), USB-C powered with 1-cell LiPo charging (MCP73831, ~100 mA) and automatic USB↔battery hand-over. Native-USB programming, no bridge chip. KiCad 10 hierarchical schematic, **4-layer board (signal / GND / GND / signal, JLC04161H-7628)**, 62.5 × 44.5 mm, JLCPCB assembly.
 
 ## Where things live
@@ -26,12 +28,16 @@ Wi-Fi plant monitor: soil moisture (DFRobot SEN0193), temp/RH/pressure (BME280, 
 | `fabrication/` | Factory files, one folder per ordered revision (empty until first order) |
 | `firmware/` | Firmware project (placeholder; hardware-imposed rules in its README) |
 
-## State (2026-08-13)
+## State (2026-08-17)
 
-**See `docs/PROJECT_STATUS.md` for the live hand-off.** Schematic complete and reviewed; placement complete and twice-reviewed (see `docs/reviews/`); board converted to 4 layers with both inner layers as solid ground. In progress: stackup number entry, final test-point placement, inner GND zones. Next: routing per `docs/Routing_Guide_RevA_4Layer.md`.
+**See `docs/PROJECT_STATUS.md` for the live hand-off.** Layout complete: routed, poured, stitched, silkscreened; DRC 0 errors / 0 unconnected / 0 parity differences (KiCad 10, zones refilled). Reviews on record through the 08-17 final layout review in `docs/reviews/`. Next: the two antenna-fence vias, final refill + DRC, then generate fab files and order per `fabrication/revA/ORDER_NOTES.md`.
 
 ## Hard rules
 
 1. Meter the battery plug polarity before it ever touches J3 (charge LED ≠ proof of polarity).
 2. Protected cells only; never store the board with a battery attached (~210 µA sleep floor).
 3. Firmware enforces battery limits: no TX below ~3.5 V, shutdown at 3.0 V.
+
+## License
+
+Hardware design files and documentation are released under the **CERN Open Hardware Licence v2 — Permissive** (see `LICENSE`). Vendor datasheets in `references/datasheets/` remain the property of their respective manufacturers.

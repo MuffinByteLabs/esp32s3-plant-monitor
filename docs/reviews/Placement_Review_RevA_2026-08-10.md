@@ -135,4 +135,4 @@ Pre-order gates stay as my §7 list: ERC/DRC clean, JLC preview rotation/polarit
 
 ---
 
-*measured from the board file, not screenshots · all coordinates in KiCad board units (mm, Y down).*
+*Measured from the board file, not screenshots · all coordinates in KiCad board units (mm, Y down).*
