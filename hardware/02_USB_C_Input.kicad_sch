@@ -5,9 +5,13 @@
 	(uuid "9e2179ad-0aaa-4e5a-b1aa-22923e7b856e")
 	(paper "A4")
 	(title_block
-		(title "02_USB_C_Input")
-		(date "2026-07-03")
+		(title "ESP32-S3 Plant Monitor")
+		(date "2026-08-21")
 		(rev "A")
+		(company "MuffinByteLabs")
+		(comment 1 "Designed by Ray Malik")
+		(comment 2 "4-layer JLC04161H-7628, 1.6 mm, HASL lead-free, green mask")
+		(comment 3 "Fabrication and assembly: JLCPCB")
 	)
 	(lib_symbols
 		(symbol "Connector:USB_C_Receptacle_USB2.0_16P"

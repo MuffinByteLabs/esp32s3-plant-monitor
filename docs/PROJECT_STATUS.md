@@ -1,5 +1,5 @@
 # PROJECT STATUS — read me first in a new session
-*Updated 2026-08-17, pre-order (all statements verified from the saved files: board DRC re-run with zones refilled + schematic parity on). This file is the hand-off between work sessions — update it whenever a milestone lands. Previous statuses (2026-08-13 board-setup, 2026-08-15 late-stage) are in git history.*
+*Updated 2026-08-18 (parts ordered); board state verified 2026-08-17, pre-order (all statements verified from the saved files: board DRC re-run with zones refilled + schematic parity on). This file is the hand-off between work sessions — update it whenever a milestone lands. Previous statuses (2026-08-13 board-setup, 2026-08-15 late-stage) are in git history.*
 
 ## Where the project stands
 
@@ -13,6 +13,10 @@
 - **J1 grounding (fixed 2026-08-17):** the four G pads (A1/B12, A12/B1) are **solid** to the top pour with a GND via ~1.1 mm from each pad pair; shield slots stay on thermal reliefs (they ground through their barrels on all four layers, and stay hand-reworkable).
 - **Thermal:** U2/U6/U4 ground pads solid; U2 has 5 GND vias within 3 mm; all THT (J2/J3/TPs) on thermal reliefs — hand-solderable.
 - **Exclusions:** C3/C4 dnp + excluded from BOM/CPL **on both schematic and board** (parity now clean); all 12 TPs + H1–H4 excluded from BOM and position files.
+
+## Parts status (2026-08-18)
+
+All in-stock lines for 5 boards + attrition are **purchased into the JLC Parts Library** (~$82). **AP2112K-3.3 (C51118) pre-order paid — awaiting JLC's quotation (48 h window from payment); this is the only schedule gate.** The 10 k pre-order (C25804) **failed** — JLC could not obtain a supplier quotation despite large displayed group stock — and was auto-refunded ($8.61); **the 10 k is now C98220** (Yageo RC0603FR-0710KL, Extended, in stock; BOM + ORDER_NOTES updated). At assembly BOM matching, select C98220 for R5/R6/R7/R13/R16. Fallback if the LDO pre-order also fails: DNP U2 at assembly, hand-solder from DigiKey at bring-up.
 
 ## Remaining before export (minutes, not hours)
 

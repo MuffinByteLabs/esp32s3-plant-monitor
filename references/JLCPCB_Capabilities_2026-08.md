@@ -1,16 +1,16 @@
 # JLCPCB Manufacturing Capabilities — Reference Copy
 
-*Captured from jlcpcb.com by me, 2026-08-02. Like stock and Basic/Extended status, capabilities are **live values** — re-skim the site before each order. Sections: [Rev A quick sheet](#what-this-means-for-rev-a) · [Rigid PCB](#rigid-pcb-capabilities) · [Assembly](#pcb-assembly-capabilities) · [Stencil](#smt-stencil-capabilities) · [Flex](#flexible-pcb-capabilities).*
+*Captured from jlcpcb.com by me, 2026-08-02. Quick-sheet corrected to the 4-layer Rev A board 2026-08-21 (the capability tables below remain the original 2026-08-02 site capture). Like stock and Basic/Extended status, capabilities are **live values** — re-skim the site before each order. Sections: [Rev A quick sheet](#what-this-means-for-rev-a) · [Rigid PCB](#rigid-pcb-capabilities) · [Assembly](#pcb-assembly-capabilities) · [Stencil](#smt-stencil-capabilities) · [Flex](#flexible-pcb-capabilities).*
 
 ---
 
 ## What this means for Rev A
 
-My board (2-layer, 1.6 mm, green, JLC assembly) against JLC's limits — everything fits, with margin:
+My board (**4-layer** JLC04161H-7628, 1.6 mm, green, JLC assembly) against JLC's limits — everything fits, with margin:
 
 | Mine (Rev A) | JLC limit | Margin |
 |---|---|---|
-| Track/clearance 0.2 / 0.2 mm | 0.10 / 0.10 (1 oz) | 2× |
+| Track/clearance 0.2 / 0.2 mm | 0.09 / 0.09 (multilayer, 1 oz) | >2× |
 | Routing via 0.6 / 0.3 | 0.25 / 0.15 min | comfortable — and **no surcharge** (extra cost only for 0.15 holes, or 0.2/0.25 holes with pad < 0.45) |
 | ESP32 module thermal vias 0.6 / 0.2 | see above | **no surcharge** — hole 0.2 but pad 0.6 ≥ 0.45 ✓ |
 | Copper-to-edge 0.5 | ≥ 0.2 (routed) | 2.5× |
@@ -21,9 +21,9 @@ My board (2-layer, 1.6 mm, green, JLC assembly) against JLC's limits — everyth
 | Silk near pads | clipped within 0.15 of a pad | expect clipping, not an error |
 | 0603 passives, 0.65 mm LGA, 1.27 mm module | Economic: 0402 / 0.4 mm pitch min | ✓ all parts qualify dimensionally |
 | All parts top side | Economic = single-sided placement | ✓ |
-| 2 L / 1.6 mm / green | Economic PCBA: HASL or ENIG, qty 2–50 | ✓ sweet spot |
+| 4 L / 1.6 mm / green | Economic PCBA row exists (HASL or ENIG, qty 2–50) — but the Standard-tier module sets the assembly flow | ✓ |
 
-Notes for ordering day: **reflow is 255 ± 5 °C and not adjustable** on Economic (all my parts are fine with that; the battery is never assembled). The ESP32-S3 module (C2913198) is a **Standard-tier part** per PROJECT_STATUS — expect the Standard assembly flow/pricing for that line. Board size 10×10 mm – 470×500 mm covers me trivially. No stencil purchase needed when JLC does the assembly — the stencil section below matters only if I ever hand-paste at home.
+Notes for ordering day: **reflow is 255 ± 5 °C and not adjustable** on Economic (all my parts are fine with that; the battery is never assembled). The ESP32-S3 module (C2913198) is a **Standard-tier part** per PROJECT_STATUS — expect the Standard assembly flow/pricing for that line. Board size: Economic's 10×10 – 470×500 mm covers me trivially, but **Standard PCBA's minimum single board is 70×70 mm** (live site, 2026-08-21) — the 62.5×44.5 board rides in a JLC-added panel with rails and fiducials, which is exactly what the ORDER_NOTES rail-placement remark is for. No stencil purchase needed when JLC does the assembly — the stencil section below matters only if I ever hand-paste at home.
 
 ---
 
@@ -134,13 +134,13 @@ Notes for ordering day: **reflow is 255 ± 5 °C and not adjustable** on Economi
 |---|---|---|---|---|
 | 2 | 0.8 | green | HASL (LF or leaded) | 2–30 |
 | 2 | 1.0 / 1.2 | green, black | HASL | 2–30 |
-| **2** | **1.6** | **green** | **HASL or ENIG** | **2–50** ← Rev A |
+| 2 | 1.6 | green | HASL or ENIG | 2–50 |
 | 2 | 1.6 | black | HASL | 2–50 |
 | 2 | 1.6 | blue, purple | HASL | 5–30 |
 | 2 | 1.6 | red, white | leaded HASL only | 5–30 |
 | 4 | 1.0 | green | HASL | 2–30 |
 | 4 | 1.2 | green | HASL | 2–50 |
-| 4 | 1.6 | green | HASL or ENIG | 2–50 |
+| **4** | **1.6** | **green** | **HASL or ENIG** | **2–50** ← Rev A (module ⇒ Standard flow) |
 | 6 | 1.6 | green | ENIG | 2–30 |
 
 ---

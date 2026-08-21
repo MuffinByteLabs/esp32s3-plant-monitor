@@ -1,6 +1,8 @@
 # Rev A — JLCPCB Order Notes
 *Written 2026-08-17, before the first order. Everything on this page is decided; upload day is execution, not decisions. Freeze the ordered gerber zip, BOM, and CPL into this folder afterward, plus the order-confirmation PDF.*
 
+*Updated 2026-08-21: the bottom silkscreen is now populated (board ID block + `JLCJLCJLCJLC` order-number token) — B.Silkscreen is a required plot layer; see §1 and §4.*
+
 ## 1. PCB settings
 
 | Setting | Value | Why |
@@ -12,7 +14,7 @@
 | Surface finish | **HASL (lead-free)** | Fine for 0.5 mm-pitch USB-C; ENIG optional if flatness is wanted — pick explicitly, the KiCad stackup metadata (`copper_finish: None`) does not control the order |
 | Solder mask | Green (any) | — |
 | Via covering | Tented (default) | Matches board setting (tenting front+back); test *points* are pads and stay open by design |
-| Remove order number | "Specify a location" **if** the `JLCJLCJLCJLC` text was placed; otherwise accept default or pay to remove | Without the token JLC picks the spot |
+| Remove order number | **"Specify a location"** — the `JLCJLCJLCJLC` token is placed (B.Silkscreen, under J2/J3, added 2026-08-21) | JLC prints the order number at the token and nowhere else |
 
 ## 2. Remark field — paste this text
 
@@ -25,7 +27,7 @@ Mechanism, for the record: the rail is coplanar with the board, and the module's
 - **Standard PCBA** (the module, C2913198, is Standard tier). Top side only. J2/J3 (JST PH THT) are through-hole — confirm they're included in assembly, or hand-solder them at bring-up (10 minutes, and the TP trio is THT anyway).
 - Confirm in the BOM preview: **C3, C4 absent** (DNP, excluded both sides, parity-verified 2026-08-17) · **all 12 TPs and H1–H4 absent** from BOM and CPL.
 - **Rotation/polarity check in the placement preview — every polarized part:** D1 D2 D3 D4 · U1 U2 U3 U4 U5 U6 · Q1 Q2 Q3 · J1 J2 J3 · SW1 SW2. Give **U1 two extra seconds — it is placed at 45°**, the exact case importers rotate wrong. LEDs are the classic victims; the preview render is the truth, not the CPL numbers.
-- Live stock check at upload; BOM notes the 10 k alternate **C98220** if C25804 is out.
+- Live stock check at upload. **10 k = C98220** (C25804 pre-order failed 2026-08-18; BOM updated).
 
 ## 4. Fabrication files
 
@@ -34,15 +36,16 @@ Preferred: the kicad-jlcpcb-tools plugin (gerber zip + BOM + CPL with LCSC numbe
 Manual fallback — plot **exactly this layer list** (do not upload the default plot-everything set; the saved plot parameters include User.Comments with the floorplan notes, courtyards, and fab layers):
 
 ```
-F.Cu  In1.Cu  In2.Cu  B.Cu  F.Mask  B.Mask  F.Paste  F.Silkscreen  Edge.Cuts
+F.Cu  In1.Cu  In2.Cu  B.Cu  F.Mask  B.Mask  F.Paste  F.Silkscreen  B.Silkscreen  Edge.Cuts
 ```
 
-plus Excellon drill files (PTH and NPTH separate). B.Paste / B.Silkscreen may be omitted (verified empty — no bottom-side parts, paste, or silk). Before upload, open the zip in a gerber viewer once: four copper layers, both masks, top paste/silk, outline with the four corner arcs, plated USB shield slots, PTH + NPTH.
+plus Excellon drill files (PTH and NPTH separate). B.Paste may be omitted (verified empty — no bottom-side parts or paste). **B.Silkscreen is required as of 2026-08-21** — it carries the board ID block (name / Rev A / date / MuffinByteLabs.com / designer) and the `JLCJLCJLCJLC` order-number token; the jlcpcb-tools plugin includes it automatically. Before upload, open the zip in a gerber viewer once: four copper layers, both masks, top paste, **both silks** (bottom shows the mirrored ID block + token), outline with the four corner arcs, plated USB shield slots, PTH + NPTH.
 
 ## 5. Pre-upload gate (state on 2026-08-17)
 
 - [ ] Two antenna-fence vias added at ~(56, 51.2) and ~(75.5, 51.0) — last open must-do
-- [ ] Optional: double the VBUS via at (46.40, 73.95), silk text newline cleanup, name/rev + `JLCJLCJLCJLC` texts
+- [x] Name/rev + `JLCJLCJLCJLC` texts — **done 2026-08-21** (bottom-silk ID block, order-number token, 2× logo as G1, filled title block)
+- [ ] Optional: double the VBUS via at (46.40, 73.95); silk newline cleanup done except one `BME280` comment-box label (docs layer only)
 - [ ] Refill zones (`B`) → DRC: **0 errors · 0 unconnected · 0 parity** (last verified clean 2026-08-17)
 - [ ] git commit "pre-order baseline", then generate the fab files from that commit
 - [ ] After ordering: freeze zip/BOM/CPL + confirmation PDF here, commit, push
@@ -58,7 +61,7 @@ Out of stock at LCSC on check date — expect to resolve at upload:
 | Part | Refs | Plan |
 |---|---|---|
 | AP2112K-3.3 (C51118) | U2 | JLC pre-order (~$9 / 67 min, leftovers bank in My Parts Lib) — or DNP + hand-solder from DigiKey if lead time is bad. See §3. |
-| 10 k 0603 1% (C25804) | R5 R6 R7 R13 R16 | Documented alternate **C98220** (Yageo RC0603FR-0710KL) verified in stock (11.9 M). One-click swap in the BOM matcher. |
+| 10 k 0603 1% | R5 R6 R7 R13 R16 | **Resolved 2026-08-18: C25804 pre-order FAILED** (JLC could not source a quotation; $8.61 refunded) despite huge displayed group stock. **The 10 k is now C98220** (Yageo RC0603FR-0710KL, Extended, in stock) — bought into Parts Lib, ~35 pcs. Select **C98220** for R5/R6/R7/R13/R16 at assembly BOM matching; accepts one ~$3 Extended feeder fee. BOM updated. |
 | 4.7 k 0603 1% (C23162) | R8 R9 | Any in-stock Basic 4.7 k 0603 ±1% equivalent from the JLC matcher. Same value/size/tolerance = not a design change. |
 | 1 µF 0603 (C15849) | C6 C7 C8 C18 | Any in-stock Basic 1 µF 0603 X5R/X7R **≥ 16 V** equivalent (rails are ≤ 5 V). |
 | 22 µF 0805 (C45783) | C9 | Any in-stock Basic 22 µF 0805 X5R equivalent, **prefer 16–25 V** (DC-bias derating on the 3V3 bulk cap). |
