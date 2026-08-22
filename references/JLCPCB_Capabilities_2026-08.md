@@ -21,7 +21,7 @@ My board (**4-layer** JLC04161H-7628, 1.6 mm, green, JLC assembly) against JLC's
 | Silk near pads | clipped within 0.15 of a pad | expect clipping, not an error |
 | 0603 passives, 0.65 mm LGA, 1.27 mm module | Economic: 0402 / 0.4 mm pitch min | ✓ all parts qualify dimensionally |
 | All parts top side | Economic = single-sided placement | ✓ |
-| 4 L / 1.6 mm / green | Economic PCBA row exists (HASL or ENIG, qty 2–50) — but the Standard-tier module sets the assembly flow | ✓ |
+| 4 L / 1.6 mm / green | Economic PCBA row exists (HASL or ENIG, qty 2–50) — but **confirmed at the 2026-08-21 order: U3 (module) AND U4 (BME280) are Standard-only parts**, so Rev A assembles as Standard PCBA | ✓ |
 
 Notes for ordering day: **reflow is 255 ± 5 °C and not adjustable** on Economic (all my parts are fine with that; the battery is never assembled). The ESP32-S3 module (C2913198) is a **Standard-tier part** per PROJECT_STATUS — expect the Standard assembly flow/pricing for that line. Board size: Economic's 10×10 – 470×500 mm covers me trivially, but **Standard PCBA's minimum single board is 70×70 mm** (live site, 2026-08-21) — the 62.5×44.5 board rides in a JLC-added panel with rails and fiducials, which is exactly what the ORDER_NOTES rail-placement remark is for. No stencil purchase needed when JLC does the assembly — the stencil section below matters only if I ever hand-paste at home.
 

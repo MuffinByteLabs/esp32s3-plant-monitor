@@ -25,12 +25,12 @@ Wi-Fi plant monitor: soil moisture (DFRobot SEN0193), temp/RH/pressure (BME280, 
 | `references/datasheets/` | Vendor datasheets (immutable) |
 | `references/standards/` | Standards (IPC-2221 to be re-added) |
 | `references/reference-designs/` | Espressif DevKitC-1 schematic, app notes |
-| `fabrication/` | Factory files, one folder per ordered revision (empty until first order) |
+| `fabrication/` | Factory files, one folder per ordered revision (`revA/` frozen 2026-08-21) |
 | `firmware/` | Firmware project (placeholder; hardware-imposed rules in its README) |
 
 ## State (2026-08-17)
 
-**See `docs/PROJECT_STATUS.md` for the live hand-off.** Layout complete: routed, poured, stitched, silkscreened; DRC 0 errors / 0 unconnected / 0 parity differences (KiCad 10, zones refilled). Reviews on record through the 08-17 final layout review in `docs/reviews/`. Next: the two antenna-fence vias, final refill + DRC, then generate fab files and order per `fabrication/revA/ORDER_NOTES.md`.
+**See `docs/PROJECT_STATUS.md` for the live hand-off.** **Rev A ordered at JLCPCB 2026-08-21** — 5 boards, 4-layer, lead-free HASL, Standard assembly, every component from the pre-stocked JLC Parts Library. The ordered fab package (gerber zip, BOM, CPL) is frozen in `fabrication/revA/` beside the as-ordered record (`ORDER_NOTES.md` §7). DRC at order: 0 errors / 0 unconnected / 0 parity differences (KiCad 10, zones refilled); reviews on record through the 08-17 final layout review in `docs/reviews/`. Next: bring-up per `docs/BringUp_Guide.md` when the boards land (~early September).
 
 ## Hard rules
 

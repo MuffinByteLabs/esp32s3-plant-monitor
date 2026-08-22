@@ -13,7 +13,7 @@
 | Impedance control | **No** | USB is Full Speed; pair is at the ~90 Ω geometry anyway (0.29/0.2), ordered as plain 4-layer |
 | Surface finish | **HASL (lead-free)** | Fine for 0.5 mm-pitch USB-C; ENIG optional if flatness is wanted — pick explicitly, the KiCad stackup metadata (`copper_finish: None`) does not control the order |
 | Solder mask | Green (any) | — |
-| Via covering | Tented (default) | Matches board setting (tenting front+back); test *points* are pads and stay open by design |
+| Via covering | ~~Tented (default)~~ → **Plugged** (as ordered) | "Tented" is no longer offered on 4-layer — Plugged is JLC's 4L standard at $0 and strictly better; the gerbers (no via mask openings) were already correct for it. Test *points* are pads and stay open by design |
 | Remove order number | **"Specify a location"** — the `JLCJLCJLCJLC` token is placed (B.Silkscreen, under J2/J3, added 2026-08-21) | JLC prints the order number at the token and nowhere else |
 
 ## 2. Remark field — paste this text
@@ -48,9 +48,29 @@ plus Excellon drill files (PTH and NPTH separate). B.Paste may be omitted (verif
 - [ ] Optional: double the VBUS via at (46.40, 73.95); silk newline cleanup done except one `BME280` comment-box label (docs layer only)
 - [ ] Refill zones (`B`) → DRC: **0 errors · 0 unconnected · 0 parity** (last verified clean 2026-08-17)
 - [ ] git commit "pre-order baseline", then generate the fab files from that commit
-- [ ] After ordering: freeze zip/BOM/CPL + confirmation PDF here, commit, push
+- [x] After ordering: freeze zip/BOM/CPL here — **done 2026-08-21** (copied from `hardware/jlcpcb/production_files/`); **still to do: add the order-confirmation PDF, commit, push**
 
 Then `docs/BringUp_Guide.md` becomes the active document — step 1 (meter the battery plug before it touches J3) stands.
+
+---
+
+## 7. As ordered — 2026-08-21 ✅
+
+**Order placed 2026-08-21.** 5 boards, fab + Standard PCBA, paid ≈ **$49.26 after coupons** (PCB $12.10 + PCBA $86.79 − ~$49.25 coupons) + **$28.67 DHL Express (DDP — duties prepaid, nothing billed later)**.
+
+**PCB as ordered:** 4L · 1.6 mm · green / white silk · FR4 TG135 · **LeadFree HASL** (+$5.10) · Specify Stackup **No** (JLC standard 4L = the 7628 stackup) · **via covering Plugged** ($0; Tented not offered on 4L) · via plating Not Specified · min-via tier 0.3/(0.4/0.45) · outline ±0.2 · flying probe · **Mark on PCB: Remove Mark** (free; JLC strips the `JLCJLCJLCJLC` token in CAM — token kept in the design as insurance).
+
+**Assembly as ordered:** **Standard PCBA** (Economic refused **U3 AND U4 — both Standard-only parts**) · top side · qty 5 · tooling holes/rails **added by JLCPCB** · parts self-service · high-temp paste · nitrogen reflow · **remark submitted** (antenna/rails text) → "quote after review", expected $0 — **answer any JLC engineer email same-day; production pauses until then**.
+
+**Cost anatomy (PCBA $86.79):** setup $25.56 · stencil $8.21 · feeder loading $38.25 (13 Extended lines) · SMT $2.04 · **hand-soldering J2/J3 $3.58 + manual $0.46 (§3's question: yes, the THT JSTs are assembled by JLC)** · X-ray $8.20 (module EP) · packaging $0.49 · **components $0.00 — all 27 unique parts consumed from My Parts Lib**.
+
+**Order-day lessons (read before the next order):**
+
+- **The JLC BOM-matching page is the only live stock truth.** The plugin's offline DB showed C25803 at 9.3 M; the matching page showed **0** and auto-sourced the two 100 k lines from that empty global stock — re-pointed them to My Parts (30 owned) via the row's search dialog. Same failure mode that killed the C25804 pre-order.
+- The five 10 k still carried C25804 in the design fields — reassigned to **C98220** in the jlcpcb-tools plugin pre-generation (the plugin writes the LCSC field back to the board).
+- Extended lines reserve extra units for **feeder-loading attrition** (15/15 D1, 20/20 D2, 7/7 U1, 6/6 J2…) — expected, not an error.
+- Some part rotations were corrected **inside JLC's placement preview** after CPL upload (pin-1 table derived from the board file; U1's 45° imported correctly; D4 stripe → JST side, LED cathodes → USB side, BME280 dot = pin 1 at the silk triangle, second dot = lid vent). **The uploaded CPL is pre-correction — JLC's order preview / downloadable production files are the rotation truth for Rev A.**
+- Checkout shipping list: the "My DHL/UPS/FedEx Account" rows are for holders of their own courier accounts ($2.50 = handling only; freight + duties + ~$35–45 brokerage would bill to that account). Global Standard Direct Line caps declared value at $59 — under this order's value. **DDP courier is the correct pick for US orders.**
 
 ## 6. Live stock check — LCSC retail, 2026-08-17 (re-verify in the JLC library at upload; the two inventories are separate pools)
 
