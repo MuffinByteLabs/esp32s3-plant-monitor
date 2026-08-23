@@ -1,6 +1,6 @@
 # Layout Hard Rules — ESP32-S3 Plant Monitor Rev A
 
-*The complete graded rulebook for this board's placement and routing. "LAW" items are physics, safety, or fabrication requirements — violating one produces a real defect. "STRONG PRACTICE" items are professional habits — deviate only with a reason. Compiled 2026-08-05 during the pre-layout study sessions; the mechanisms behind every rule are in `docs/Layout_Readiness_and_Placement_Guide_RevA.html`.*
+*The complete graded rulebook for this board's placement and routing. "LAW" items are physics, safety, or fabrication requirements — violating one produces a real defect. "STRONG PRACTICE" items are professional habits — deviate only with a reason. Compiled 2026-08-05 during the pre-layout study sessions; the mechanisms behind every rule are in `docs/Layout_Readiness_and_Placement_Guide_RevA.md`.*
 
 ---
 

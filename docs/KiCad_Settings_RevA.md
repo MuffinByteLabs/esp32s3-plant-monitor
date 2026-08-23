@@ -100,6 +100,6 @@ Mode **Shove** (pushes existing tracks/vias aside while keeping every clearance 
 
 ## 10. Related files
 
-- `docs/Layout_Readiness_and_Placement_Guide_RevA.html` — footprint verification + placement/routing guide (2026-08-02)
+- `docs/Layout_Readiness_and_Placement_Guide_RevA.md` — footprint verification + placement/routing guide (2026-08-02)
 - `references/JLCPCB_Capabilities_2026-08.md` — fab limits these settings are derived from
 - `docs/PROJECT_STATUS.md` — overall project state

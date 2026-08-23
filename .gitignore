@@ -27,3 +27,8 @@ hardware/jlcpcb/
 
 # Office temp files
 ~$*
+
+# generated/temporary
+tmp*.rpt
+*.rpt
+_tmp_*

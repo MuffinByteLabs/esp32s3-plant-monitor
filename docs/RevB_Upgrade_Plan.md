@@ -48,7 +48,7 @@ Current floor ≈ 210 µA: power LED 120 + LDO Iq 55 + divider 21 + ESP32 ~10.
 
 ## 6. Process
 
-* Reconcile reference designators doc ↔ schematic once, then regenerate BOM/pin-map from the schematic only (single source of truth).
+* ~~Reconcile reference designators doc ↔ schematic once~~ — **done 2026-08-23**: the design document body was renumbered to as-built designators and the renumbering record moved into its Addendum A. Keep regenerating BOM/pin-map from the schematic only.
 * Add `kicad-cli sch erc` / `pcb drc` to a pre-commit or CI script.
 * Keep `docs/Engineering_Notes.md` updated per bench session; fold conclusions into the design doc addendum at each rev.
 

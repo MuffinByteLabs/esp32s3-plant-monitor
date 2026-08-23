@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 296" width="760" height="296" role="img" aria-label="Cross section and top view of a through hole pad"><rect x="0" y="0" width="760" height="296" fill="#ffffff"/>
+  <text x="44" y="60" font-size="11.5" fill="#8b95a5" font-family="ui-monospace,monospace">cut through the board</text>
+
+  <rect x="60" y="150" width="154" height="70" fill="url(#hatch)" stroke="#c2cad4"></rect>
+  <rect x="266" y="150" width="114" height="70" fill="url(#hatch)" stroke="#c2cad4"></rect>
+  <rect x="214" y="150" width="8" height="70" fill="#c07a3e"></rect>
+  <rect x="258" y="150" width="8" height="70" fill="#c07a3e"></rect>
+  <rect x="190" y="142" width="32" height="8" fill="#c07a3e"></rect>
+  <rect x="258" y="142" width="32" height="8" fill="#c07a3e"></rect>
+  <rect x="190" y="220" width="32" height="8" fill="#c07a3e"></rect>
+  <rect x="258" y="220" width="32" height="8" fill="#c07a3e"></rect>
+
+  <path d="M192,142 L228,142 L228,118 Q 208,132 192,142 Z" fill="#6d84a0"></path>
+  <path d="M288,142 L252,142 L252,118 Q 272,132 288,142 Z" fill="#6d84a0"></path>
+  <rect x="228" y="86" width="24" height="150" fill="#98a4b4" stroke="#74808e"></rect>
+
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="222" y1="228" x2="222" y2="258"></line><line x1="258" y1="228" x2="258" y2="258"></line>
+  </g>
+  <line x1="223" y1="252" x2="257" y2="252" stroke="#c2410c" stroke-width="1.8" marker-start="url(#arRS)" marker-end="url(#arR)"></line>
+  <text x="240" y="273" font-size="12" fill="#c2410c" text-anchor="middle" font-weight="700">DRILL Ø — the hole</text>
+  <text x="240" y="288" font-size="10.5" fill="#8b95a5" text-anchor="middle">must be wider than the pin</text>
+
+  <line x1="191" y1="130" x2="221" y2="130" stroke="#2f6fd0" stroke-width="1.6" marker-start="url(#arS)" marker-end="url(#ar)"></line>
+  <path d="M182,120 L200,127" stroke="#8b95a5" stroke-width="1" fill="none"></path>
+  <text x="178" y="112" font-size="11.5" fill="#2f6fd0" text-anchor="end" font-weight="700">ANNULAR RING</text>
+  <text x="178" y="126" font-size="10.5" fill="#8b95a5" text-anchor="end">the copper collar</text>
+
+  <path d="M296,80 L256,98" stroke="#8b95a5" stroke-width="1" fill="none"></path>
+  <text x="300" y="78" font-size="12" fill="#525c6b" font-weight="600">the connector&#39;s pin</text>
+
+  <text x="446" y="60" font-size="11.5" fill="#8b95a5" font-family="ui-monospace,monospace">top view</text>
+  <g>
+    <circle cx="500" cy="172" r="32" fill="#c07a3e"></circle><circle cx="500" cy="172" r="17" fill="#f7f8fa" stroke="#96602f"></circle>
+    <circle cx="590" cy="172" r="32" fill="#c07a3e"></circle><circle cx="590" cy="172" r="17" fill="#f7f8fa" stroke="#96602f"></circle>
+    <circle cx="680" cy="172" r="32" fill="#c07a3e"></circle><circle cx="680" cy="172" r="17" fill="#f7f8fa" stroke="#96602f"></circle>
+  </g>
+  <rect x="464" y="136" width="72" height="72" fill="none" stroke="#3c4654" stroke-width="1.6"></rect>
+  <text x="500" y="126" font-size="10.5" fill="#3c4654" text-anchor="middle" font-weight="700">square pad = pin 1</text>
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="500" y1="208" x2="500" y2="242"></line><line x1="590" y1="208" x2="590" y2="242"></line>
+  </g>
+  <line x1="501" y1="236" x2="589" y2="236" stroke="#c2410c" stroke-width="1.8" marker-start="url(#arRS)" marker-end="url(#arR)"></line>
+  <text x="545" y="258" font-size="12" fill="#c2410c" text-anchor="middle" font-weight="700">PITCH</text>
+</svg>

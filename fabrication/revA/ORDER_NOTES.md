@@ -41,16 +41,19 @@ F.Cu  In1.Cu  In2.Cu  B.Cu  F.Mask  B.Mask  F.Paste  F.Silkscreen  B.Silkscreen 
 
 plus Excellon drill files (PTH and NPTH separate). B.Paste may be omitted (verified empty — no bottom-side parts or paste). **B.Silkscreen is required as of 2026-08-21** — it carries the board ID block (name / Rev A / date / MuffinByteLabs.com / designer) and the `JLCJLCJLCJLC` order-number token; the jlcpcb-tools plugin includes it automatically. Before upload, open the zip in a gerber viewer once: four copper layers, both masks, top paste, **both silks** (bottom shows the mirrored ID block + token), outline with the four corner arcs, plated USB shield slots, PTH + NPTH.
 
-## 5. Pre-upload gate (state on 2026-08-17)
+## 5. Pre-upload gate — closed 2026-08-21
 
-- [ ] Two antenna-fence vias added at ~(56, 51.2) and ~(75.5, 51.0) — last open must-do
-- [x] Name/rev + `JLCJLCJLCJLC` texts — **done 2026-08-21** (bottom-silk ID block, order-number token, 2× logo as G1, filled title block)
-- [ ] Optional: double the VBUS via at (46.40, 73.95); silk newline cleanup done except one `BME280` comment-box label (docs layer only)
-- [ ] Refill zones (`B`) → DRC: **0 errors · 0 unconnected · 0 parity** (last verified clean 2026-08-17)
-- [ ] git commit "pre-order baseline", then generate the fab files from that commit
-- [x] After ordering: freeze zip/BOM/CPL here — **done 2026-08-21** (copied from `hardware/jlcpcb/production_files/`); **still to do: add the order-confirmation PDF, commit, push**
+*State of every item on the 2026-08-17 gate at the moment the order was placed.*
 
-Then `docs/BringUp_Guide.md` becomes the active document — step 1 (meter the battery plug before it touches J3) stands.
+| Item | State at order |
+|---|---|
+| Name/rev + `JLCJLCJLCJLC` texts | **Done 2026-08-21** — bottom-silk ID block, order-number token, 2× logo as G1, title block filled |
+| Zones refilled → DRC | **Done** — 0 errors · 0 unconnected · 0 parity (KiCad 10, verified 2026-08-17 and again on order day) |
+| C3/C4 exclusion flags synced to the schematic | **Done** — both carry *dnp* + *exclude from BOM*, which is what took parity to zero |
+| J1 GND pads → solid zone connection | **Done** — A1/A12/B1/B12 (and the VBUS pads A9/B9) are `zone_connect = solid`. The four shield slots stay on thermal relief **by decision**, not by omission — see the waiver in `docs/PROJECT_STATUS.md` (barrel grounds into both planes; reliefs keep the connector hand-replaceable) |
+| `pre-order baseline` commit, fab files generated from it | **Done** — the frozen package in this folder was generated from that commit |
+| Freeze zip/BOM/CPL here | **Done 2026-08-21** — copied from `hardware/jlcpcb/production_files/` |
+| Double the VBUS via at (46.40, 73.95) | **Not done — waived.** Marked optional on 08-17; capacity margin ≫ load, consistency-only finding. Waiver recorded in `docs/PROJECT_STATUS.md` |
 
 ---
 

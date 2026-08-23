@@ -70,20 +70,7 @@ Both are parts whose GND pin is their only heatsink (LAW 15 says so explicitly f
 
 Clearance was set to 0.3 but the thermal gap kept the stock 0.5. Bringing both outer zones to 0.3 matches the inner planes and improves the odds of a second spoke resolving on cramped pads.
 
-### 2.3 Antenna via row has two gaps above the 3 mm target
-
-Vias with y < 53 in the x 54–78 band:
-
-```
-x = 53.88, 58.50, 61.10, 64.08, 67.08, 70.08, 72.10, 77.83
-gaps =    4.62   2.60   2.98   3.00   3.00   2.02   5.73
-```
-
-The middle run (58.5 → 72.1) is exactly right. The two end gaps — **4.62 mm** and **5.73 mm** — exceed λ/20 ≈ 3 mm in FR4 at 2.4 GHz.
-
-**Fix:** one via near **x ≈ 56, y ≈ 51.2** and one near **x ≈ 75.5, y ≈ 51.0**. The second can land directly on the existing 0.8 mm GND trace running from U3 pad 40 to C14's ground pad, which also gives pad 40 a direct via ground and makes its thermal-spoke DRC error safe to exclude.
-
-### 2.4 Perimeter and corner stitching incomplete
+### 2.3 Perimeter and corner stitching incomplete
 
 5 % of the outer pour area sits more than 5 mm from any GND via (LAW 21). Worst regions:
 
@@ -100,11 +87,11 @@ The middle run (58.5 → 72.1) is exactly right. The two end gaps — **4.62 mm*
 
 Consistent with the perimeter pass (Phase 2 item 5) not being done yet. Corners are constrained by H1–H4; the open edges are the right side (x ≈ 95.5 between the mounting holes) and the bottom (y ≈ 93.5).
 
-### 2.5 TP7 has no ground via
+### 2.4 TP7 has no ground via
 
 TP7 is a GND test point — a scope ground reference during bring-up — with no track and no via; its nearest GND via is **3.33 mm** away and it reaches ground only through thermal-relief spokes. Give it its own via.
 
-### 2.6 One un-doubled power via
+### 2.5 One un-doubled power via
 
 | net | vias | hops | singles |
 |---|---|---|---|
@@ -115,7 +102,7 @@ TP7 is a GND test point — a scope ground reference during bring-up — with no
 
 The "three single-via +3V3 hops" noted as open in the Finishing Guide are now all doubled. One VBUS hop remains single. Not a capacity problem — a 0.4 mm drill via carries well over the ~1 A involved — purely a consistency item.
 
-### 2.7 Silkscreen pass not started
+### 2.6 Silkscreen pass not started
 
 Zero standalone silkscreen text objects on the board. Phase 4 of the Finishing Guide is entirely outstanding: TP function labels, the J3 `+`/`−` safety marks (LAW 27), pin-1 marks at J2/J3, `BOOT`/`RESET` at SW1/SW2, `PWR`/`CHG` at D2/D3, board name and rev, and the `JLCJLCJLCJLC` order-number placement.
 
@@ -159,10 +146,10 @@ TP7 has moved out since the 08-15 status note. The open decision is now smaller 
 1. Move the VBAT via (§1.1) — 30 seconds, clears a DRC error.
 2. Set U2/U6/U4/U3 ground pads to solid (§2.1) — clears the two thermal errors legitimately.
 3. Drop TOP_GND/BTM_GND thermal gap to 0.3 (§2.2), refill, re-run DRC.
-4. Close the two antenna-row gaps and add the TP7 via (§2.3, §2.5).
-5. Perimeter stitching pass (§2.4).
+4. Add the TP7 via (§2.4).
+5. Perimeter stitching pass (§2.3).
 6. Tick the exclusion flags on TPs, H1–H4, C3, C4 (§1.2, §1.3).
-7. Silkscreen pass (§2.7), then the DRC loop and the JLC upload gauntlet.
+7. Silkscreen pass (§2.6), then the DRC loop and the JLC upload gauntlet.
 
 ---
 

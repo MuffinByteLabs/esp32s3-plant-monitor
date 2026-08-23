@@ -2,24 +2,13 @@
 
 *Independent machine audit of `hardware/ESP32S3_PlantMonitor.kicad_pcb` as saved 2026-08-17 (the snapshot taken this morning — 404 track segments, 154 vias, 4 zones, silkscreen pass done). Method: full KiCad 10.0.5 DRC with zone refill and schematic-parity, plus independent geometric analysis of every rule in `Hard_Rules_Layout_RevA.md` and the finishing checklist. Schematic assumed correct. Every number below was measured from the board file, not taken from the docs.*
 
-**Verdict: this board is ready to manufacture after about 15 minutes of small fixes.** Copper, clearances, stackup, USB, power, decoupling, and assembly hygiene all check out — several items from the 08-16 finishing review are confirmed fixed (VBAT via spacing, thermal-gap 0.3, U2/U6/U4 solid pads, TP/H exclusions, C3/C4 exclusions, TP courtyards). What remains is two real fixes, one process sync, and a set of judgment calls I should close consciously rather than by default.
+**Verdict: this board is ready to manufacture after about 15 minutes of small fixes.** Copper, clearances, stackup, USB, power, decoupling, and assembly hygiene all check out — several items from the 08-16 finishing review are confirmed fixed (VBAT via spacing, thermal-gap 0.3, U2/U6/U4 solid pads, TP/H exclusions, C3/C4 exclusions, TP courtyards). What remains is one real fix, one process sync, and a set of judgment calls I should close consciously rather than by default.
 
 ---
 
 ## 1. Fix before ordering
 
-### 1.1 The two antenna-fence gaps are still open (from the 08-16 review §2.3)
-
-The GND via fence along the top edge, measured on the current file (all vias y < 53.2, gaps center-to-center):
-
-```
-x:    36.6  41.75  45.5  48.9  50.88  53.88  58.5  61.1  64.08  67.08  70.08  72.1  77.83  84.5  87.5  94.2
-gaps:   5.15   3.75   3.4   1.98   3.0    4.62  2.6   2.98   3.0    3.0    2.02   5.73   6.67   3.0   6.7
-```
-
-In the critical band beside/under the antenna (x ≈ 54–78) the same two gaps flagged on 08-16 remain: **4.62 mm** (53.88 → 58.5) and **5.73 mm** (72.1 → 77.83), against my ~3 mm (λ/20) target. The 08-16 prescription still applies verbatim: one via near **(56, 51.2)**, one near **(75.5, 51.0)** — the second lands on the existing 0.8 mm GND trace from U3 pad 40 to C14's ground. Two clicks, close it out. (The gaps further right, 77.8 → 84.5 → 87.5 → 94.2, are outside the antenna span — optional.)
-
-### 1.2 J1's ground pads hang on single thermal spokes (3 DRC warnings)
+### 1.1 J1's ground pads hang on single thermal spokes (3 DRC warnings)
 
 The only genuine DRC findings on the whole board: **starved thermals on J1 pads A12, B1, and the rear-right shield slot** — each reaches the top pour through one 0.5 mm spoke instead of the required two. Related: the top pour fills two tiny scraps beside the connector (≈1.1 mm² at x 39.2–40.9 / y 82.1–83.5, and ≈0.6 mm² at x 40.7–42.1 / y 80.5–81.0) whose only anchor is those spokes — no via in either. Meanwhile the shield slots' nearest dedicated GND vias sit 4.4 mm away (the two front slots are fine at 1.4–1.8 mm).
 
@@ -27,7 +16,7 @@ My own LAW ("J1's shield holes and its GND pads take the cable yank — solid ti
 
 **Fix:** select J1's four GND pads (A1/B12, A12/B1) and the four SH slots → pad properties → **Connection to copper zones: Solid**. J1 is reflowed by JLC, so the hand-soldering rationale for reliefs doesn't apply. Then refill and, if either little scrap survives as a peninsula, drop one GND via into it (or let the solid connection absorb it). This clears all three warnings for the right reason.
 
-### 1.3 Sync the C3/C4 exclusion flags into the schematic
+### 1.2 Sync the C3/C4 exclusion flags into the schematic
 
 The board footprints now carry *exclude from BOM / position files* (good — confirmed in the file), but the schematic symbols don't, which is exactly what the two remaining schematic-parity warnings say. Harmless for fabrication today, but my pre-order gauntlet ends with a final F8 — and an F8 with mismatched flags can silently re-import the attributes and resurrect C3/C4 into the BOM. Tick *Exclude from bill of materials* on C3/C4 in sheet 02, F8, and parity goes to zero. Two minutes, removes a booby trap from my own process.
 
@@ -47,7 +36,7 @@ Current distances from the antenna keep-out rectangle (re-measured; TP7 confirme
 
 This is my own conservative rule (Espressif's guidance is silent on test pads), the pads are 1.5 mm dots with no permanently attached wire, and the antenna fully overhangs the edge. The physics concern is the probe *lead* during RF-active bring-up, which is a bench discipline problem, not a layout problem. Moving TP3/TP5 buys little and risks disturbing a finished, DRC-clean top layer. **Waive it, write the waiver down, and keep probe leads off those three TPs during Wi-Fi tests** (my bring-up guide already implies this). If I ever spin Rev B, move TP5 south a few mm and the topic dies.
 
-### 2.2 One un-doubled USB_VBUS via (from 08-16 §2.6)
+### 2.2 One un-doubled USB_VBUS via (from 08-16 §2.5)
 
 Still there at **(46.40, 73.95)**. A 0.4 mm-drill via is good for well over the ~0.5 A this rail will ever see, so this is consistency, not capacity. Double it if I want a clean "every power hop doubled" claim (all other hops on +3V3 / +5V_PROT / VBAT / VBUS are doubled — verified); otherwise waive it in one sentence.
 
@@ -87,13 +76,13 @@ U6's GND pad is solid-connected to the pour (good, confirmed), but its nearest G
 
 **Decoupling (LAW 11/12):** all 16 fitted capacitors have their GND pad's via at **1.12–1.45 mm** — at the pad, every one. Supply-side pad-to-pin: C10 2.0, C14 2.0 (ADC_SOIL at pin 39), C17 2.1 (BAT_SENSE at pin 38), C7 1.9, C8 2.2, C13 2.2, C15 1.9, C16 2.1 mm — the non-negotiables are all at their pins. U1's GND pin (ESD dump) has its via at 1.37 mm.
 
-**Grounds & zones (LAW 19/20/21):** GND1/GND2 fill as single uncut sheets with 0.5 mm edge pullback; B.Cu pour is one region; all four zones now at clearance 0.3 / min width 0.25 / thermal gap 0.3 / spoke 0.5 / remove-islands on. Top pour: main sheet (~1780 mm², 104 GND vias) plus the module island (4 vias), the R11/R14/R15 patch (1 via), the R13 patch (1 via) — the two J1 scraps are §1.2. GND exists on F.Cu only as short via-ties (58 stubs, 70 mm total) — never a long skinny trace. TP7 (scope ground) now has a via at 1.95 mm; TP8 within 2.8 mm.
+**Grounds & zones (LAW 19/20/21):** GND1/GND2 fill as single uncut sheets with 0.5 mm edge pullback; B.Cu pour is one region; all four zones now at clearance 0.3 / min width 0.25 / thermal gap 0.3 / spoke 0.5 / remove-islands on. Top pour: main sheet (~1780 mm², 104 GND vias) plus the module island (4 vias), the R11/R14/R15 patch (1 via), the R13 patch (1 via) — the two J1 scraps are §1.1. GND exists on F.Cu only as short via-ties (58 stubs, 70 mm total) — never a long skinny trace. TP7 (scope ground) now has a via at 1.95 mm; TP8 within 2.8 mm.
 
 **Thermal (LAW 15/16/17):** U2's GND pad solid-connected with **5 vias within 3 mm** into two full planes; U6 solid-connected (§2.4); U3 pads 1/40/EP solid. BME280 is 33–45 mm from LDO/charger/module, its labels sit outside the package, no silk under the vent, and all THT parts (J2/J3, TP trio) keep thermal reliefs — hand-solderable, exactly per plan.
 
 **Analog (LAW 18):** ADC_SOIL runs J2 → right side → C14 → pin 39, 21+ mm from the USB corridor, never through the power spine; BAT_SENSE is a 4 mm hop R14/R15 → C17 → pin 38 plus the TP5 spur. Both pass ~2.3–2.8 mm from the (already off-board) antenna keep-out at the pin end — forced by the module's own pinout, microstrip over solid ground, cable exits 38+ mm away; the standing waiver is sound.
 
-**Antenna (LAW 1–4):** module top 6.5 mm including the entire antenna section overhangs the edge; the enlarged keep-out rectangle in the module footprint (x 41.885–89.885, y 28.5–49.5) sits wholly off-board — which is also *why* DRC is silent about it and why the absent 4-layer rule area is genuinely moot for copper (nothing on-board can be "under" the antenna). Pour/plane pullback confirmed 0.5 mm at the top edge on all four layers. Off-board conductor exits (J2, J3, UART TPs) are 36–42 mm away, openings facing away. Only open item is the fence (§1.1).
+**Antenna (LAW 1–4):** module top 6.5 mm including the entire antenna section overhangs the edge; the enlarged keep-out rectangle in the module footprint (x 41.885–89.885, y 28.5–49.5) sits wholly off-board — which is also *why* DRC is silent about it and why the absent 4-layer rule area is genuinely moot for copper (nothing on-board can be "under" the antenna). Pour/plane pullback confirmed 0.5 mm at the top edge on all four layers. Off-board conductor exits (J2, J3, UART TPs) are 36–42 mm away, openings facing away.
 
 **Assembly & files (LAW 22–31):** all 51 fitted footprints on top, every one carrying an LCSC number; C3/C4 = dnp + excluded from BOM and CPL; all 12 TPs and H1–H4 excluded from both files; J1 nose overhang measured from the fab outline: **0.96 mm** (HRO target ~1.0); J3 polarity silk verified against the netlist — pin 1 (left) is VBAT_RAW and carries the `+`, pin 2 GND carries the `−`; J2's SIG/PWR/GND read left-to-right over pins 1/2/3 = ADC_SOIL / SOIL_PWR / GND; D1/D4 cathode bars sit on the cathode pads (D1 pad 1 → VBUS, D4 pad 1 → VSYS — correct for both); LED cathode marks on the GND/STAT sides; BOOT label at SW1, RESET at SW2, matching the nets. Silk text uniformly 1.0 mm / 0.15 — at the JLC floor, nowhere below it.
 

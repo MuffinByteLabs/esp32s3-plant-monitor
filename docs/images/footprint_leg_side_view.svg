@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 362" width="760" height="362" role="img" aria-label="Side view of a component leg sitting on a copper pad"><rect x="0" y="0" width="760" height="362" fill="#ffffff"/>
+  <defs>
+    <marker markerwidth="8" markerheight="8" refx="7" refy="4" orient="auto"><path d="M0,1 L7,4 L0,7 z" fill="#2f6fd0"></path></marker>
+    <marker markerwidth="8" markerheight="8" refx="1" refy="4" orient="auto"><path d="M7,1 L0,4 L7,7 z" fill="#2f6fd0"></path></marker>
+    <marker markerwidth="8" markerheight="8" refx="7" refy="4" orient="auto"><path d="M0,1 L7,4 L0,7 z" fill="#c2410c"></path></marker>
+    <marker markerwidth="8" markerheight="8" refx="1" refy="4" orient="auto"><path d="M7,1 L0,4 L7,7 z" fill="#c2410c"></path></marker>
+    <pattern width="7" height="7" patterntransform="rotate(45)" patternunits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="7" stroke="#ccd3db" stroke-width="3"></line>
+    </pattern>
+  </defs>
+
+  <rect x="20" y="206" width="720" height="32" fill="url(#hatch)" stroke="#c2cad4"></rect>
+  <text x="30" y="228" font-size="11.5" fill="#7b8593" font-family="ui-monospace,monospace">your PCB</text>
+
+  <rect x="336" y="194" width="156" height="12" fill="#c07a3e" stroke="#96602f"></rect>
+
+  <path d="M336,194 L372,194 L372,172 Q 352,186 336,194 Z" fill="#6d84a0"></path>
+  <path d="M492,194 L452,194 L452,176 Q 474,187 492,194 Z" fill="#6d84a0"></path>
+
+  <rect x="60" y="58" width="240" height="82" rx="5" fill="#3c4654"></rect>
+  <text x="180" y="105" font-size="14" fill="#fff" text-anchor="middle" font-weight="600" letter-spacing="1.6">BODY</text>
+
+  <path d="M300,92 L332,92 L378,180 L452,180 L452,194 L372,194 L322,106 L300,106 Z" fill="#98a4b4" stroke="#74808e"></path>
+  <rect x="372" y="180" width="80" height="14" fill="none" stroke="#2f6fd0" stroke-width="1.6" stroke-dasharray="4 3"></rect>
+
+  <g stroke="#ccd3db" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="336" y1="206" x2="336" y2="332"></line><line x1="372" y1="194" x2="372" y2="332"></line>
+    <line x1="452" y1="194" x2="452" y2="332"></line><line x1="492" y1="206" x2="492" y2="332"></line>
+  </g>
+
+  <text x="372" y="254" font-size="11.5" fill="#525c6b" text-anchor="middle" font-weight="700">HEEL</text>
+  <text x="452" y="254" font-size="11.5" fill="#525c6b" text-anchor="middle" font-weight="700">TOE</text>
+
+  <g stroke="#c2410c" stroke-width="1.6">
+    <line x1="338" y1="270" x2="370" y2="270" marker-start="url(#arRS)" marker-end="url(#arR)"></line>
+    <line x1="454" y1="270" x2="490" y2="270" marker-start="url(#arRS)" marker-end="url(#arR)"></line>
+  </g>
+  <text x="354" y="288" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="600">overhang</text>
+  <text x="472" y="288" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="600">overhang</text>
+
+  <text x="412" y="303" font-size="12" fill="#2f6fd0" text-anchor="middle" font-weight="700">FOOT</text>
+  <line x1="373" y1="308" x2="451" y2="308" stroke="#2f6fd0" stroke-width="1.6" marker-start="url(#arS)" marker-end="url(#ar)"></line>
+  <line x1="337" y1="331" x2="491" y2="331" stroke="#2f6fd0" stroke-width="1.6" marker-start="url(#arS)" marker-end="url(#ar)"></line>
+  <text x="414" y="350" font-size="12" fill="#2f6fd0" text-anchor="middle" font-weight="700">PAD (the copper)</text>
+
+  <g stroke="#8b95a5" stroke-width="1" fill="none">
+    <path d="M398,58 L352,124"></path><path d="M528,146 L486,190"></path>
+  </g>
+  <text x="402" y="52" font-size="12.5" fill="#525c6b" font-weight="600">LEAD (the leg)</text>
+  <text x="534" y="142" font-size="12.5" fill="#525c6b" font-weight="600">SOLDER</text>
+  <text x="534" y="158" font-size="11" fill="#8b95a5">fills the overhang and</text>
+  <text x="534" y="172" font-size="11" fill="#8b95a5">freezes into a wedge</text>
+</svg>

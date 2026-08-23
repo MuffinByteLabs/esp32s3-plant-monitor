@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" width="640" height="420" role="img" aria-label="Suggested floorplan sketch"><rect x="0" y="0" width="640" height="420" fill="#ffffff"/>
+  <defs>
+    <pattern width="6" height="6" patterntransform="rotate(45)" patternunits="userSpaceOnUse">
+      <rect width="6" height="6" fill="#fdf3dd"></rect><line x1="0" y1="0" x2="0" y2="6" stroke="#d9a53e" stroke-width="1.4"></line>
+    </pattern>
+    <marker markerwidth="7" markerheight="7" refx="5.2" refy="3.5" orient="auto"><path d="M0,0 L6,3.5 L0,7 z" fill="#1c5d99"></path></marker>
+  </defs>
+  <!-- board -->
+  <rect x="70" y="45" width="440" height="330" rx="10" fill="#ffffff" stroke="#1a2b22" stroke-width="2.5"></rect>
+  <!-- mounting holes -->
+  <g fill="none" stroke="#5b6b62" stroke-width="2">
+    <circle cx="92" cy="67" r="7"></circle><circle cx="488" cy="67" r="7"></circle><circle cx="92" cy="353" r="7"></circle><circle cx="488" cy="353" r="7"></circle>
+  </g>
+  <!-- antenna keepout strip on-board + module overhang -->
+  <rect x="470" y="150" width="40" height="120" fill="url(#hatch)" stroke="#d9a53e" stroke-width="1"></rect>
+  <rect x="510" y="150" width="52" height="120" fill="url(#hatch)" stroke="#d9a53e" stroke-dasharray="4 3" stroke-width="1.2"></rect>
+  <!-- esp32 module -->
+  <rect x="358" y="150" width="204" height="120" rx="6" fill="#e8f4ed" stroke="#1e7a46" stroke-width="2"></rect>
+  <rect x="510" y="150" width="52" height="120" fill="none" stroke="#1e7a46" stroke-width="2" stroke-dasharray="5 3"></rect>
+  <text x="440" y="205" font-size="14" font-weight="600" fill="#1e7a46" text-anchor="middle">U3  ESP32-S3</text>
+  <text x="440" y="222" font-size="11" fill="#41504a" text-anchor="middle">decouplers C9/C10 at pin 2</text>
+  <text x="536" y="205" font-size="10.5" fill="#8a5a00" text-anchor="middle" transform="rotate(-90 536 205)">ANTENNA → off board</text>
+  <!-- usb-c -->
+  <rect x="52" y="150" width="60" height="74" rx="8" fill="#e8f1f9" stroke="#1c5d99" stroke-width="2"></rect>
+  <text x="82" y="190" font-size="12" font-weight="600" fill="#1c5d99" text-anchor="middle">J1</text>
+  <text x="82" y="204" font-size="10" fill="#1c5d99" text-anchor="middle">USB-C</text>
+  <!-- protection cluster -->
+  <rect x="122" y="140" width="96" height="95" rx="8" fill="#fff" stroke="#1c5d99" stroke-width="1.5" stroke-dasharray="5 3"></rect>
+  <text x="170" y="160" font-size="11.5" font-weight="600" fill="#1c5d99" text-anchor="middle">D1 · F1 · U1</text>
+  <text x="170" y="175" font-size="10" fill="#41504a" text-anchor="middle">TVS, fuse, ESD</text>
+  <text x="170" y="189" font-size="10" fill="#41504a" text-anchor="middle">R3/R4 at CC pins</text>
+  <text x="170" y="203" font-size="10" fill="#41504a" text-anchor="middle">C1, C2 close</text>
+  <text x="170" y="224" font-size="10" fill="#8a5a00" text-anchor="middle">first in line from plug</text>
+  <!-- usb data flow -->
+  <path d="M112 187 L122 187" stroke="#1c5d99" stroke-width="2" marker-end="url(#arr)"></path>
+  <path d="M218 187 Q285 187 300 200 L352 212" stroke="#1c5d99" stroke-width="2" fill="none" marker-end="url(#arr)"></path>
+  <text x="282" y="180" font-size="10" fill="#1c5d99">D+/D− pair · R1/R2 near module</text>
+  <!-- power zone -->
+  <rect x="140" y="248" width="180" height="100" rx="8" fill="#fff" stroke="#a03123" stroke-width="1.5" stroke-dasharray="5 3"></rect>
+  <text x="230" y="268" font-size="11.5" font-weight="600" fill="#a03123" text-anchor="middle">POWER</text>
+  <text x="230" y="284" font-size="10" fill="#41504a" text-anchor="middle">U2 LDO + C5/C6/C7 · copper pour</text>
+  <text x="230" y="298" font-size="10" fill="#41504a" text-anchor="middle">U6 charger + C15/C16 · R13</text>
+  <text x="230" y="312" font-size="10" fill="#41504a" text-anchor="middle">Q2/Q3 · D4 · R16 — tight VSYS node</text>
+  <text x="230" y="332" font-size="10" fill="#8a5a00" text-anchor="middle">heat lives here — keep sensors away</text>
+  <!-- sensors -->
+  <rect x="122" y="60" width="200" height="66" rx="8" fill="#fff" stroke="#1e7a46" stroke-width="1.5" stroke-dasharray="5 3"></rect>
+  <text x="222" y="80" font-size="11.5" font-weight="600" fill="#1e7a46" text-anchor="middle">SENSORS — cool corner</text>
+  <text x="222" y="96" font-size="10" fill="#41504a" text-anchor="middle">U4 BME280 (vent to open air, far from heat)</text>
+  <text x="222" y="110" font-size="10" fill="#41504a" text-anchor="middle">U5 VEML7700 (clear sky view, away from LEDs)</text>
+  <!-- buttons + LEDs -->
+  <rect x="352" y="290" width="120" height="60" rx="8" fill="#fff" stroke="#5b6b62" stroke-width="1.5" stroke-dasharray="5 3"></rect>
+  <text x="412" y="310" font-size="11" font-weight="600" fill="#41504a" text-anchor="middle">SW1 BOOT · SW2 RESET</text>
+  <text x="412" y="325" font-size="10" fill="#41504a" text-anchor="middle">finger room · silk labels</text>
+  <text x="412" y="339" font-size="10" fill="#41504a" text-anchor="middle">D2/D3 LEDs visible</text>
+  <!-- connectors bottom -->
+  <rect x="120" y="360" width="64" height="30" rx="5" fill="#e8f4ed" stroke="#1e7a46" stroke-width="1.5"></rect>
+  <text x="152" y="379" font-size="10.5" fill="#1e7a46" text-anchor="middle">J2 soil</text>
+  <rect x="230" y="360" width="64" height="30" rx="5" fill="#e8f4ed" stroke="#1e7a46" stroke-width="1.5"></rect>
+  <text x="262" y="379" font-size="10.5" fill="#1e7a46" text-anchor="middle">J3 battery</text>
+  <!-- test points -->
+  <text x="330" y="366" font-size="10" fill="#41504a">TP row (probe-able) · THT trio TP8/11/12 at edge</text>
+  <g fill="#fff" stroke="#41504a" stroke-width="1.4">
+    <circle cx="338" cy="378" r="4.5"></circle><circle cx="352" cy="378" r="4.5"></circle><circle cx="366" cy="378" r="4.5"></circle>
+  </g>
+  <!-- edge labels -->
+  <text x="40" y="187" font-size="10" fill="#5b6b62" text-anchor="middle" transform="rotate(-90 40 187)">board edge — plug side</text>
+  <text x="588" y="210" font-size="10" fill="#8a5a00" text-anchor="middle" transform="rotate(90 588 210)">antenna past edge · no copper</text>
+</svg>
