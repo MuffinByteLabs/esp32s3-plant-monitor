@@ -32,3 +32,7 @@ hardware/jlcpcb/
 tmp*.rpt
 *.rpt
 _tmp_*
+
+# firmware credentials - never commit (added 2026-08-24)
+firmware/plant_monitor/secrets.h
+secrets.h
