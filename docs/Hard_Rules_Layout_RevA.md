@@ -27,7 +27,7 @@
 14. Power nets ≥0.5 mm (Power net class enforces).
 
 ### Thermal
-15. LDO (U2): copper pour on its GND pin, stitched to the bottom plane — its only heatsink for ~0.34 W.
+15. LDO (U2): copper pour on its GND pin, stitched to the bottom plane — its only heatsink for ~0.26 W.
 16. Charger (U6): modest copper, ~0.2 W into a low battery.
 17. BME280 far from LDO, charger, and module; vent hole open to air; no silkscreen on or over it. Board heat = corrupted readings.
 
@@ -83,7 +83,7 @@
 - **LAW 5 stands, and improves:** the J1 duplicate-pad breakout routes entirely on L1 (one tie behind the pad row, one in front, exits from the outer pads — Routing Guide §3.1, geometry verified 08-12), so the pair truly gets zero vias, no exceptions.
 - **LAW 12 unchanged for decouplers** — every decoupler GND pad gets its via at the pad (the hop to GND1 is now 0.21 mm — the whole point of the stackup). Amendment: *trivial* grounds (100 k pull-down ends, switch GND pads, R13's ground) may join a well-stitched pour instead of getting personal vias.
 - **LAW 21 restated:** stitch the outer pours into the planes every ~5 mm and at every decoupler. New companion rule: a **fast** signal changing layers needs a GND via within 1–2 mm (return current must jump planes through it); slow signals can lean on the stitching grid.
-- **LAW 1–3 unchanged**, but the keep-out must now be enforced on **four** copper layers — use a Rule Area covering F.Cu/GND1/GND2/B.Cu (re-create it: the current board file has none).
+- **LAW 1–3 unchanged**, but the keep-out must now be enforced on **four** copper layers — use a Rule Area covering F.Cu/GND1/GND2/B.Cu (waived for Rev A: the module overhangs the board edge and all four zones pull back 0.5 mm, so no on-board copper can exist in the keep-out — see `KiCad_Settings_RevA.md` §5).
 
 ## Pocket numbers
 

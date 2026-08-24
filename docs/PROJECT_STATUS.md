@@ -1,9 +1,9 @@
-# PROJECT STATUS — read me first in a new session
-*Updated 2026-08-21 (**Rev A ORDERED**). Board state verified pre-order the same day (independent file audit + gerber render + JLC placement preview pass). This file is the hand-off between work sessions — update it whenever a milestone lands. Previous statuses (2026-08-13 board-setup, 2026-08-15 late-stage, 2026-08-18 order-prep) are in git history.*
+# Rev A — Order and Build Log
+*Updated 2026-08-21 (**Rev A ORDERED**). Board state verified pre-order the same day (file audit + gerber render + JLC placement preview pass). Previous statuses (2026-08-13 board-setup, 2026-08-15 late-stage, 2026-08-18 order-prep) are in git history.*
 
 ## Where the project stands
 
-**Rev A IS ORDERED — JLCPCB order placed 2026-08-21: 5 boards, fabricated + Standard-assembled, every component from the JLC Parts Library.** Paid ≈ **$49.26 after coupons** (PCB $12.10 + Standard PCBA $86.79 − ~$49.25 coupons) + **$28.67 DHL Express (DDP)**. Expected timeline: ~3-day fab + Standard assembly + 2–4-day shipping → boards on the bench around the first week of September.
+**Rev A IS ORDERED — JLCPCB order placed 2026-08-21: 5 boards, fabricated + Standard-assembled, every component from the JLC Parts Library.** Paid ≈ **$49.26 after coupons** (PCB $12.10 + Standard PCBA $86.79 − ~$49.63 coupons) + **$28.67 DHL Express (DDP)**. Expected timeline: ~3-day fab + Standard assembly + 2–4-day shipping → boards on the bench around the first week of September.
 
 **As ordered** (differences from the 08-17 plan were deliberate, decided on order day):
 
@@ -30,20 +30,18 @@ Open cosmetic items (zero fab impact; last verified open just before ordering): 
 
 1. **Watch email for the assembly-remark review / DFM questions — reply same-day.**
 2. Drop the **order-confirmation PDF** into `fabrication/revA/` (the ordered gerber zip + BOM + CPL were frozen there 2026-08-21).
-3. git commit `"revA ordered 2026-08-21"` and push.
-4. Enjoy the in-production photos on the JLC order page.
-5. Then **`docs/BringUp_Guide.md` becomes the active document — step 1, in my own handwriting: meter the battery plug before it ever touches J3.**
+3. Then **`docs/BringUp_Guide.md` becomes the active document, and its step 1 stands: meter the battery plug before it ever touches J3.**
 
-## Waivers on record (each one sentence, per the house rule)
+## Waivers on record
 
 - **TP3 / TP5 / TP9 inside the self-imposed 15 mm antenna ring** (10.6 / 8.3 / 12.5 mm): bare 1.5 mm pads, antenna fully overhangs, vendor guidance has no TP rule — waived for Rev A with probe-lead discipline during RF-active tests (BringUp_Guide); TP5 move noted for Rev B.
 - **Rear shield-slot single top spoke:** the slot is tied by an explicit trace and grounded through its barrel into both planes and the bottom pour; reliefs kept so the connector stays hand-replaceable.
 - **Single VBUS via at (46.40, 73.95):** capacity margin ≫ load; consistency-only finding.
 - **No on-board antenna rule area:** the antenna and its enlarged keep-out sit wholly off-board (module overhangs the top edge) and every zone pulls back 0.5 mm from the edge — there is no on-board region for a rule area to police (also recorded in `KiCad_Settings_RevA.md` §5).
 
-## Standing facts (don't re-derive)
+## Settled facts and decisions
 
-Hand-over: R16 = 10 k ⇒ ~50–100 ms body-diode notch at unplug — scope-verify at TP2/VSYS during bring-up (BringUp_Guide step 9) · firmware owns battery limits: no TX < ~3.5 V, shutdown at 3.0 V · sleep floor ~210 µA (power LED dominant; DNP D2 for battery tests) · charge LED ≠ polarity proof — meter the pack plug, always · SW1 = BOOT, SW2 = RESET (schematic wins over the old design doc) · **module C2913198 AND BME280 C92489 are Standard-PCBA-tier parts** (confirmed at the 2026-08-21 order) · trace resistance pocket number corrected 2026-08-17: 0.5 mm / 1 oz ≈ **10 mΩ/cm**, not 1 (Hard Rules § pocket numbers) · U1 sits at 45° — verified correct in the Rev A placement preview · JLC reserves extra units on Extended feeder lines for loading attrition (e.g., 15 of 15 D1s, 20 of 20 D2s) — expected, not an error · **DDP shipping = duties prepaid, nothing billed by the courier afterward**; the "My DHL/UPS/FedEx Account" checkout options are for holders of their own courier accounts, not a $2.50 shipping deal · doc↔schematic refdes cross-map lives in the design doc Addendum A.
+Hand-over: R16 = 10 k ⇒ ~50–100 ms body-diode notch at unplug — scope-verify at TP2/VSYS during bring-up (BringUp_Guide step 9) · firmware owns battery limits: no TX < ~3.5 V, shutdown at 3.0 V · sleep floor ~210 µA (power LED dominant; DNP D2 for battery tests) · charge LED ≠ polarity proof — meter the pack plug, always · SW1 = BOOT, SW2 = RESET · **module C2913198 AND BME280 C92489 are Standard-PCBA-tier parts** (confirmed at the 2026-08-21 order) · trace resistance pocket number corrected 2026-08-17: 0.5 mm / 1 oz ≈ **10 mΩ/cm**, not 1 (Hard Rules § pocket numbers) · U1 sits at 45° — verified correct in the Rev A placement preview · JLC reserves extra units on Extended feeder lines for loading attrition (e.g., 15 of 15 D1s, 20 of 20 D2s) — expected, not an error · **DDP shipping = duties prepaid, nothing billed by the courier afterward**; the "My DHL/UPS/FedEx Account" checkout options are for holders of their own courier accounts, not a $2.50 shipping deal · doc↔schematic refdes cross-map lives in the design doc Addendum A.
 
 ## Key files
 

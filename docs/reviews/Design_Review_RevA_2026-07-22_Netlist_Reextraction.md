@@ -1,8 +1,9 @@
-# Independent Pre-Layout Design Review — ESP32-S3 Plant Monitor, Rev A
+# Pre-Layout Design Review: Netlist Re-Extraction — ESP32-S3 Plant Monitor, Rev A
 
-**Method:** independent netlist re-extraction + datasheet cross-check
+**Method:** the netlist was rebuilt from the `.kicad_sch` sources rather than read off the drawing, then every connection cross-checked against the datasheets in `references/`. Reviewing the parsed source instead of the schematic view is what makes this a second opinion rather than a second look.
 **Date:** 2026-07-22
-**Board:** RS_ESP32S3_PlantMonitor_RevA · KiCad 10.0.2 · 2-layer
+**Board:** ESP32S3_PlantMonitor Rev A · KiCad 10.0.2 · 2-layer at the time of review
+> *Historical note: reviewed pre-layout, when the board was still planned as 2-layer. The move to 4 layers was decided 2026-08-06 and applied to the board file 2026-08-12 — reasoning in [`../KiCad_Settings_RevA.md`](../KiCad_Settings_RevA.md).*
 **Files reviewed:** all 8 schematic sheets, the project file, the custom symbol/footprint library, the BOM, and the full design document + prior review.
 
 ---
@@ -31,7 +32,7 @@ Rather than just read the schematic pictures, I wrote a program that re-parsed t
 
 ## What's correct (the reassuring part)
 
-Everything structural is right. Specifically, I independently confirmed:
+Everything structural checks out. Verified from the re-extracted netlist:
 
 **Power & protection**
 - USB-C sink wiring is textbook: both CC pins get their own 5.1 kΩ resistor to ground (R3, R4 — one per pin, never shared), all four VBUS pads tied, and — importantly — **all four USB-C ground pins (A1/B1/A12/B12) plus the shield connect to ground.** (This was the big fix from the last review; it's confirmed present.)
@@ -84,7 +85,7 @@ There's no cheap fix in this exact topology, so the mitigation is procedural and
 
 ### 3 — Give the regulator a copper heat-spreader *(do at layout)*
 
-The 3.3 V regulator (U2) is a small SOT-23-5 part. In the worst case (USB power + Wi-Fi running hard) it burns off about **0.34 W as heat**. That's fine *if* it can shed heat into the board. During layout, pour a generous copper area connected to its ground pin/tab on both layers with a few stitching vias. My design doc already plans this — it's a real requirement, not optional, and worth a thermocouple check at bring-up during a long Wi-Fi session.
+The 3.3 V regulator (U2) is a small SOT-23-5 part. In the worst case (USB power + Wi-Fi running hard) it burns off about **0.26 W as heat**. That's fine *if* it can shed heat into the board. During layout, pour a generous copper area connected to its ground pin/tab on both layers with a few stitching vias. My design doc already plans this — it's a real requirement, not optional, and worth a thermocouple check at bring-up during a long Wi-Fi session.
 
 ### 4 — Re-verify the tactile-switch footprint *(do at layout)*
 
@@ -147,7 +148,7 @@ These are deliberate, documented choices, not mistakes:
 | Prior review's fixes present? | **Yes** — all confirmed in the current files |
 | **Ready for PCB layout?** | **Yes — go.** |
 
-This is a genuinely well-executed first board, and unusually well-documented for a portfolio project. Nice work. Run F8 and start placing parts — and keep the bring-up guide handy, because the two things worth watching (the low-battery hand-over and the reverse-battery procedure) are behaviors to confirm with a meter, not schematic changes.
+Rev A closes with no blocking or functional findings. Run F8 and start placing parts — and keep the bring-up guide handy, because the two things worth watching (the low-battery hand-over and the reverse-battery procedure) are behaviors to confirm with a meter, not schematic changes.
 
 ---
 

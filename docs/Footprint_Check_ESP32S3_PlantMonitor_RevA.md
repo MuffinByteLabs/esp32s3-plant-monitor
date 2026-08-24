@@ -2,7 +2,7 @@
 
 *20 packages · 69 placements · KiCad 10 · JLCPCB assembly. Verified before layout; frozen here as the Rev A record.*
 
-Every footprint below was checked pad-by-pad against the datasheet linked in its row — pad size and pitch, courtyard, pin-1 marking, and (for the parts JLC places) the orientation the assembler's preview would show. Two footprints are project-custom and are marked **⚠ Custom**; the rest are KiCad standard library.
+Every footprint below was checked pad-by-pad against the datasheet linked in its row — pad size and pitch, courtyard, pin-1 marking, and (for the parts JLC places) the orientation the assembler's preview would show. Six footprints are project-custom and are marked **⚠ Custom**; the rest are KiCad standard library.
 
 ## Summary
 
@@ -12,10 +12,10 @@ Every footprint below was checked pad-by-pad against the datasheet linked in its
 | MLCC 0805 (2012 metric) | `Capacitor_SMD:C_0805_2012Metric` | KiCad std | Passive | 3 | [Samsung MLCC](../references/datasheets/CAP_Samsung_MLCC_Catalogue_2015-11.pdf) |
 | Chip resistor 0603 (1608 metric) | `Resistor_SMD:R_0603_1608Metric` | KiCad std | Passive | 16 | — |
 | Chip LED 0603 | `LED_SMD:LED_0603_1608Metric` | KiCad std | Opto | 2 | [XINGLIGHT XL-0603QYGC](../references/datasheets/LED_XINGLIGHT_XL-0603QYGC_YellowGreen_0603_C2289_Datasheet.pdf) · [KENTO KT-0603R](../references/datasheets/LED_KENTO_KT-0603R_Red_0603_C2286_Datasheet.pdf) |
-| SMF5.0A TVS diode | `Diode_SMD:D_SOD-123F` | KiCad std | Protection | 1 | [MDD SMF5](../references/datasheets/TVS_MDD_SMF5_0A_5V_Unidirectional_Datasheet.pdf) |
-| SS14 Schottky 1A/40V | `Diode_SMD:D_SMA` | KiCad std | Power | 1 | [SS14 Schottky](../references/datasheets/DIODE_SS14_Schottky_1A40V_Family_Datasheet.pdf) |
-| Resettable PPTC fuse 1206 | `Fuse:Fuse_1206_3216Metric` | KiCad std | Protection | 1 | [Littelfuse 1206L](../references/datasheets/FUSE_Littelfuse_1206L_Resettable_PPTC_Datasheet_2024.pdf) |
-| HRO USB-C receptacle, 16P | `Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12` | KiCad std | Connector | 1 | [TYPE-C-31-M-12 Receptacle](../references/datasheets/USBC_TYPE-C-31-M-12_Receptacle_C165948_Footprint_Drawing.pdf) |
+| SMF5.0A TVS diode | `PlantMonitor_JLC:D_SOD-123F` | ⚠ Custom | Protection | 1 | [MDD SMF5](../references/datasheets/TVS_MDD_SMF5_0A_5V_Unidirectional_Datasheet.pdf) |
+| SS14 Schottky 1A/40V | `PlantMonitor_JLC:D_SMA` | ⚠ Custom | Power | 1 | [SS14 Schottky](../references/datasheets/DIODE_SS14_Schottky_1A40V_Family_Datasheet.pdf) |
+| Resettable PPTC fuse 1206 | `PlantMonitor_JLC:Fuse_1206_3216Metric` | ⚠ Custom | Protection | 1 | [Littelfuse 1206L](../references/datasheets/FUSE_Littelfuse_1206L_Resettable_PPTC_Datasheet_2024.pdf) |
+| HRO USB-C receptacle, 16P | `PlantMonitor_JLC:USB_C_Receptacle_HRO_TYPE-C-31-M-12` | ⚠ Custom | Connector | 1 | [TYPE-C-31-M-12 Receptacle](../references/datasheets/USBC_TYPE-C-31-M-12_Receptacle_C165948_Footprint_Drawing.pdf) |
 | SOT-23-6 — ESD protection | `Package_TO_SOT_SMD:SOT-23-6` | KiCad std | IC | 1 | [ST USBLC6-2SC6](../references/datasheets/ESD_ST_USBLC6-2SC6_USB2_DataLine_Protection_Datasheet.pdf) |
 | SOT-23-5 — LDO + LiPo charger | `Package_TO_SOT_SMD:SOT-23-5` | KiCad std | IC | 2 | [Diodes AP2112K-3.3](../references/datasheets/LDO_Diodes_AP2112K-3.3_600mA_3V3_Regulator_Datasheet.pdf) · [Microchip MCP73831](../references/datasheets/CHARGER_Microchip_MCP73831_LiPo_Linear_Charger_Datasheet_DS20001984H.pdf) |
 | SOT-23 — P-channel MOSFET | `Package_TO_SOT_SMD:SOT-23` | KiCad std | Discrete | 3 | [AlphaOmega AO3401A](../references/datasheets/MOSFET_AlphaOmega_AO3401A_PchannelMOSFET_Datasheet.pdf) |
@@ -73,18 +73,18 @@ Every footprint below was checked pad-by-pad against the datasheet linked in its
 | R2 | 22 | 02 USB-C | C23345 |
 | R3 | 5.1k | 02 USB-C | C23186 |
 | R4 | 5.1k | 02 USB-C | C23186 |
-| R5 | 10k | 03 3V3 Power | C25804 |
-| R6 | 10k | 04 ESP32-S3 Core | C25804 |
-| R7 | 10k | 04 ESP32-S3 Core | C25804 |
+| R5 | 10k | 03 3V3 Power | C98220 |
+| R6 | 10k | 04 ESP32-S3 Core | C98220 |
+| R7 | 10k | 04 ESP32-S3 Core | C98220 |
 | R8 | 4.7k | 05 I2C Sensors | C23162 |
 | R9 | 4.7k | 05 I2C Sensors | C23162 |
 | R10 | 100k | 06 Soil ADC | C25803 |
 | R11 | 100k | 06 Soil ADC | C25803 |
 | R12 | 470 | 07 Charger | C23179 |
-| R13 | 10k | 07 Charger | C25804 |
+| R13 | 10k | 07 Charger | C98220 |
 | R14 | 100k 1% | 07 Charger | C25803 |
 | R15 | 100k 1% | 07 Charger | C25803 |
-| R16 | 10k | 07 Charger | C25804 |
+| R16 | 10k | 07 Charger | C98220 |
 
 ### Chip LED 0603
 
@@ -97,7 +97,7 @@ Every footprint below was checked pad-by-pad against the datasheet linked in its
 
 ### SMF5.0A TVS diode
 
-`Diode_SMD:D_SOD-123F` · **Library:** KiCad std · **Sheets:** 02 USB-C · **Datasheet:** [MDD SMF5](../references/datasheets/TVS_MDD_SMF5_0A_5V_Unidirectional_Datasheet.pdf)
+`PlantMonitor_JLC:D_SOD-123F` · **Library:** ⚠ Custom · **Sheets:** 02 USB-C · **Datasheet:** [MDD SMF5](../references/datasheets/TVS_MDD_SMF5_0A_5V_Unidirectional_Datasheet.pdf)
 
 | Ref | Value | Sheet | JLC # |
 |---|---|---|---|
@@ -105,7 +105,7 @@ Every footprint below was checked pad-by-pad against the datasheet linked in its
 
 ### SS14 Schottky 1A/40V
 
-`Diode_SMD:D_SMA` · **Library:** KiCad std · **Sheets:** 07 Charger · **Datasheet:** [SS14 Schottky](../references/datasheets/DIODE_SS14_Schottky_1A40V_Family_Datasheet.pdf)
+`PlantMonitor_JLC:D_SMA` · **Library:** ⚠ Custom · **Sheets:** 07 Charger · **Datasheet:** [SS14 Schottky](../references/datasheets/DIODE_SS14_Schottky_1A40V_Family_Datasheet.pdf)
 
 | Ref | Value | Sheet | JLC # |
 |---|---|---|---|
@@ -113,7 +113,7 @@ Every footprint below was checked pad-by-pad against the datasheet linked in its
 
 ### Resettable PPTC fuse 1206
 
-`Fuse:Fuse_1206_3216Metric` · **Library:** KiCad std · **Sheets:** 02 USB-C · **Datasheet:** [Littelfuse 1206L](../references/datasheets/FUSE_Littelfuse_1206L_Resettable_PPTC_Datasheet_2024.pdf)
+`PlantMonitor_JLC:Fuse_1206_3216Metric` · **Library:** ⚠ Custom · **Sheets:** 02 USB-C · **Datasheet:** [Littelfuse 1206L](../references/datasheets/FUSE_Littelfuse_1206L_Resettable_PPTC_Datasheet_2024.pdf)
 
 | Ref | Value | Sheet | JLC # |
 |---|---|---|---|
@@ -121,7 +121,7 @@ Every footprint below was checked pad-by-pad against the datasheet linked in its
 
 ### HRO USB-C receptacle, 16P
 
-`Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12` · **Library:** KiCad std · **Sheets:** 02 USB-C · **Datasheet:** [TYPE-C-31-M-12 Receptacle](../references/datasheets/USBC_TYPE-C-31-M-12_Receptacle_C165948_Footprint_Drawing.pdf)
+`PlantMonitor_JLC:USB_C_Receptacle_HRO_TYPE-C-31-M-12` · **Library:** ⚠ Custom · **Sheets:** 02 USB-C · **Datasheet:** [TYPE-C-31-M-12 Receptacle](../references/datasheets/USBC_TYPE-C-31-M-12_Receptacle_C165948_Footprint_Drawing.pdf)
 
 | Ref | Value | Sheet | JLC # |
 |---|---|---|---|

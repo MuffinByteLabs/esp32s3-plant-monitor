@@ -1,6 +1,6 @@
 # KiCad Settings Log — ESP32-S3 Plant Monitor Rev A
 
-*Record of every custom setting configured before layout, with the reasoning. Started 2026-08-04 (pre-layout setup); updated 2026-08-13, 2026-08-17 (USB netclass patterns, layer plan revised to GND/GND, rule-area status). KiCad 10, **4-layer** (was 2 — changed 2026-08-06, see §5), JLCPCB. Update this file whenever a setting changes — it is the "why" behind the numbers in `ESP32S3_PlantMonitor.kicad_pro`.*
+*Record of every custom setting configured before layout, with the reasoning. Started 2026-08-04 (pre-layout setup); updated 2026-08-13, 2026-08-17 (USB netclass patterns, layer plan revised to GND/GND, rule-area status). KiCad 10, **4-layer** (was 2 — decided 2026-08-06, applied 2026-08-12, see §5), JLCPCB. The "why" behind the numbers in `ESP32S3_PlantMonitor.kicad_pro`.*
 
 ---
 
@@ -43,7 +43,7 @@ The `*` wildcard on `*VBAT_RAW` / `*USB_VBUS` exists because those two are **loc
 
 ## 5. Other Board Setup pages
 
-- **Physical Stackup: 4 copper layers / 1.6 mm total** — changed from 2 → 4 on **2026-08-06**, before a single trace was routed. JLC's standard 1.6 mm 4-layer construction (`JLC04161H-7628`):
+- **Physical Stackup: 4 copper layers / 1.6 mm total** — decided **2026-08-06** and applied to the board file **2026-08-12**, before a single trace was routed. JLC's standard 1.6 mm 4-layer construction (`JLC04161H-7628`):
 
   | Layer | Material | Thickness | Er |
   |---|---|---|---|
@@ -60,7 +60,7 @@ The `*` wildcard on `*VBAT_RAW` / `*USB_VBUS` exists because those two are **loc
   **Why 4 layers.** Not a speed requirement: the fastest signal on this board is USB **Full Speed** (12 Mb/s; ~5 ns edges ≈ 75 cm of physical edge length against a ~3 cm trace — nowhere near the trace > edge/10 threshold), and everything else (I²C 400 kHz, ADC, power) is slower still. A disciplined 2-layer board would have worked. Four layers were bought for **margin on a first layout**:
   - In1.Cu is a ground plane that *cannot* be cut, because nothing is ever routed on it. Hard rules 6, 19, 20 and 21 stop being constant vigilance and become automatic. On 2-layer, "will this via trench a return path?" is the judgement call a first-timer is most likely to get wrong, in the busiest part of the board.
   - Ground sits **0.21 mm** under F.Cu instead of 1.51 mm — ~7× closer, so signal-return loop area (and its inductance) drops by roughly the same factor, and a genuine 90 Ω USB pair becomes achievable instead of "close enough".
-  - U2's ~0.34 W gets two more full copper sheets of heatsink (hard rule 15), which also lowers the local hot spot the BME280 is trying not to read (hard rule 17).
+  - U2's ~0.26 W gets two more full copper sheets of heatsink (hard rule 15), which also lowers the local hot spot the BME280 is trying not to read (hard rule 17).
   - Slack. The subtle failure of a cramped 2-layer board isn't that it fails, it's the small ugly compromises made at ~80 % routed. Defects live there.
 
   Cost delta ≈ **$5** on five boards (JLC 4-layer board charge scales with area; the board is 62.5 × 44.5 mm after the 08-12 shrink); JLC **assembly** cost is identical either way, so it's a rounding error on the order.

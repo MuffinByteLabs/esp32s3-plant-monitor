@@ -99,7 +99,7 @@ sheet 03
 
 **Where:** in the power zone, roughly between D4/Q3 (its input) and the module (its biggest customer). C5 (10 µF) + C6 (1 µF) at the VIN pin, C7 (1 µF) at VOUT — caps first, millimetres from the pins, each with a ground via right at its ground pad.
 
-**Why:** this little part burns up to ~0.34 W during a long Wi-Fi session — real heat for a SOT-23-5. It sheds heat through its pins into copper: give its GND pin a generous pour (a square centimetre or more if I can) on the top layer, tie it to the bottom-layer ground with 4–6 stitching vias, and let the pour breathe.
+**Why:** this little part burns up to ~0.26 W during a long Wi-Fi session — real heat for a SOT-23-5. It sheds heat through its pins into copper: give its GND pin a generous pour (a square centimetre or more if I can) on the top layer, tie it to the bottom-layer ground with 4–6 stitching vias, and let the pour breathe.
 
 **Watch out:** keep U2 (and its warm pour) well away from the BME280 — a couple of degrees of board heat becomes a temperature-reading error. Confirmed requirement from both prior reviews, not optional. Thermocouple-check at bring-up. sheet 07
 
@@ -149,7 +149,7 @@ CORRECTED 2026-08-08 These two are **not** "the ADC filter" as a pair — nothin
 
 ### SW1 (BOOT) · SW2 (RESET) — buttons
 
-**Where:** a reachable edge, side by side, same orientation, ~8–10 mm apart so two fingers fit. Silk labels **BOOT** and **RESET** (SW1 = BOOT, SW2 = RESET — schematic wins over the old design doc, as my status file records).
+**Where:** a reachable edge, side by side, same orientation, ~8–10 mm apart so two fingers fit. Silk labels **BOOT** and **RESET** (SW1 = BOOT, SW2 = RESET).
 
 **Why:** I verified the tricky part already — the footprint's 1/1/2/2 numbering matches the switch's internal A-B (top) / C-D (bottom) pairing, re-checked against the XKB drawing. The legs exit left and right; give them ~1 mm of clear space (the courtyard nit from Section 2).
 
@@ -165,7 +165,7 @@ sheets 03/07
 
 **Where:** flat pads (TP1–TP7, TP9, TP10) anywhere probe-able on the top face — spread near the circuits they measure, ≥2.5 mm apart, silk-labelled. The through-hole trio TP8/TP11/TP12 (GND/TXD0/RXD0 — my UART recovery port) clusters at one edge like a tiny header, far from the antenna. Holes in the four corners; M3 screw heads need ~Ø6 mm of part-free space around each.
 
-**Watch out:** label every TP on silk with its name, not just a number — future-me with a multimeter will be grateful. Don't let a mounting hole (or its metal standoff) sit inside the antenna keep-out.
+**Watch out:** label every TP on silk with its name, not just a number — a numbered pad is useless to whoever probes the board later. Don't let a mounting hole (or its metal standoff) sit inside the antenna keep-out.
 
 ## Routing rules for this board
 
@@ -201,4 +201,4 @@ sheets 03/07
 
 Parsed from disk (not screenshots): all 8 schematic sheets, `ESP32S3_PlantMonitor.kicad_pcb` (post-F8: 69 footprints, 228 pads, nets assigned, no tracks/outline yet), `ESP32S3_PlantMonitor.kicad_pro` (rules & classes), `fp-lib-table`, and all six `PlantMonitor_JLC.pretty` footprints (confirmed byte-equivalent in geometry to the copies embedded in the board — no stale imports). Datasheets measured: HRO TYPE-C-31-M-12 footprint drawing · XKB TS-1187A drawing (pad layout + internal pairing) · Vishay VEML7700 Rev 1.8 p.10 · MDD SS12–SS1200 p.3 (SMA pads) · Goodwork SMF series p.5 (SOD-123FL pads) · Littelfuse 1206L p.4 · Microchip MCP73831 p.24 (OT land pattern) · Diodes AP2112 p.14 (SOT-25) · ST USBLC6-2 p.13 (Fig 19) · Bosch BME280 Rev 1.24 pp.42–43 (Fig 21) · Espressif ESP32-S3-WROOM-1 v1.8 pp.42–45 (Fig 10-1/11-1) · Espressif Hardware Design Guidelines §1.4.7–1.4.8 (module placement, antenna keep-out, USB) · JST PH family sheet · AOS AO3401A Rev 3.1 (no land pattern published; generic SOT-23 applies). Pad→net mapping verified for every IC, diode, LED, connector, switch, and FET against datasheet pinouts. Prior project reviews (2026-07-20, 2026-07-22) incorporated, not repeated.
 
-First-PCB project · this document lives at `docs/Layout_Readiness_and_Placement_Guide_RevA.html`.
+First-PCB project · this document lives at `docs/Layout_Readiness_and_Placement_Guide_RevA.md`.

@@ -174,13 +174,13 @@ LDO = Low-DropOut regulator: a linear regulator that makes a lower, steady volta
 
 ### D2 — power LED (green, 0603) with R5 (10 kΩ, as built)
 
-Lights whenever +3V3 is alive — on USB or on battery. At 10 kΩ it draws ≈120 µA — deliberately dim to protect the sleep budget; even so it is the largest single sleep-mode drain. Note for battery testing: D2 may be left unsoldered on boards used for battery-life measurements; 1.5 mA is enormous next to the sleep current.
+Lights whenever +3V3 is alive — on USB or on battery. At 10 kΩ it draws ≈120 µA — deliberately dim to protect the sleep budget; even so it is the largest single sleep-mode drain. Note for battery testing: D2 may be left unsoldered on boards used for battery-life measurements; ≈120 µA is large next to the ≈90 µA the rest of the board draws asleep.
 
 ### Behavior on battery — documented design decision
 
 On battery power, VSYS equals the battery voltage (4.2 V full → 3.0 V empty). While the battery is above ≈3.6 V, the regulator holds a clean 3.3 V. Below that, the 3.3 V rail sags gracefully along with the battery; the ESP32-S3 keeps running (its supply range is 3.0–3.6 V) but Wi-Fi transmit margin shrinks near empty. This is accepted for Rev A: it is the same trade-off used by mainstream hobby boards of this class, the battery monitor reports the state, and the practical usable battery range is 4.2 V down to ≈3.5–3.6 V. A future revision may use a buck-boost converter (a switching regulator that holds 3.3 V across the whole battery range) if full-range operation is ever needed.
 
-Thermal note: worst sustained dissipation in the regulator is about (5 V − 3.3 V) × 0.2 A ≈ 0.34 W. The layout gives U2 generous copper area as a heatsink (Section 9).
+Thermal note: worst sustained dissipation in the regulator is about (4.6 V − 3.3 V) × 0.2 A ≈ 0.26 W. The layout gives U2 generous copper area as a heatsink (Section 9).
 
 ## 5. ESP32-S3 Core — Sheet 04_ESP32S3_Core
 
@@ -341,7 +341,7 @@ This is the circuit that answers 'how does the board know to switch to the batte
 
 ### Battery voltage monitor — R14, R15 (100 kΩ + 100 kΩ, 1%), C17 (100 nF)
 
-An always-on voltage divider from VBAT to ground; the midpoint, net BAT_SENSE, is exactly half the battery voltage and goes to GPIO2 (ADC channel ADC1_CH1). A full battery reads 2.1 V — inside the ADC's 0–2900 mV range. The divider's constant drain is ≈21 µA, accepted as part of the ≈100 µA sleep floor. Firmware converts the reading to a percentage using a small lithium-cell voltage table.
+An always-on voltage divider from VBAT to ground; the midpoint, net BAT_SENSE, is exactly half the battery voltage and goes to GPIO2 (ADC channel ADC1_CH1). A full battery reads 2.1 V — inside the ADC's 0–2900 mV range. The divider's constant drain is ≈21 µA, accepted as part of the ≈210 µA sleep floor. Firmware converts the reading to a percentage using a small lithium-cell voltage table.
 
 ## 9. Mechanical & Layout Rules — Sheet 08_Mechanical
 
@@ -355,7 +355,7 @@ This sheet holds the non-electrical realities: board outline, mounting, the ante
 
 - USB data pair: routed as a short, tightly-coupled pair over the unbroken inner ground plane, with no vias. On the 4-layer stackup the pair geometry (0.29 mm trace / 0.20 mm gap over the 0.21 mm prepreg) lands at ≈90 Ω differential without paying for controlled-impedance fabrication; length-matched to 0.42 mm. The board is ordered as plain 4-layer — the geometry is right, the fab tolerance is simply not guaranteed, which is the correct trade at USB full speed.
 
-- Regulator U2 gets a generous copper pour on its tab/ground for heat spreading (worst case ≈0.34 W sustained).
+- Regulator U2 gets a generous copper pour on its tab/ground for heat spreading (worst case ≈0.26 W sustained).
 
 - BME280 placed away from U2 and U3 (heat), lid vent hole kept exposed. VEML7700 placed with a clear sky view, away from D2/D3.
 
@@ -438,7 +438,7 @@ BOM = Bill of Materials: the complete shopping list the assembler builds from. J
 
 - DFRobot SEN0193 capacitive soil probe (plugs into J2). Sold by DigiKey/DFRobot/Amazon. Not waterproof past its marked line.
 
-- 1S protected LiPo battery, 3.7 V nominal, JST-PH plug, ≈1000 mAh (plugs into J3).
+- 1S protected LiPo battery, 3.7 V nominal, JST-PH plug, 1000 mAh class (plugs into J3). The cell used for Rev A bring-up is a 500 mAh PKCell LP503035, so halve any 1000 mAh runtime estimate.
 
 - If the probe's included cable ends in a DuPont-style connector: one PH-to-PH 3-pin cable.
 
@@ -526,7 +526,7 @@ soldered in if USB is ever bricked. All other test points are 1.5 mm bare pads.
 
 - Regulator sag on a low battery: below ≈3.6 V battery, the 3.3 V rail follows the battery down. Accepted for Rev A; battery monitor reports it; buck-boost is the Rev B path if ever needed.
 
-- Linear regulator heat: ≈0.34 W sustained worst case — handled with copper pour; verified at bring-up.
+- Linear regulator heat: ≈0.26 W sustained worst case — handled with copper pour; verified at bring-up.
 
 - Fuse derating: the 0.75 A hold falls to 0.65 A at 40 °C; margins were sized against the derated number.
 

@@ -1,5 +1,5 @@
 # Engineering Notes — ESP32-S3 Plant Monitor Rev A
-*Bench notes and design analyses, organized 2026-07-20 from working notes. Add new entries at the bottom with a date.*
+*Bench measurements and design analyses, in date order.*
 
 ## 1. Soil probe calibration (breadboard, direct connection — matches final schematic)
 
@@ -89,4 +89,3 @@ All 53 parts assigned footprints + LCSC numbers in the schematic (verified 53/53
 * Values normalized (1uF/4.7uF), D1=SMF5.0A, F1=1206L075/16WR, D2=LED_YG, D3=LED_RED; DNP only on C3/C4.
 
 ---
-*Add new dated entries below.*

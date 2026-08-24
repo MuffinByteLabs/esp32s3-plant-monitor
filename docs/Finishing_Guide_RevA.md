@@ -44,7 +44,7 @@ Rules while stitching: don't line vias into tight rows closer than ~1 mm (hole-t
 Set up the view first: in the Appearance panel, dim or hide the copper layers and show **F.Silkscreen** — silk work goes fast when I can see it.
 
 1. **Fix colliding reference designators.** The DRC silk warnings are my worklist (~35 items). Click a refdes, **M** to move, **R** to rotate; park each one beside its part where it's readable. Rotate, don't delete — my own rule. Keep text ≥1.0 mm / 0.15 mm thickness (the JLC legibility floor already in my constraints).
-2. **Label the test points by function**, not number: Place → **Text**, layer F.Silkscreen, height 1.0–1.2 mm. Next to each pad: `5V` (TP1), `VSYS` (TP2), `3V3` (TP3), `VBAT` (TP4), `BSNS` (TP5), `SOIL` (TP6), `GND` (TP7, TP8), `EN` (TP9), `BOOT` (TP10), `TX` (TP11), `RX` (TP12). Future-me with a meter will thank present-me.
+2. **Label the test points by function**, not number: Place → **Text**, layer F.Silkscreen, height 1.0–1.2 mm. Next to each pad: `5V` (TP1), `VSYS` (TP2), `3V3` (TP3), `VBAT` (TP4), `BSNS` (TP5), `SOIL` (TP6), `GND` (TP7, TP8), `EN` (TP9), `BOOT` (TP10), `TX` (TP11), `RX` (TP12). Function labels make the board self-documenting at the bench; a refdes number means nothing with a probe in hand.
 3. **The safety silk** (my LAW 27): big unmissable **+** and **−** beside J3's pins — the board's one true hazard is a reversed battery. Pin-1 marks at J2 and J3. `BOOT` beside SW1, `RESET` beside SW2 (schematic refs — SW1 is BOOT). `PWR` at D2, `CHG` at D3. Check D1/D4 cathode marks survived from the footprints.
 4. **Nothing over pads, nothing on the BME280** — no silk on or near U4's vent, and DRC's silk-over-pad check catches the rest.
 5. Optional flourishes: board name + rev + date somewhere open (`PlantMonitor RevA 2026-08`), and my logo lives at `logos:muffinByteLogo` — Place → Footprint if I want it. If I'd rather JLC's order number not land somewhere ugly, place a text reading exactly `JLCJLCJLCJLC` where I *want* it — their system replaces it and prints nothing elsewhere.
@@ -57,10 +57,10 @@ Set up the view first: in the Appearance panel, dim or hide the copper layers an
 3. **In the plugin/BOM preview, verify the exclusions:** C3, C4 (DNP), all 12 TPs, H1–H4 — none of them on the BOM or placement file.
 4. **Upload to JLC.** Board settings: **4 layers · JLC04161H-7628 · 1.6 mm · impedance control: No** · surface finish HASL (lead-free) is fine · everything else defaults.
 5. **Assembly settings:** the module (C2913198) is **Standard PCBA tier**, so pick Standard assembly. Then the check my rulebook calls the classic victim-catcher: **in JLC's component placement preview, verify rotation and polarity of every polarized part** — D1, D2, D3, D4, U1–U6, J1, Q1–Q3, SW1/SW2. JLC's rotations sometimes differ from KiCad's by 90°/180°; their preview render is the truth. LEDs especially.
-6. **Live stock check** at upload (my BOM notes the 10 k alternate C98220 if C25804 is out again).
+6. **Live stock check** at upload (C25804 failed pre-order on 2026-08-18; the 10 k is now C98220).
 7. **Freeze and commit:** copy the ordered gerber zip, BOM, and CPL into `fabrication/revA/`, then git commit and push — my rule 32. The order confirmation email PDF is worth saving there too.
 
-Then the board is out of my hands for a week, `BringUp_Guide.md` becomes the active document, and step 1 of that guide — meter the battery plug before it ever touches J3 — is already written in my own hand.
+Then the board is out of my hands for a week, `BringUp_Guide.md` becomes the active document, and its step 1 stands: meter the battery plug before it ever touches J3.
 
 ---
 

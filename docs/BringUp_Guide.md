@@ -1,5 +1,5 @@
 # Bring-Up Guide — ESP32-S3 Plant Monitor Rev A
-*Supersedes `references/ESP32S3_PlantMonitor_RevA_BringUp_Checklist.pdf` (2026-07-20). Designators match the schematic, not the design doc.*
+*Replaced the original bring-up checklist PDF on 2026-07-20 (it referenced test points and a soil divider that no longer exist); that PDF was retired. Designators match the schematic, not the design doc.*
 
 **Bench kit:** multimeter, current-limited USB source if available (set ~700 mA), oscilloscope (needed for step 9), the buzzed-out probe cable, a metered battery.
 

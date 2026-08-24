@@ -118,7 +118,7 @@ Zero standalone silkscreen text objects on the board. Phase 4 of the Finishing G
 - **R13's ground via is done** — 0.8 mm track from the pad to a via at (54.0, 87.375). This open item from the Finishing Guide can be closed.
 - **All 12 test point nets correct** against the bring-up probe table (TP1 +5V_PROT, TP2 VSYS, TP3 +3V3, TP4 VBAT, TP5 BAT_SENSE, TP6 ADC_SOIL, TP7/TP8 GND, TP9 EN, TP10 BOOT, TP11 TXD0, TP12 RXD0).
 - **LAW 18 satisfied.** ADC_SOIL and BAT_SENSE stay 21.6 mm from the USB pair.
-- **All 53 fitted parts carry LCSC part numbers.** No gaps.
+- **All 51 fitted parts carry LCSC part numbers.** No gaps.
 - **Via inventory clean.** 140 vias, only the two predefined sizes (96 × 0.6/0.3, 44 × 0.8/0.4). No via violates copper-to-edge (0.5 mm), none sits outside the outline or inside a corner arc, and no via-to-THT-hole pair is under 0.5 mm.
 - **Antenna keep-out rule area still absent** (0 rule areas in the file), consistent with the conscious waiver in PROJECT_STATUS. With the antenna fully overhanging and the pour clipped 0.5 mm from the edge, no copper can reach under it.
 

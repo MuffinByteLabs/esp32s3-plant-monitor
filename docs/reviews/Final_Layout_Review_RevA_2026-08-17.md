@@ -1,6 +1,6 @@
 # Final Pre-Fab Layout Review — Rev A
 
-*Independent machine audit of `hardware/ESP32S3_PlantMonitor.kicad_pcb` as saved 2026-08-17 (the snapshot taken this morning — 404 track segments, 154 vias, 4 zones, silkscreen pass done). Method: full KiCad 10.0.5 DRC with zone refill and schematic-parity, plus independent geometric analysis of every rule in `Hard_Rules_Layout_RevA.md` and the finishing checklist. Schematic assumed correct. Every number below was measured from the board file, not taken from the docs.*
+*Geometry audit of `hardware/ESP32S3_PlantMonitor.kicad_pcb` as saved 2026-08-17 (the saved snapshot — 404 track segments, 154 vias, 4 zones, silkscreen pass done). Method: full KiCad 10.0.5 DRC with zone refill and schematic-parity, plus independent geometric analysis of every rule in `Hard_Rules_Layout_RevA.md` and the finishing checklist. Schematic assumed correct. Every number below was measured from the board file, not taken from the docs.*
 
 **Verdict: this board is ready to manufacture after about 15 minutes of small fixes.** Copper, clearances, stackup, USB, power, decoupling, and assembly hygiene all check out — several items from the 08-16 finishing review are confirmed fixed (VBAT via spacing, thermal-gap 0.3, U2/U6/U4 solid pads, TP/H exclusions, C3/C4 exclusions, TP courtyards). What remains is one real fix, one process sync, and a set of judgment calls I should close consciously rather than by default.
 
@@ -64,7 +64,7 @@ U6's GND pad is solid-connected to the pour (good, confirmed), but its nearest G
 
 ## 3. Verified clean — the numbers behind the verdict
 
-**DRC (KiCad 10.0.5, zones refilled, all severities, schematic parity on):** 0 errors, **0 unconnected items**, 0 copper/clearance/annular/edge/hole violations of any kind. Every warning is accounted for above. (The 65 "library" items in this run are an artifact of auditing outside my usual setup — my fp-lib-table resolves them.)
+**DRC (KiCad 10.0.5, zones refilled, all severities, schematic parity on):** 0 errors, **0 unconnected items**, 0 copper/clearance/annular/edge/hole violations of any kind. Every warning is accounted for above. (The 65 "library" items in this run come from running DRC headless outside the project's `fp-lib-table`; they resolve in the project environment.)
 
 **Stackup & fab match:** file contains exactly JLC04161H-7628 — 0.035 / 0.2104 (εr 4.4) / 0.0152 / 1.065 (εr 4.6) / 0.0152 / 0.2104 / 0.035, total 1.6062 mm. 4-layer · 1.6 mm · green · Economic-PCBA-eligible. Track/space floor on the board is 0.2/0.2 vs JLC's 0.09/0.09 multilayer capability; copper-to-edge min measured 0.59 mm (tracks), 0.60 (vias), 0.501 (all four zone fills) against my 0.5 rule; 154 vias, only the two sanctioned sizes (0.6/0.3, 0.8/0.4), all tented both sides, none in pads; module EP's 12 × Ø0.2 drills sit in 0.6 pads — no JLC surcharge; NPTH pegs Ø0.65 and mounting holes Ø3.2 ≥ their 0.5 floor; shield slots 0.6 × 1.7 ≥ 0.5 wide plated-slot minimum; hole-to-hole all clear (the 08-16 VBAT via pair is fixed — now doubled at legal spacing).
 
@@ -90,8 +90,8 @@ U6's GND pad is solid-connected to the pour (good, confirmed), but its nearest G
 
 ## 4. Order-day reminders (unchanged from my own docs, repeated because they're live values)
 
-4 layers · **JLC04161H-7628** · 1.6 mm · impedance control **No** · HASL(LF) or ENIG · **Standard assembly** (module C2913198 is Standard-tier). In the JLC placement preview, check rotation/polarity on D1–D4, U1–U6, Q1–Q3, J1, SW1/SW2 — U1 is placed at 45°, which is legal for assembly but exactly the kind of part whose rotation JLC's importer sometimes mangles, so give it two extra seconds in the preview. Re-check live stock (10 k alternate C98220 noted in my BOM). Then freeze gerbers/BOM/CPL into `fabrication/revA/`, commit, push. Close KiCad and save before exporting — the `.lck` files show it's open right now.
+4 layers · **JLC04161H-7628** · 1.6 mm · impedance control **No** · HASL(LF) or ENIG · **Standard assembly** (module C2913198 is Standard-tier). In the JLC placement preview, check rotation/polarity on D1–D4, U1–U6, Q1–Q3, J1, SW1/SW2 — U1 is placed at 45°, which is legal for assembly but exactly the kind of part whose rotation JLC's importer sometimes mangles, so give it two extra seconds in the preview. Re-check live stock (10 k alternate C98220 noted in my BOM). Then freeze gerbers/BOM/CPL into `fabrication/revA/`, commit, push. Save and close KiCad before exporting — a live `.lck` file means unsaved state.
 
 ---
 
-*KiCad 10.0.5 headless DRC + independent s-expression geometry audit · companion to `Finishing_Review_RevA_2026-08-16.md` · file under `docs/reviews/`.*
+*KiCad 10.0.5 headless DRC + s-expression geometry audit · companion to `Finishing_Review_RevA_2026-08-16.md` · file under `docs/reviews/`.*

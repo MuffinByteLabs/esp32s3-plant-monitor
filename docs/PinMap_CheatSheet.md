@@ -1,5 +1,5 @@
 # Pin Map Cheat Sheet — ESP32-S3 Plant Monitor Rev A
-*Supersedes `references/ESP32S3_PlantMonitor_RevA_PinMap_CheatSheet.pdf` (which still showed the deleted soil divider). Designators match the schematic. Updated 2026-07-20; test points added 2026-07-22; USB segment nets added 2026-08-13; **I²C re-pinned 2026-08-15** (layout-driven: IO4/IO5 → IO38/IO39, module pads 31/32 on the right side facing the sensors — verified from the board netlist after F8).*
+*Replaced the original pin-map PDF, which still showed the deleted soil divider; that PDF was retired. Designators match the schematic. Updated 2026-07-20; test points added 2026-07-22; USB segment nets added 2026-08-13; **I²C re-pinned 2026-08-15** (layout-driven: IO4/IO5 → IO38/IO39, module pads 31/32 on the right side facing the sensors — verified from the board netlist after F8).*
 
 ## At a glance
 
@@ -8,7 +8,7 @@
 * **ADC1 (ATTEN=3, effective 0–2900 mV):** GPIO1 = `ADC_SOIL` (ADC1_CH0, **direct** — no divider; 100 k pull-down R11 + 100 nF C14) · GPIO2 = `BAT_SENSE` (ADC1_CH1, VBAT÷2 via R14/R15 100 k 1 % + 100 nF C17).
 * **Soil-probe power:** GPIO21 = `SENS_PWR_EN` → Q1 gate. **LOW = probe ON**, HIGH/floating = off (R10 100 k pull-up keeps it off in deep sleep and at boot).
 * **USB (native):** GPIO19 = D− (`USB_DN`) · GPIO20 = D+ (`USB_DP`). No bridge chip.
-* **Buttons (per schematic refs — note: design doc has these swapped):** **SW1 = BOOT** (GPIO0, hold low to flash) · **SW2 = RESET** (EN).
+* **Buttons (per schematic refs):** **SW1 = BOOT** (GPIO0, hold low to flash) · **SW2 = RESET** (EN).
 * **Strapping pins:** GPIO0 (10 k pull-up R6), GPIO3 / GPIO45 / GPIO46 left unconnected on purpose.
 * **Soil calibration (direct chain, 12-bit raw):** wet ≈ 1465 · dry ≈ 2900.
 

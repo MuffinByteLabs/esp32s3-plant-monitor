@@ -16,7 +16,7 @@ This matters because it explains every quirk below. When I wonder "how does the 
 
 | | Bare board fabrication | Assembly (PCBA) |
 |---|---|---|
-| What I get | A blank PCB — copper, mask, silkscreen, holes | That board with 53 components soldered on |
+| What I get | A blank PCB — copper, mask, silkscreen, holes | That board with 51 components soldered on |
 | Files needed | Gerbers + drill files (one zip) | BOM + CPL/position file |
 | Who does it | The board shop | The assembly line, often a different building |
 
@@ -52,7 +52,7 @@ The green coating covers the *whole board*. The mask Gerber marks where it is **
 
 The fab also applies **mask expansion** — typically ~0.05 mm larger than the pad all round — so that slight registration error between the copper and mask layers doesn't leave green creeping onto a pad. I don't draw this; KiCad and the fab handle it.
 
-Vias are usually **tented** — mask left over them so they're sealed. That's the default and it's what I want for my 140 vias; untented vias under a component can wick solder.
+Vias are usually **tented** — mask left over them so they're sealed. That was the plan for my 154 vias, but JLC no longer offers Tented on 4-layer, so Rev A was ordered **Plugged**; untented vias under a component can wick solder.
 
 ### Edge.Cuts must be one closed loop
 
@@ -110,16 +110,16 @@ A CSV. For JLC the columns that matter are:
 | Designator | Which parts | `R5,R6,R7,R13,R16` |
 | Quantity | How many | `5` |
 | Comment / Value | Human sanity check | `10k` |
-| Footprint | Human sanity check | `R_0402_1005Metric` |
-| **LCSC Part #** | **The actual order** | `C25804` |
+| Footprint | Human sanity check | `R_0603_1608Metric` |
+| **LCSC Part #** | **The actual order** | `C98220` |
 
 Identical parts are grouped onto one line with a comma-separated designator list.
 
-**The LCSC number is the only column that truly binds.** Value and footprint are there so a human reviewer can spot when I ask for C25804 but write 100k — the machine buys whatever the LCSC number says. This is why a typo'd part number produces a board that's fully assembled and completely wrong.
+**The LCSC number is the only column that truly binds.** Value and footprint are there so a human reviewer can spot when I ask for C98220 but write 100k — the machine buys whatever the LCSC number says. This is why a typo'd part number produces a board that's fully assembled and completely wrong.
 
-All 53 of my fitted parts already carry LCSC numbers. Parts that must **not** appear here: C3 and C4 (marked DNP), all 12 test points, and H1–H4.
+All 51 of my fitted parts already carry LCSC numbers. Parts that must **not** appear here: C3 and C4 (marked DNP), all 12 test points, and H1–H4.
 
-**Stock is checked at order time, not design time.** A part that existed when I drew the schematic may be out of stock today. My BOM notes carry an alternate for the 10k (C98220 if C25804 is out) — worth keeping.
+**Stock is checked at order time, not design time.** A part that existed when I drew the schematic may be out of stock today. The 10 k proved it: C25804 was the original choice, it failed JLC's pre-order sourcing check on 2026-08-18, and the BOM moved to C98220 before the order went through. Carrying a named alternate in the BOM notes is what made that a same-day fix instead of a lost week.
 
 ---
 
@@ -165,7 +165,7 @@ None of this is in any file I upload. It's all dropdowns.
 - Solder mask colour, silkscreen colour
 - Minimum track/spacing spec — affects price; my 0.2 mm minimum is well inside the standard tier
 - Impedance control — **No**, per my decision (USB is Full Speed, 12 Mbps)
-- Via treatment (tented), gold fingers (no), castellated holes (no)
+- Via treatment (plugged — Tented is not offered on 4-layer), gold fingers (no), castellated holes (no)
 - Electrical test — flying-probe continuity check; standard on multilayer
 
 **Assembly:**

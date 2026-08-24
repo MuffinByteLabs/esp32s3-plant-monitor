@@ -15,7 +15,7 @@
 
 **0.5 Finish the pre-routing edits while edits are still free:**
 - Place the remaining eight test points (table in `Placement_Review_RevA_2026-08-12_v2_status.md` — still valid; my TP10 spot at (83, 92) checks out, feed it with a spur from R6).
-- Decide the SCL/SDA re-pin (IO47/IO48) **now** — it's a schematic edit + F8, and F8 after routing means ripping up tracks.
+- Decide the SCL/SDA re-pin (IO38/IO39) **now** — it's a schematic edit + F8, and F8 after routing means ripping up tracks.
 - Lock J1 and U3 (H1–H4 already are).
 
 ---
@@ -73,7 +73,7 @@ Keep a mental budget: if a net needs more than one trip to L4 and back, rotate a
 - **ADC_SOIL:** J2 pin 1 → past my TP6 → up the right side → C14's pad → pin 39. Solid plane under it the whole way (free now), ≥ 0.5 mm from power trunks, nowhere near the USB corridor or the top-edge strip.
 - **BAT_SENSE:** R14/R15 junction → C17 → pin 38 — 4 mm total. The divider's VBAT feed routes as ordinary power.
 
-**3.5 Slow signals** — EN (R7/C8 → pin 3, spur to SW2 and TP9), IO0 (R6 → pin 27, spurs to SW1 and my TP10 at (83, 92)), SENS_PWR_EN (pin 23 → Q1's gate — fine to hop to L4 to cross the middle; companion via), SOIL_PWR (Q1 → J2 pin 2), I²C (pins 4/5 or 47/48 → R8/R9 → both sensors; route SCL/SDA loosely as a pair for tidiness — electrically relaxed at 100–400 kHz), LED lines (R5 → D2, R12 → D3 ← U6 STAT — long and slow, route them last through whatever's left), UART (pins 36/37 down the right side and west along the lower board to TP11/TP12 — LAW 34: the path matters, the length doesn't), R13 PROG.
+**3.5 Slow signals** — EN (R7/C8 → pin 3, spur to SW2 and TP9), IO0 (R6 → pin 27, spurs to SW1 and my TP10 at (83, 92)), SENS_PWR_EN (pin 23 → Q1's gate — fine to hop to L4 to cross the middle; companion via), SOIL_PWR (Q1 → J2 pin 2), I²C (pins 38/39 → R8/R9 → both sensors; route SCL/SDA loosely as a pair for tidiness — electrically relaxed at 100–400 kHz), LED lines (R5 → D2, R12 → D3 ← U6 STAT — long and slow, route them last through whatever's left), UART (pins 36/37 down the right side and west along the lower board to TP11/TP12 — LAW 34: the path matters, the length doesn't), R13 PROG.
 
 **3.6 GND — the net I don't route.** The pads where a dedicated via *at the pad* is required (LAW 12 plus the heavy hitters): **all ~20 decoupler ground pads** (C1–C18's GND ends — this is the one Espressif calls out explicitly), U1 pin 2 (ESD strikes need the shortest possible path into the planes), the LDO and charger grounds (thermal + return), J1's four shield holes *and* its GND pads (they take the cable yank — solid ties), and TP7/TP8. The module's centre pad already carries its 12. Truly trivial grounds — the 100 k pull-down ends (R11, R15's bottom), R13's ground end, the switch ground pads — don't *need* personal vias; letting them join a well-stitched L1 pour is fine. A via there is still free and harmless, so don't agonize — the only real rule is: never let a trivial pad's only connection be a long skinny pour neck (DRC's unconnected check plus a glance at the filled pour catches this). On this stackup each of those vias is a ~0.25 mm hop to the plane — my decoupling loops land well under 5 nH (pocket-number target: <5 nH = good) almost by default. This is the payoff of the whole 4-layer decision.
 
@@ -97,7 +97,7 @@ Keep a mental budget: if a net needs more than one trip to L4 and back, rotate a
 
 ## 5 · Power and heat on four layers
 
-The LDO's pour plan improves for free: L1 copper on its GND pin, 4–6 vias, and now those vias land in **two full-board copper sheets** — a far better heatsink than the 2-layer plan for its ~0.34 W worst case. Same for the charger's ~0.2 W. Keep both pours generous.
+The LDO's pour plan improves for free: L1 copper on its GND pin, 4–6 vias, and now those vias land in **two full-board copper sheets** — a far better heatsink than the 2-layer plan for its ~0.26 W worst case. Same for the charger's ~0.2 W. Keep both pours generous.
 
 The flip side, worth knowing: solid planes conduct heat *everywhere*, including toward the BME280. Distance is still my tool (it's 33–45 mm from all three sources) and the planes also *dilute* hot spots, so the net effect at my power levels is a small, roughly uniform rise — expect the BME280 to read maybe a degree high during long Wi-Fi sessions. Don't slot the Rev A planes for it (plane integrity is worth more); characterize the offset at bring-up with the thermocouple step my review already prescribes, and correct in firmware. Rev B can add thermal slots if the data says so.
 
