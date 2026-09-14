@@ -8,9 +8,8 @@ Wi-Fi plant monitor: soil moisture, temperature / humidity / pressure, and ambie
 
 ![ESP32-S3 Plant Monitor Rev A — 3D render](docs/images/board_iso.png)
 
-*KiCad 3D render. Rev A was ordered fabricated **and assembled** at JLCPCB on 2026-08-21 and is in production — photographs of the populated board and measured bring-up results will be published here when it lands.*
 
-**Status — Rev A ordered 2026-08-21.** 5 boards, 4-layer, fully assembled by JLCPCB. DRC at order: **0 errors · 0 unconnected items · 0 schematic-parity differences** (KiCad 10.0.5, zones refilled). Next step is bring-up per [`docs/BringUp_Guide.md`](docs/BringUp_Guide.md).
+
 
 | | |
 |---|---|
