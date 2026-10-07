@@ -26,8 +26,52 @@ Current floor ≈ 210 µA: power LED 120 + LDO Iq 55 + divider 21 + ESP32 ~10.
 
 * **Power LED on a solder jumper** (or DNP by default): −120 µA.
 * **Low-Iq LDO**: TI TPS7A02 (25 nA Iq, 200 mA — check peak headroom vs. Wi-Fi TX; may need output bulk) or HT7833 / XC6220 class (~1–8 µA Iq, 300–500 mA): −47…−55 µA.
-* **Switched battery divider**: high-side P-FET on the divider driven by a GPIO (sample-then-off), or 1 MΩ + 1 MΩ with a small buffer: −20 µA.
+* **Switched battery divider**: high-side P-FET on the divider driven by a GPIO (sample-then-off), or 1 MΩ + 1 MΩ with a small buffer: −20 µA. **This also restores U6's battery-detection circuit — see the note below.**
 * Achievable floor ≈ 15–35 µA ⇒ 500 mAh ≈ 1.5–3 years of pure sleep; wake cycles then dominate.
+
+> ### Note added 2026-09-09 — the BAT_SENSE divider defeats U6's battery detection
+>
+> Found during Rev A bring-up, confirmed against the MCP73831 datasheet (DS20001984H §4.2)
+> and the part's own option codes. **This corrects an earlier claim in `BringUp_Guide.md` §5
+> Observation 2, which states the MCP73831 "has no battery-detection circuit at all." It has one.
+> Our divider stops it working.**
+>
+> **The mechanism.** U6 sources a **6 µA** probe current (I_BAT_DET, 0.6 µA min) out of the VBAT
+> pin. If VBAT rises to **V_REG + 100 mV = 4.30 V** under that probe, the charger concludes no
+> battery is present. The datasheet is explicit that this requires the node impedance before the
+> pack is connected to be **greater than 7 MΩ**.
+>
+> **Rev A has R14 + R15 = 200 kΩ permanently across VBAT — 35× lower than required.** The divider
+> sinks ~21 µA at 4.2 V where the detector sources only 6 µA, so the probe can never pull the node
+> up to 4.30 V. U6 therefore reports "battery present" unconditionally, pack or no pack.
+>
+> **Fitted part is MCP73831T-2ACI/OT — options `AC`**, which sets the thresholds that follow:
+>
+> | Parameter | Ratio (option AC) | Value at V_REG = 4.20 V |
+> |---|---|---|
+> | I_PREG / I_REG (precondition current) | 10 % | 10 mA |
+> | V_PTH / V_REG (precondition threshold) | 66.5 % | 2.79 V |
+> | I_TERM / I_REG (termination current) | 7.5 % | 7.5 mA |
+> | **V_RTH / V_REG (auto-recharge threshold)** | **96.5 %** | **4.05 V** |
+>
+> **Observable consequence, no pack fitted.** VBAT is not a DC level — it is a sawtooth. C16
+> (4.7 µF) charges to 4.20 V in ~7 µs, current collapses far below the 7.5 mA termination
+> threshold, U6 latches off, and the 200 kΩ divider then drains C16 through the **147 mV**
+> hysteresis window (4.20 → 4.05 V) in **~34 ms**, whereupon auto-recharge restarts it. That is a
+> **~30 Hz** cycle. STAT is held low only for the refill plus the termination comparator's
+> t_TERM filter (~1.3 ms), giving D3 a **~4 % duty cycle** — dim, and above the flicker-fusion
+> rate, so it reads as steady rather than blinking. This is the quantitative version of the
+> D3 brightness table in `BringUp_Guide.md` §5 Observation 2.
+>
+> **Why it matters beyond cosmetics.** The same P-FET that saves the 21 µA in the bullet above
+> raises the node impedance above 7 MΩ while the divider is parked, so battery detection starts
+> working — U6 could then distinguish "no pack" from "flat pack." One part, three wins: sleep
+> current, working detection, and a VBAT reading that stops lying at ~4.13 V mean when no cell
+> is fitted.
+>
+> **Caveat for the layout:** with the divider switched off, VBAT's only remaining DC path is
+> U6 itself. Confirm nothing else (leakage, scope probe, TP4 fixture) drags the node below
+> 7 MΩ, or detection still will not work.
 
 ## 4. Power robustness
 
@@ -55,6 +99,7 @@ Current floor ≈ 210 µA: power LED 120 + LDO Iq 55 + divider 21 + ESP32 ~10.
 ## Sources
 
 * [Microchip AN1149 — Li-Ion charger with load sharing](https://ww1.microchip.com/downloads/en/AppNotes/01149c.pdf)
+* MCP73831/2 datasheet DS20001984H §1.0 (Electrical Characteristics), §4.2 (Battery Detection), §4.6–4.8 (CV mode, termination, auto-recharge), and the Product Identification System option table — local copy at `references/datasheets/CHARGER_Microchip_MCP73831_LiPo_Linear_Charger_Datasheet_DS20001984H.pdf`
 * [TI BQ24075 product page](https://www.ti.com/product/BQ24075) · [datasheet PDF](https://cdn.sparkfun.com/assets/learn_tutorials/5/3/0/bq24075.pdf)
 * [Microchip MCP73871 product page](https://www.microchip.com/en-us/product/mcp73871) · [datasheet PDF](https://ww1.microchip.com/downloads/en/DeviceDoc/MCP73871-Data-Sheet-20002090E.pdf)
 * [TI TPS2113A product page](https://www.ti.com/product/TPS2113A) · [datasheet](https://www.ti.com/lit/gpn/TPS2113A)

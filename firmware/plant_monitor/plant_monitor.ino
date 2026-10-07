@@ -51,6 +51,48 @@ static bool deadlineReached() {
   return (millis() - wakeStartMs) > AWAKE_DEADLINE_MS;
 }
 
+// Which conditions were true last wake, and when I last said so out loud. Both
+// have to survive deep sleep or every wake would rediscover that the soil is
+// dry and tell you about it again, one minute later, forever.
+RTC_DATA_ATTR static uint32_t rtcAlertsActive  = 0;
+RTC_DATA_ATTR static uint32_t rtcLastAlertBoot = 0;
+
+// Each condition latches. Once it has fired it holds until the reading comes
+// back past the threshold by the hysteresis band, so a probe sitting exactly on
+// 30.0 % does not alert, recover, alert and recover for the rest of the week.
+// Same trick as the transmit cutoff in power.cpp, and for the same reason.
+static uint32_t evaluateAlerts(const Readings &r, const BatteryState &b) {
+  uint32_t a = 0;
+
+  if (r.soilValid) {
+    bool latched = (rtcAlertsActive & ALERT_BIT_SOIL_DRY) != 0;
+    float threshold = latched ? ALERT_SOIL_DRY_PCT + ALERT_SOIL_HYST_PCT
+                              : ALERT_SOIL_DRY_PCT;
+    if (r.soilPct < threshold) a |= ALERT_BIT_SOIL_DRY;
+  }
+
+  // Only when the number means something. On USB the charger holds VBAT at its
+  // float voltage and trustworthy is false, which is what stops the bench from
+  // generating low-battery alerts about a cell that is not even fitted.
+  if (b.trustworthy && !isnan(b.percent)) {
+    bool latched = (rtcAlertsActive & ALERT_BIT_BATT_LOW) != 0;
+    float threshold = latched ? ALERT_BATT_LOW_PCT + ALERT_BATT_HYST_PCT
+                              : ALERT_BATT_LOW_PCT;
+    if (b.percent < threshold) a |= ALERT_BIT_BATT_LOW;
+  }
+
+#if ALERT_ON_SENSOR_FAULT
+  // A sensor that stopped answering is the failure mode that otherwise hides:
+  // the graph simply stops having a line and nothing tells you it was supposed
+  // to. Worth one notification.
+  if (!r.soilValid || !r.climateValid || !r.lightValid) {
+    a |= ALERT_BIT_SENSOR_FAULT;
+  }
+#endif
+
+  return a;
+}
+
 void setup() {
   wakeStartMs = millis();
   bootCount++;
@@ -121,6 +163,27 @@ void setup() {
 
   // --- 6. Transmit ------------------------------------------------------
 
+  uint32_t alerts = evaluateAlerts(readings, battery);
+
+  // Three things are worth spending a notification on: something has just gone
+  // wrong, something that was wrong has just come right, or a condition has sat
+  // there long enough to deserve reminding about. Everything else is the
+  // graph's job now, and the graph never needs to wake anybody up.
+  bool appeared = (alerts & ~rtcAlertsActive) != 0;
+  bool cleared  = (alerts == 0) && (rtcAlertsActive != 0);
+  bool overdue  = (alerts != 0) &&
+                  ((bootCount - rtcLastAlertBoot) >= ALERT_REPEAT_WAKES);
+
+  bool notifyWanted = USE_NTFY &&
+                      (!NTFY_ALERTS_ONLY || appeared || cleared || overdue);
+  bool notifySent   = false;
+
+  LOGF("alerts:  0x%02x%s%s%s   notify: %s\n", (unsigned)alerts,
+       (alerts & ALERT_BIT_SOIL_DRY)     ? " dry"    : "",
+       (alerts & ALERT_BIT_BATT_LOW)     ? " batt"   : "",
+       (alerts & ALERT_BIT_SENSOR_FAULT) ? " sensor" : "",
+       notifyWanted ? "yes" : "no");
+
   if (!battery.txAllowed) {
     // Not a battery rule but a regulator one: the AP2112K needs about 200 mV of
     // headroom to hold 3.3 V through a 355 mA transmit peak, and below roughly
@@ -133,13 +196,42 @@ void setup() {
     LOGLN("tx: skipped, this wake has already run long");
 
   } else if (netConnectWifi() && !deadlineReached()) {
+    // Three backends, one association. Any of them can be switched off in
+    // config.h; with USE_MQTT at 0 the broker is not even attempted, so no wake
+    // cycle spends MQTT_TIMEOUT_MS discovering that a broker it does not have
+    // is still not there.
+#if USE_MQTT
     if (netConnectBroker(bootCount)) {
       netPublishState(readings, battery, bootCount);
     }
+#endif
+#if USE_THINGSPEAK
+    // First, and every wake without exception. A missed notification is a
+    // shrug; a missed entry is a permanent hole in the record, and the record
+    // is the entire point of the exercise.
+    if (!deadlineReached()) {
+      netPublishThingSpeak(readings, battery, bootCount);
+    }
+#endif
+#if USE_NTFY
+    if (notifyWanted && !deadlineReached()) {
+      notifySent = netPublishNtfy(readings, battery, bootCount, alerts);
+    }
+#endif
     netShutdown();
 
   } else {
     netShutdown();
+  }
+
+  // Commit this wake's verdict only once it has actually been delivered. If the
+  // radio never came up, or the cell was too flat to be allowed to use it, then
+  // nobody has been told yet and the condition is still news next time.
+  if (!notifyWanted || notifySent) {
+    rtcAlertsActive = alerts;
+  }
+  if (notifySent) {
+    rtcLastAlertBoot = bootCount;
   }
 
   // --- 7. Sleep ---------------------------------------------------------
